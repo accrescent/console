@@ -2,19 +2,16 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-const js = require("@eslint/js");
-
-const {
-    FlatCompat,
-} = require("@eslint/eslintrc");
+import js from "@eslint/js";
+import { FlatCompat } from "@eslint/eslintrc";
 
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
+    baseDirectory: import.meta.dirname,
     recommendedConfig: js.configs.recommended,
     allConfig: js.configs.all
 });
 
-module.exports = [{
+export default [{
     ignores: ["projects/**/*"],
 }, ...compat.extends(
     "eslint:recommended",
