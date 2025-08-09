@@ -28,7 +28,10 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/material-icons.css",
+              "src/roboto.css",
+              "src/assets",
+              "src/fonts"
             ],
             "styles": [
               "src/styles.scss"
@@ -129,7 +132,10 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/material-icons.css",
+              "src/roboto.css",
+              "src/assets",
+              "src/fonts"
             ],
             "styles": [
               "src/styles.scss"
