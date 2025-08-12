@@ -1,0 +1,19 @@
+// Copyright 2025 Logan Magee
+//
+// SPDX-License-Identifier: AGPL-3.0-only
+
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "console",
+    "compatibility_date": "2025-08-12",
+    "routes": [
+        {
+            "pattern": "console.accrescent.app",
+            "custom_domain": true
+        }
+    ],
+    "assets": {
+        "directory": "./dist/console/browser",
+        "not_found_handling": "single-page-application"
+    }
+}
