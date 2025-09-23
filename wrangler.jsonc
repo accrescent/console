@@ -6,14 +6,26 @@
     "$schema": "node_modules/wrangler/config-schema.json",
     "name": "console",
     "compatibility_date": "2025-08-12",
-    "routes": [
-        {
-            "pattern": "console.accrescent.app",
-            "custom_domain": true
-        }
-    ],
     "assets": {
         "directory": "./dist/console/browser",
         "not_found_handling": "single-page-application"
+    },
+    "env": {
+        "production": {
+            "routes": [
+                {
+                    "pattern": "console.accrescent.app",
+                    "custom_domain": true
+                }
+            ]
+        },
+        "testing": {
+            "routes": [
+                {
+                    "pattern": "testing.console.accrescent.app",
+                    "custom_domain": true
+                }
+            ]
+        }
     }
 }
