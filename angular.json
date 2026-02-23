@@ -31,6 +31,8 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/@fontsource-variable/roboto/index.css",
+              "node_modules/@fontsource/material-icons/index.css",
               "src/styles.scss"
             ],
             "scripts": [],

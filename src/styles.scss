@@ -17,7 +17,7 @@ html {
             primary: theme.$primary-palette,
             tertiary: theme.$tertiary-palette,
         ),
-        typography: Roboto,
+        typography: "Roboto Variable",
         density: 0,
     ));
 }
@@ -37,4 +37,32 @@ body {
 }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: "Roboto Variable", "Helvetica Neue", sans-serif; }
+
+// Sourced verbatim from
+// https://developers.google.com/fonts/docs/material_icons#setup_method_2_self_hosting (which is
+// repeated at https://fontsource.org/docs/getting-started/material-icons)
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;  /* Preferred icon size */
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Support for IE. */
+    font-feature-settings: 'liga';
+}
