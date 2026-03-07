@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-only
 
-name: Check licensing
+name: CI
 
 on: [push, pull_request]
 
@@ -15,3 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: fsfe/reuse-action@v6
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          check-latest: true
+      - run: npm ci
+      - run: npm run lint
