@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 Logan Magee
+//
+// SPDX-License-Identifier: AGPL-3.0-only
+
 // @ts-check
 const eslint = require("@eslint/js");
 const { defineConfig } = require("eslint/config");

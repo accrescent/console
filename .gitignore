@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: © 2026 Logan Magee
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
@@ -23,10 +27,15 @@ yarn-error.log
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json
+!.vscode/settings.json.license
 !.vscode/tasks.json
+!.vscode/tasks.json.license
 !.vscode/launch.json
+!.vscode/launch.json.license
 !.vscode/extensions.json
+!.vscode/extensions.json.license
 !.vscode/mcp.json
+!.vscode/mcp.json.license
 .history/*
 
 # Miscellaneous

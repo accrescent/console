@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 Logan Magee
+//
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { TestBed } from "@angular/core/testing";
 import { App } from "./app";
 
