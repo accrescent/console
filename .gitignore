@@ -1,8 +1,4 @@
-# SPDX-FileCopyrightText: © 2023 Logan Magee
-#
-# SPDX-License-Identifier: AGPL-3.0-only
-
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
 /dist
@@ -30,6 +26,7 @@ yarn-error.log
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/mcp.json
 .history/*
 
 # Miscellaneous
@@ -40,6 +37,7 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+__screenshots__/
 
 # System files
 .DS_Store

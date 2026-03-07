@@ -1,11 +1,12 @@
-// SPDX-FileCopyrightText: © 2023 Logan Magee
-//
-// SPDX-License-Identifier: AGPL-3.0-only
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
-export interface App {
-    id: string;
-    label: string;
-    version_code: number;
-    version_name: string;
-    short_description: string;
+@Component({
+  selector: 'acc-root',
+  imports: [RouterOutlet],
+  templateUrl: './app.html',
+  styleUrl: './app.css'
+})
+export class App {
+  protected readonly title = signal('console');
 }
