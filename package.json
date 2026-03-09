@@ -38,7 +38,7 @@
         "jsdom": "^28.1.0",
         "oxfmt": "^0.37.0",
         "typescript": "~5.9.0",
-        "typescript-eslint": "8.56.1",
+        "typescript-eslint": "8.57.0",
         "vitest": "^4.0.18"
     },
     "devEngines": {
