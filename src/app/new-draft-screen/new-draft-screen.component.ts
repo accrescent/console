@@ -6,9 +6,11 @@ import { Component, inject } from "@angular/core";
 import { HttpEventType, HttpResponse } from "@angular/common/http";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { finalize } from "rxjs";
 
+import { showApiErrorSnackbar } from "../api-error-handler";
 import { DraftService } from "../draft.service";
 import { DraftSubmissionDialogComponent } from "../draft-submission-dialog/draft-submission-dialog.component";
 import { NewDraftEditorComponent } from "../new-draft-editor/new-draft-editor.component";
@@ -23,6 +25,7 @@ export class NewDraftScreenComponent {
     private dialog = inject(MatDialog);
     private draftService = inject(DraftService);
     private router = inject(Router);
+    private snackbar = inject(MatSnackBar);
 
     uploadProgress?: number = undefined;
     submitDisabled = false;
@@ -32,29 +35,33 @@ export class NewDraftScreenComponent {
         this.draftService
             .createDraft(form)
             .pipe(finalize(() => (this.submitDisabled = false)))
-            .subscribe((event) => {
-                if (event.type === HttpEventType.UploadProgress) {
-                    this.uploadProgress = (100 * event.loaded) / event.total!;
+            .subscribe({
+                next: (event) => {
+                    if (event.type === HttpEventType.UploadProgress) {
+                        this.uploadProgress = (100 * event.loaded) / event.total!;
 
-                    // Clear the progress bar once the upload is complete
-                    if (event.loaded === event.total!) {
-                        this.uploadProgress = undefined;
-                    }
-                } else if (event instanceof HttpResponse) {
-                    const draft = event.body!;
-                    this.dialog
-                        .open(DraftSubmissionDialogComponent, { data: draft })
-                        .afterClosed()
-                        .subscribe((confirmed) => {
-                            if (confirmed) {
-                                this.draftService.submitDraft(draft.id).subscribe(() => {
+                        // Clear the progress bar once the upload is complete
+                        if (event.loaded === event.total!) {
+                            this.uploadProgress = undefined;
+                        }
+                    } else if (event instanceof HttpResponse) {
+                        const draft = event.body!;
+                        this.dialog
+                            .open(DraftSubmissionDialogComponent, { data: draft })
+                            .afterClosed()
+                            .subscribe((confirmed) => {
+                                if (confirmed) {
+                                    this.draftService.submitDraft(draft.id).subscribe({
+                                        next: () => this.router.navigate(["apps"]),
+                                        error: showApiErrorSnackbar(this.snackbar),
+                                    });
+                                } else {
                                     this.router.navigate(["apps"]);
-                                });
-                            } else {
-                                this.router.navigate(["apps"]);
-                            }
-                        });
-                }
+                                }
+                            });
+                    }
+                },
+                error: showApiErrorSnackbar(this.snackbar),
             });
     }
 }

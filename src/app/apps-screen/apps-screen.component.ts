@@ -6,9 +6,11 @@ import { Component, OnInit, inject } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatDividerModule } from "@angular/material/divider";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { RouterLink } from "@angular/router";
 
 import { App } from "../app";
+import { showApiErrorSnackbar } from "../api-error-handler";
 import { AppCardComponent } from "../app-card/app-card.component";
 import { AppService } from "../app.service";
 import { Draft, DraftStatus } from "../draft";
@@ -31,15 +33,22 @@ import { DraftService } from "../draft.service";
 })
 export class AppsScreenComponent implements OnInit {
     private appService = inject(AppService);
-    private draftService = inject(DraftService);
     private dialog = inject(MatDialog);
+    private draftService = inject(DraftService);
+    private snackbar = inject(MatSnackBar);
 
     apps: App[] = [];
     drafts: Draft[] = [];
 
     ngOnInit(): void {
-        this.appService.getApps().subscribe((apps) => (this.apps = apps));
-        this.draftService.getDrafts().subscribe((drafts) => (this.drafts = drafts));
+        this.appService.getApps().subscribe({
+            next: (apps) => (this.apps = apps),
+            error: showApiErrorSnackbar(this.snackbar),
+        });
+        this.draftService.getDrafts().subscribe({
+            next: (drafts) => (this.drafts = drafts),
+            error: showApiErrorSnackbar(this.snackbar),
+        });
     }
 
     deleteDraft(id: string): void {
@@ -50,26 +59,32 @@ export class AppsScreenComponent implements OnInit {
             .afterClosed()
             .subscribe((confirmed) => {
                 if (confirmed) {
-                    this.draftService.deleteDraft(id).subscribe(() => {
-                        // Remove from the UI
-                        const i = this.drafts.findIndex((d) => d.id === id);
-                        if (i > -1) {
-                            this.drafts.splice(i, 1);
-                        }
+                    this.draftService.deleteDraft(id).subscribe({
+                        next: () => {
+                            // Remove from the UI
+                            const i = this.drafts.findIndex((d) => d.id === id);
+                            if (i > -1) {
+                                this.drafts.splice(i, 1);
+                            }
+                        },
+                        error: showApiErrorSnackbar(this.snackbar),
                     });
                 }
             });
     }
 
     submitDraft(id: string): void {
-        this.draftService.submitDraft(id).subscribe(() => {
-            // Mark as submitted in the UI
-            const draft = this.drafts.find(
-                (draft) => draft.id === id && draft.status === DraftStatus.Unsubmitted,
-            );
-            if (draft !== undefined) {
-                draft.status = DraftStatus.Submitted;
-            }
+        this.draftService.submitDraft(id).subscribe({
+            next: () => {
+                // Mark as submitted in the UI
+                const draft = this.drafts.find(
+                    (draft) => draft.id === id && draft.status === DraftStatus.Unsubmitted,
+                );
+                if (draft !== undefined) {
+                    draft.status = DraftStatus.Submitted;
+                }
+            },
+            error: showApiErrorSnackbar(this.snackbar),
         });
     }
 }

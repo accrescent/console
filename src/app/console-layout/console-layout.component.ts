@@ -3,14 +3,16 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { Component, inject } from "@angular/core";
-import { Router, RouterLink, RouterOutlet } from "@angular/router";
-
-import { AuthService } from "../auth.service";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
 import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { Router, RouterLink, RouterOutlet } from "@angular/router";
+
+import { showApiErrorSnackbar } from "../api-error-handler";
+import { AuthService } from "../auth.service";
 
 @Component({
     selector: "acc-console-layout",
@@ -29,6 +31,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 export class ConsoleLayoutComponent {
     private authService = inject(AuthService);
     private router = inject(Router);
+    private snackbar = inject(MatSnackBar);
 
     get reviewer(): boolean {
         return this.authService.reviewer;
@@ -39,6 +42,9 @@ export class ConsoleLayoutComponent {
     }
 
     logOut(): void {
-        this.authService.logOut().subscribe(() => this.router.navigate(["/login"]));
+        this.authService.logOut().subscribe({
+            next: () => this.router.navigate(["/login"]),
+            error: showApiErrorSnackbar(this.snackbar),
+        });
     }
 }

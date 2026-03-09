@@ -4,9 +4,11 @@
 
 import { Component, OnInit, inject } from "@angular/core";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { Draft } from "../../draft";
 import { Edit } from "../../edit";
+import { showApiErrorSnackbar } from "../../api-error-handler";
 import { DraftService } from "../draft.service";
 import { EditService } from "../edit.service";
 import { ReviewDialogComponent } from "../review-dialog/review-dialog.component";
@@ -31,6 +33,7 @@ export class ReviewScreenComponent implements OnInit {
     private dialog = inject(MatDialog);
     private draftService = inject(DraftService);
     private editService = inject(EditService);
+    private snackbar = inject(MatSnackBar);
     private updateService = inject(UpdateService);
 
     drafts: Draft[] = [];
@@ -38,9 +41,18 @@ export class ReviewScreenComponent implements OnInit {
     updates: Update[] = [];
 
     ngOnInit(): void {
-        this.draftService.getAssigned().subscribe((drafts) => (this.drafts = drafts));
-        this.editService.getAssigned().subscribe((edits) => (this.edits = edits));
-        this.updateService.getAssigned().subscribe((updates) => (this.updates = updates));
+        this.draftService.getAssigned().subscribe({
+            next: (drafts) => (this.drafts = drafts),
+            error: showApiErrorSnackbar(this.snackbar),
+        });
+        this.editService.getAssigned().subscribe({
+            next: (edits) => (this.edits = edits),
+            error: showApiErrorSnackbar(this.snackbar),
+        });
+        this.updateService.getAssigned().subscribe({
+            next: (updates) => (this.updates = updates),
+            error: showApiErrorSnackbar(this.snackbar),
+        });
     }
 
     openDraftReviewDialog(draftId: string): void {
@@ -49,12 +61,15 @@ export class ReviewScreenComponent implements OnInit {
             .afterClosed()
             .subscribe((review) => {
                 if (review !== undefined) {
-                    this.draftService.createReviewForDraft(draftId, review).subscribe(() => {
-                        // Remove draft card from the UI
-                        const i = this.drafts.findIndex((d) => d.id === draftId);
-                        if (i > -1) {
-                            this.drafts.splice(i, 1);
-                        }
+                    this.draftService.createReviewForDraft(draftId, review).subscribe({
+                        next: () => {
+                            // Remove draft card from the UI
+                            const i = this.drafts.findIndex((d) => d.id === draftId);
+                            if (i > -1) {
+                                this.drafts.splice(i, 1);
+                            }
+                        },
+                        error: showApiErrorSnackbar(this.snackbar),
                     });
                 }
             });
@@ -66,12 +81,15 @@ export class ReviewScreenComponent implements OnInit {
             .afterClosed()
             .subscribe((review) => {
                 if (review !== undefined) {
-                    this.editService.createReviewForEdit(editId, review).subscribe(() => {
-                        // Remove edit card from the UI
-                        const i = this.edits.findIndex((e) => e.id === editId);
-                        if (i > -1) {
-                            this.edits.splice(i, 1);
-                        }
+                    this.editService.createReviewForEdit(editId, review).subscribe({
+                        next: () => {
+                            // Remove edit card from the UI
+                            const i = this.edits.findIndex((e) => e.id === editId);
+                            if (i > -1) {
+                                this.edits.splice(i, 1);
+                            }
+                        },
+                        error: showApiErrorSnackbar(this.snackbar),
                     });
                 }
             });
@@ -83,12 +101,15 @@ export class ReviewScreenComponent implements OnInit {
             .afterClosed()
             .subscribe((review) => {
                 if (review !== undefined) {
-                    this.updateService.createReviewForUpdate(updateId, review).subscribe(() => {
-                        // Remove update card from the UI
-                        const i = this.updates.findIndex((u) => u.id === updateId);
-                        if (i > -1) {
-                            this.updates.splice(i, 1);
-                        }
+                    this.updateService.createReviewForUpdate(updateId, review).subscribe({
+                        next: () => {
+                            // Remove update card from the UI
+                            const i = this.updates.findIndex((u) => u.id === updateId);
+                            if (i > -1) {
+                                this.updates.splice(i, 1);
+                            }
+                        },
+                        error: showApiErrorSnackbar(this.snackbar),
                     });
                 }
             });
