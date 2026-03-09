@@ -2,65 +2,65 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Routes } from '@angular/router';
+import { Routes } from "@angular/router";
 
-import { authGuard } from './auth.guard';
+import { authGuard } from "./auth.guard";
 
 export const routes: Routes = [
     {
-        path: '',
+        path: "",
         loadComponent: () =>
-            import('./console-layout/console-layout.component').then(
+            import("./console-layout/console-layout.component").then(
                 (m) => m.ConsoleLayoutComponent,
             ),
         canActivate: [authGuard],
         children: [
-            { path: '', redirectTo: 'apps', pathMatch: 'full' },
+            { path: "", redirectTo: "apps", pathMatch: "full" },
             {
-                path: 'apps',
+                path: "apps",
                 loadComponent: () =>
-                    import('./apps-screen/apps-screen.component').then(
+                    import("./apps-screen/apps-screen.component").then(
                         (m) => m.AppsScreenComponent,
                     ),
             },
             {
-                path: 'apps/:id/details',
+                path: "apps/:id/details",
                 loadComponent: () =>
-                    import('./app-details-screen/app-details-screen.component').then(
+                    import("./app-details-screen/app-details-screen.component").then(
                         (m) => m.AppDetailsScreenComponent,
                     ),
             },
             {
-                path: 'drafts/new',
+                path: "drafts/new",
                 loadComponent: () =>
-                    import('./new-draft-screen/new-draft-screen.component').then(
+                    import("./new-draft-screen/new-draft-screen.component").then(
                         (m) => m.NewDraftScreenComponent,
                     ),
             },
             {
-                path: 'review',
-                loadChildren: () => import('./review/review.routes').then((m) => m.REVIEW_ROUTES),
+                path: "review",
+                loadChildren: () => import("./review/review.routes").then((m) => m.REVIEW_ROUTES),
             },
             {
-                path: 'publish',
+                path: "publish",
                 loadChildren: () =>
-                    import('./publish/publish.routes').then((m) => m.PUBLISH_ROUTES),
+                    import("./publish/publish.routes").then((m) => m.PUBLISH_ROUTES),
             },
         ],
     },
     {
-        path: 'login',
+        path: "login",
         loadComponent: () =>
-            import('./login-screen/login-screen.component').then((m) => m.LoginScreenComponent),
+            import("./login-screen/login-screen.component").then((m) => m.LoginScreenComponent),
     },
     {
-        path: 'auth/github/callback',
-        loadComponent: () => import('./login/login.component').then((m) => m.LoginComponent),
+        path: "auth/github/callback",
+        loadComponent: () => import("./login/login.component").then((m) => m.LoginComponent),
     },
     {
-        path: '**',
+        path: "**",
         loadComponent: () =>
-            import('./page-not-found/page-not-found.component').then(
+            import("./page-not-found/page-not-found.component").then(
                 (m) => m.PageNotFoundComponent,
             ),
     },

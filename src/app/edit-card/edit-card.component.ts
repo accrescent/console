@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, input, output } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { Component, input, output } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 
-import { Edit, EditStatus } from '../edit';
+import { Edit, EditStatus } from "../edit";
 
 @Component({
-    selector: 'acc-edit-card',
+    selector: "acc-edit-card",
     imports: [MatButtonModule, MatCardModule],
-    templateUrl: './edit-card.component.html',
+    templateUrl: "./edit-card.component.html",
 })
 export class EditCardComponent {
     readonly edit = input.required<Edit>();

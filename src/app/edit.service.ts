@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from "@angular/core";
+import { HttpClient, HttpEvent, HttpRequest } from "@angular/common/http";
+import { Observable } from "rxjs";
 
-import { Edit } from './edit';
-import { NewEditForm } from './new-edit-form';
-import { environment } from '../environments/environment';
+import { Edit } from "./edit";
+import { NewEditForm } from "./new-edit-form";
+import { environment } from "../environments/environment";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class EditService {
     private http = inject(HttpClient);
@@ -22,10 +22,10 @@ export class EditService {
     createEdit(appId: string, edit: NewEditForm): Observable<HttpEvent<Edit>> {
         const formData = new FormData();
         if (edit.shortDescription !== undefined) {
-            formData.append('short_description', edit.shortDescription);
+            formData.append("short_description", edit.shortDescription);
         }
 
-        const req = new HttpRequest('POST', `${this.appsUrl}/${appId}/edits`, formData);
+        const req = new HttpRequest("POST", `${this.appsUrl}/${appId}/edits`, formData);
 
         return this.http.request(req);
     }
@@ -35,7 +35,7 @@ export class EditService {
     }
 
     submitEdit(editId: string): Observable<void> {
-        return this.http.patch<void>(`${this.editsUrl}/${editId}`, '');
+        return this.http.patch<void>(`${this.editsUrl}/${editId}`, "");
     }
 
     deleteEdit(id: string): Observable<void> {

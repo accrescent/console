@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { ErrorHandler, Injectable, inject } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ErrorHandler, Injectable, inject } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { isApiError } from './api-error';
+import { isApiError } from "./api-error";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class GlobalErrorHandler implements ErrorHandler {
     private snackbar = inject(MatSnackBar);

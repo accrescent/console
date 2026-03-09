@@ -2,22 +2,22 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit, inject } from "@angular/core";
+import { MatCardModule } from "@angular/material/card";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatDividerModule } from "@angular/material/divider";
+import { RouterLink } from "@angular/router";
 
-import { App } from '../app';
-import { AppCardComponent } from '../app-card/app-card.component';
-import { AppService } from '../app.service';
-import { Draft, DraftStatus } from '../draft';
-import { DraftCardComponent } from '../draft-card/draft-card.component';
-import { DraftDeletionDialogComponent } from '../draft-deletion-dialog/draft-deletion-dialog.component';
-import { DraftService } from '../draft.service';
+import { App } from "../app";
+import { AppCardComponent } from "../app-card/app-card.component";
+import { AppService } from "../app.service";
+import { Draft, DraftStatus } from "../draft";
+import { DraftCardComponent } from "../draft-card/draft-card.component";
+import { DraftDeletionDialogComponent } from "../draft-deletion-dialog/draft-deletion-dialog.component";
+import { DraftService } from "../draft.service";
 
 @Component({
-    selector: 'acc-apps-screen',
+    selector: "acc-apps-screen",
     imports: [
         AppCardComponent,
         DraftCardComponent,
@@ -26,8 +26,8 @@ import { DraftService } from '../draft.service';
         MatDividerModule,
         RouterLink,
     ],
-    templateUrl: './apps-screen.component.html',
-    styleUrl: './apps-screen.component.scss',
+    templateUrl: "./apps-screen.component.html",
+    styleUrl: "./apps-screen.component.scss",
 })
 export class AppsScreenComponent implements OnInit {
     private appService = inject(AppService);

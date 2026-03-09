@@ -2,18 +2,18 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, input, output, inject } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { Component, input, output, inject } from "@angular/core";
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 
-import { NewUpdateForm } from '../new-update-form';
+import { NewUpdateForm } from "../new-update-form";
 
 @Component({
-    selector: 'acc-new-update-editor',
+    selector: "acc-new-update-editor",
     imports: [MatButtonModule, MatCardModule, ReactiveFormsModule],
-    templateUrl: './new-update-editor.component.html',
-    styleUrl: './new-update-editor.component.scss',
+    templateUrl: "./new-update-editor.component.html",
+    styleUrl: "./new-update-editor.component.scss",
 })
 export class NewUpdateEditorComponent {
     private fb = inject(NonNullableFormBuilder);
@@ -22,11 +22,11 @@ export class NewUpdateEditorComponent {
     readonly formSubmit = output<NewUpdateForm>();
 
     form = this.fb.group({
-        apkSet: ['', Validators.required],
+        apkSet: ["", Validators.required],
     });
 
     emitForm(): void {
-        const apkSet = (<HTMLInputElement>document.getElementById('apkset')).files?.[0];
+        const apkSet = (<HTMLInputElement>document.getElementById("apkset")).files?.[0];
 
         if (apkSet !== undefined) {
             const form: NewUpdateForm = { apkSet: apkSet };

@@ -13,9 +13,9 @@ export interface Update {
 }
 
 export enum UpdateStatus {
-    Unsubmitted = 'unsubmitted',
-    PendingReview = 'pending-review',
-    Rejected = 'rejected',
-    Publishing = 'publishing',
-    Published = 'published',
+    Unsubmitted = "unsubmitted",
+    PendingReview = "pending-review",
+    Rejected = "rejected",
+    Publishing = "publishing",
+    Published = "published",
 }

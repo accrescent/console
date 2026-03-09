@@ -11,9 +11,9 @@ export interface Edit {
 }
 
 export enum EditStatus {
-    Unsubmitted = 'unsubmitted',
-    Submitted = 'submitted',
-    Rejected = 'rejected',
-    Publishing = 'publishing',
-    Published = 'published',
+    Unsubmitted = "unsubmitted",
+    Submitted = "submitted",
+    Rejected = "rejected",
+    Publishing = "publishing",
+    Published = "published",
 }

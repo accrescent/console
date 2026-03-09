@@ -9,6 +9,6 @@ export interface Review {
 }
 
 export enum ReviewResult {
-    Approved = 'approved',
-    Rejected = 'rejected',
+    Approved = "approved",
+    Rejected = "rejected",
 }

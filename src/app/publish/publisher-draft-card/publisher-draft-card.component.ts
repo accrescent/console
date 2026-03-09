@@ -2,17 +2,17 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, input, output } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { Component, OnInit, input, output } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 
-import { Draft } from '../../draft';
-import { environment } from '../../../environments/environment';
+import { Draft } from "../../draft";
+import { environment } from "../../../environments/environment";
 
 @Component({
-    selector: 'acc-publisher-draft-card',
+    selector: "acc-publisher-draft-card",
     imports: [MatButtonModule, MatCardModule],
-    templateUrl: './publisher-draft-card.component.html',
+    templateUrl: "./publisher-draft-card.component.html",
 })
 export class PublisherDraftCardComponent implements OnInit {
     readonly draft = input.required<Draft>();

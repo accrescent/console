@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
-import { Edit, EditStatus } from './edit';
+import { Edit, EditStatus } from "./edit";
 
 @Pipe({
-    name: 'editFilter',
+    name: "editFilter",
     standalone: true,
     pure: false,
 })

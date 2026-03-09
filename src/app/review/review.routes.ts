@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Routes } from '@angular/router';
+import { Routes } from "@angular/router";
 
-import { ReviewScreenComponent } from './review-screen/review-screen.component';
+import { ReviewScreenComponent } from "./review-screen/review-screen.component";
 
-export const REVIEW_ROUTES: Routes = [{ path: '', component: ReviewScreenComponent }];
+export const REVIEW_ROUTES: Routes = [{ path: "", component: ReviewScreenComponent }];

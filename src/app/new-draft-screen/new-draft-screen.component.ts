@@ -2,22 +2,22 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, inject } from '@angular/core';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { Router } from '@angular/router';
-import { finalize } from 'rxjs';
+import { Component, inject } from "@angular/core";
+import { HttpEventType, HttpResponse } from "@angular/common/http";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { Router } from "@angular/router";
+import { finalize } from "rxjs";
 
-import { DraftService } from '../draft.service';
-import { DraftSubmissionDialogComponent } from '../draft-submission-dialog/draft-submission-dialog.component';
-import { NewDraftEditorComponent } from '../new-draft-editor/new-draft-editor.component';
-import { NewDraftForm } from '../new-draft-form';
+import { DraftService } from "../draft.service";
+import { DraftSubmissionDialogComponent } from "../draft-submission-dialog/draft-submission-dialog.component";
+import { NewDraftEditorComponent } from "../new-draft-editor/new-draft-editor.component";
+import { NewDraftForm } from "../new-draft-form";
 
 @Component({
-    selector: 'acc-new-draft-screen',
+    selector: "acc-new-draft-screen",
     imports: [MatDialogModule, MatProgressBarModule, NewDraftEditorComponent],
-    templateUrl: './new-draft-screen.component.html',
+    templateUrl: "./new-draft-screen.component.html",
 })
 export class NewDraftScreenComponent {
     private dialog = inject(MatDialog);
@@ -48,10 +48,10 @@ export class NewDraftScreenComponent {
                         .subscribe((confirmed) => {
                             if (confirmed) {
                                 this.draftService.submitDraft(draft.id).subscribe(() => {
-                                    this.router.navigate(['apps']);
+                                    this.router.navigate(["apps"]);
                                 });
                             } else {
-                                this.router.navigate(['apps']);
+                                this.router.navigate(["apps"]);
                             }
                         });
                 }

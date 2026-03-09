@@ -12,11 +12,11 @@ export interface ApiError {
 export function isApiError(error: any): error is ApiError {
     return (
         error &&
-        'error_code' in error &&
-        typeof error.error_code === 'number' &&
-        'title' in error &&
-        typeof error.title === 'string' &&
-        'message' in error &&
-        typeof error.message === 'string'
+        "error_code" in error &&
+        typeof error.error_code === "number" &&
+        "title" in error &&
+        typeof error.title === "string" &&
+        "message" in error &&
+        typeof error.message === "string"
     );
 }

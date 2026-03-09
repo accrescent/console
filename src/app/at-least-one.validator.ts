@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { AbstractControl, isFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, isFormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 
 export const atLeastOne =
     (validator: ValidatorFn) =>

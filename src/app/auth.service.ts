@@ -2,41 +2,41 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams, HttpStatusCode } from '@angular/common/http';
+import { Injectable, inject } from "@angular/core";
+import { HttpClient, HttpParams, HttpStatusCode } from "@angular/common/http";
 
-import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
+import { Observable, catchError, map, of, tap, throwError } from "rxjs";
 
-import { AuthResult } from './auth-result';
-import { environment } from '../environments/environment';
+import { AuthResult } from "./auth-result";
+import { environment } from "../environments/environment";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class AuthService {
     private http = inject(HttpClient);
 
     private readonly callbackUrl = `${environment.developerApiUrl}/auth/github/callback2`;
     private readonly sessionUrl = `${environment.developerApiUrl}/api/v1/session`;
-    private readonly loggedInStorageKey = 'loggedIn';
-    private readonly reviewerStorageKey = 'reviewer';
-    private readonly publisherStorageKey = 'publisher';
+    private readonly loggedInStorageKey = "loggedIn";
+    private readonly reviewerStorageKey = "reviewer";
+    private readonly publisherStorageKey = "publisher";
 
     get loggedIn(): boolean {
-        return localStorage.getItem(this.loggedInStorageKey) === 'true';
+        return localStorage.getItem(this.loggedInStorageKey) === "true";
     }
 
     get reviewer(): boolean {
-        return localStorage.getItem(this.reviewerStorageKey) === 'true';
+        return localStorage.getItem(this.reviewerStorageKey) === "true";
     }
 
     get publisher(): boolean {
-        return localStorage.getItem(this.publisherStorageKey) === 'true';
+        return localStorage.getItem(this.publisherStorageKey) === "true";
     }
 
     logIn(code: string, state: string): Observable<boolean> {
-        const params = new HttpParams().append('code', code).append('state', state);
-        return this.http.get<AuthResult>(this.callbackUrl, { observe: 'response', params }).pipe(
+        const params = new HttpParams().append("code", code).append("state", state);
+        return this.http.get<AuthResult>(this.callbackUrl, { observe: "response", params }).pipe(
             tap((res) => {
                 const body = res.body!;
 
@@ -58,7 +58,7 @@ export class AuthService {
     logOut(): Observable<void> {
         return this.http.delete<void>(this.sessionUrl).pipe(
             tap(() => {
-                localStorage.setItem(this.loggedInStorageKey, 'false');
+                localStorage.setItem(this.loggedInStorageKey, "false");
                 localStorage.removeItem(this.reviewerStorageKey);
             }),
         );

@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, input, output } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { Component, input, output } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 
-import { Update, UpdateStatus } from '../update';
+import { Update, UpdateStatus } from "../update";
 
 @Component({
-    selector: 'acc-update-card',
+    selector: "acc-update-card",
     imports: [MatButtonModule, MatCardModule],
-    templateUrl: './update-card.component.html',
+    templateUrl: "./update-card.component.html",
 })
 export class UpdateCardComponent {
     readonly update = input.required<Update>();

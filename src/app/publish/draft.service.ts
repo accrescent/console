@@ -2,15 +2,15 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
-import { Draft } from '../draft';
-import { environment } from '../../environments/environment';
+import { Draft } from "../draft";
+import { environment } from "../../environments/environment";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class DraftService {
     private http = inject(HttpClient);

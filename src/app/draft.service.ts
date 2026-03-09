@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from "@angular/core";
+import { HttpClient, HttpEvent, HttpRequest } from "@angular/common/http";
+import { Observable } from "rxjs";
 
-import { Draft } from './draft';
-import { NewDraftForm } from './new-draft-form';
-import { environment } from '../environments/environment';
+import { Draft } from "./draft";
+import { NewDraftForm } from "./new-draft-form";
+import { environment } from "../environments/environment";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class DraftService {
     private http = inject(HttpClient);
@@ -20,12 +20,12 @@ export class DraftService {
 
     createDraft(form: NewDraftForm): Observable<HttpEvent<Draft>> {
         const formData = new FormData();
-        formData.append('icon', form.icon);
-        formData.append('apk_set', form.apkSet);
-        formData.append('label', form.label);
-        formData.append('short_description', form.shortDescription);
+        formData.append("icon", form.icon);
+        formData.append("apk_set", form.apkSet);
+        formData.append("label", form.label);
+        formData.append("short_description", form.shortDescription);
 
-        const req = new HttpRequest('POST', this.draftsUrl, formData, { reportProgress: true });
+        const req = new HttpRequest("POST", this.draftsUrl, formData, { reportProgress: true });
 
         return this.http.request(req);
     }
@@ -35,7 +35,7 @@ export class DraftService {
     }
 
     submitDraft(id: string): Observable<void> {
-        return this.http.patch<void>(`${this.draftsUrl}/${id}`, '');
+        return this.http.patch<void>(`${this.draftsUrl}/${id}`, "");
     }
 
     deleteDraft(id: string): Observable<void> {

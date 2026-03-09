@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
-import { Edit } from '../edit';
-import { Review } from './review';
-import { environment } from '../../environments/environment';
+import { Edit } from "../edit";
+import { Review } from "./review";
+import { environment } from "../../environments/environment";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class EditService {
     private http = inject(HttpClient);

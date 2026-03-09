@@ -2,19 +2,19 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, output, inject } from '@angular/core';
-import { FormArray, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
+import { Component, output, inject } from "@angular/core";
+import { FormArray, NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatRadioModule } from "@angular/material/radio";
 
-import { Review, ReviewResult } from '../review';
+import { Review, ReviewResult } from "../review";
 
 @Component({
-    selector: 'acc-review-editor',
+    selector: "acc-review-editor",
     imports: [
         MatButtonModule,
         MatCardModule,
@@ -24,8 +24,8 @@ import { Review, ReviewResult } from '../review';
         MatRadioModule,
         ReactiveFormsModule,
     ],
-    templateUrl: './review-editor.component.html',
-    styleUrl: './review-editor.component.scss',
+    templateUrl: "./review-editor.component.html",
+    styleUrl: "./review-editor.component.scss",
 })
 export class ReviewEditorComponent {
     private fb = inject(NonNullableFormBuilder);
@@ -36,16 +36,16 @@ export class ReviewEditorComponent {
 
     form = this.fb.group({
         result: [ReviewResult.Rejected, Validators.required],
-        reasons: this.fb.array([this.fb.control('', Validators.required)], Validators.required),
-        additional_notes: [''],
+        reasons: this.fb.array([this.fb.control("", Validators.required)], Validators.required),
+        additional_notes: [""],
     });
 
     get reasons(): FormArray {
-        return this.form.controls['reasons'] as FormArray;
+        return this.form.controls["reasons"] as FormArray;
     }
 
     addReason(): void {
-        this.reasons.push(this.fb.control('', Validators.required));
+        this.reasons.push(this.fb.control("", Validators.required));
     }
 
     removeReason(index: number): void {
@@ -56,10 +56,10 @@ export class ReviewEditorComponent {
         // Enable the 'reasons' field if and only if the review is a rejection
         switch (result) {
             case ReviewResult.Approved:
-                this.form.controls['reasons'].disable();
+                this.form.controls["reasons"].disable();
                 break;
             case ReviewResult.Rejected:
-                this.form.controls['reasons'].enable();
+                this.form.controls["reasons"].enable();
                 break;
         }
     }
@@ -72,7 +72,7 @@ export class ReviewEditorComponent {
 
         // Don't send this field if there aren't any notes to avoid creating unnecessary database
         // entries
-        if (form.additional_notes === '') {
+        if (form.additional_notes === "") {
             form.additional_notes = undefined;
         }
 

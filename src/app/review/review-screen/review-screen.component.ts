@@ -2,30 +2,30 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject } from '@angular/core';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Component, OnInit, inject } from "@angular/core";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 
-import { Draft } from '../../draft';
-import { Edit } from '../../edit';
-import { DraftService } from '../draft.service';
-import { EditService } from '../edit.service';
-import { ReviewDialogComponent } from '../review-dialog/review-dialog.component';
-import { ReviewerDraftCardComponent } from '../reviewer-draft-card/reviewer-draft-card.component';
-import { ReviewerEditCardComponent } from '../reviewer-edit-card/reviewer-edit-card.component';
-import { ReviewerUpdateCardComponent } from '../reviewer-update-card/reviewer-update-card.component';
-import { Update } from '../../update';
-import { UpdateService } from '../update.service';
+import { Draft } from "../../draft";
+import { Edit } from "../../edit";
+import { DraftService } from "../draft.service";
+import { EditService } from "../edit.service";
+import { ReviewDialogComponent } from "../review-dialog/review-dialog.component";
+import { ReviewerDraftCardComponent } from "../reviewer-draft-card/reviewer-draft-card.component";
+import { ReviewerEditCardComponent } from "../reviewer-edit-card/reviewer-edit-card.component";
+import { ReviewerUpdateCardComponent } from "../reviewer-update-card/reviewer-update-card.component";
+import { Update } from "../../update";
+import { UpdateService } from "../update.service";
 
 @Component({
-    selector: 'acc-review-screen',
+    selector: "acc-review-screen",
     imports: [
         MatDialogModule,
         ReviewerDraftCardComponent,
         ReviewerEditCardComponent,
         ReviewerUpdateCardComponent,
     ],
-    templateUrl: './review-screen.component.html',
-    styleUrl: './review-screen.component.scss',
+    templateUrl: "./review-screen.component.html",
+    styleUrl: "./review-screen.component.scss",
 })
 export class ReviewScreenComponent implements OnInit {
     private dialog = inject(MatDialog);

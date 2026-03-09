@@ -2,38 +2,38 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject } from '@angular/core';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { finalize } from 'rxjs';
+import { Component, OnInit, inject } from "@angular/core";
+import { HttpEventType, HttpResponse } from "@angular/common/http";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { ActivatedRoute, Router } from "@angular/router";
+import { finalize } from "rxjs";
 
-import { App } from '../app';
-import { AppService } from '../app.service';
-import { Edit, EditStatus } from '../edit';
-import { EditCardComponent } from '../edit-card/edit-card.component';
-import { EditDeletionDialogComponent } from '../edit-deletion-dialog/edit-deletion-dialog.component';
-import { EditFilterPipe } from '../edit-filter.pipe';
-import { EditService } from '../edit.service';
-import { EditSubmissionDialogComponent } from '../edit-submission-dialog/edit-submission-dialog.component';
-import { NewEditEditorComponent } from '../new-edit-editor/new-edit-editor.component';
-import { NewEditForm } from '../new-edit-form';
-import { NewUpdateEditorComponent } from '../new-update-editor/new-update-editor.component';
-import { NewUpdateForm } from '../new-update-form';
-import { Update, UpdateStatus } from '../update';
-import { UpdateCardComponent } from '../update-card/update-card.component';
-import { UpdateFilterPipe } from '../update-filter.pipe';
-import { UpdateService } from '../update.service';
-import { UpdateDeletionDialogComponent } from '../update-deletion-dialog/update-deletion-dialog.component';
-import { UpdateSubmissionDialogComponent } from '../update-submission-dialog/update-submission-dialog.component';
+import { App } from "../app";
+import { AppService } from "../app.service";
+import { Edit, EditStatus } from "../edit";
+import { EditCardComponent } from "../edit-card/edit-card.component";
+import { EditDeletionDialogComponent } from "../edit-deletion-dialog/edit-deletion-dialog.component";
+import { EditFilterPipe } from "../edit-filter.pipe";
+import { EditService } from "../edit.service";
+import { EditSubmissionDialogComponent } from "../edit-submission-dialog/edit-submission-dialog.component";
+import { NewEditEditorComponent } from "../new-edit-editor/new-edit-editor.component";
+import { NewEditForm } from "../new-edit-form";
+import { NewUpdateEditorComponent } from "../new-update-editor/new-update-editor.component";
+import { NewUpdateForm } from "../new-update-form";
+import { Update, UpdateStatus } from "../update";
+import { UpdateCardComponent } from "../update-card/update-card.component";
+import { UpdateFilterPipe } from "../update-filter.pipe";
+import { UpdateService } from "../update.service";
+import { UpdateDeletionDialogComponent } from "../update-deletion-dialog/update-deletion-dialog.component";
+import { UpdateSubmissionDialogComponent } from "../update-submission-dialog/update-submission-dialog.component";
 
 @Component({
-    selector: 'acc-app-details-screen',
+    selector: "acc-app-details-screen",
     imports: [
         EditCardComponent,
         EditFilterPipe,
@@ -48,8 +48,8 @@ import { UpdateSubmissionDialogComponent } from '../update-submission-dialog/upd
         UpdateCardComponent,
         UpdateFilterPipe,
     ],
-    templateUrl: './app-details-screen.component.html',
-    styleUrl: './app-details-screen.component.scss',
+    templateUrl: "./app-details-screen.component.html",
+    styleUrl: "./app-details-screen.component.scss",
 })
 export class AppDetailsScreenComponent implements OnInit {
     private activatedRoute = inject(ActivatedRoute);
@@ -73,7 +73,7 @@ export class AppDetailsScreenComponent implements OnInit {
     ngOnInit(): void {
         this.activatedRoute.paramMap.subscribe((params) => {
             // TODO: Handle error case
-            const appId = params.get('id');
+            const appId = params.get("id");
             if (appId !== null) {
                 this.appService.getApp(appId).subscribe((app) => (this.app = app));
                 this.editService.getEdits(appId).subscribe((edits) => (this.edits = edits));

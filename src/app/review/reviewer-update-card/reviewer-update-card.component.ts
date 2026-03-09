@@ -2,17 +2,17 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, input, output } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { Component, OnInit, input, output } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 
-import { Update } from '../../update';
-import { environment } from '../../../environments/environment';
+import { Update } from "../../update";
+import { environment } from "../../../environments/environment";
 
 @Component({
-    selector: 'acc-reviewer-update-card',
+    selector: "acc-reviewer-update-card",
     imports: [MatButtonModule, MatCardModule],
-    templateUrl: './reviewer-update-card.component.html',
+    templateUrl: "./reviewer-update-card.component.html",
 })
 export class ReviewerUpdateCardComponent implements OnInit {
     readonly update = input.required<Update>();

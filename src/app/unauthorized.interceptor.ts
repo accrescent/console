@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { HttpErrorResponse, HttpInterceptorFn, HttpStatusCode } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { HttpErrorResponse, HttpInterceptorFn, HttpStatusCode } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { Router } from "@angular/router";
+import { tap } from "rxjs";
 
-import { AuthService } from './auth.service';
+import { AuthService } from "./auth.service";
 
 export const unauthorizedInterceptor: HttpInterceptorFn = (req, next) => {
     const authService = inject(AuthService);
@@ -20,7 +20,7 @@ export const unauthorizedInterceptor: HttpInterceptorFn = (req, next) => {
                     // This reloads the page (ensuring the login screen is shown instead of a stale
                     // view of the current page) without fetching data from the server.
                     router
-                        .navigate(['/'])
+                        .navigate(["/"])
                         // eslint-disable-next-line no-self-assign
                         .then(() => (window.location.href = window.location.href));
                 });
