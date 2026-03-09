@@ -1,62 +1,62 @@
 {
-  "name": "console",
-  "version": "0.13.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "ng lint",
-    "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check"
-  },
-  "dependencies": {
-    "@angular/cdk": "^20.0.5",
-    "@angular/common": "^20.0.6",
-    "@angular/compiler": "^20.0.6",
-    "@angular/core": "^20.0.6",
-    "@angular/forms": "^20.0.6",
-    "@angular/material": "^20.0.5",
-    "@angular/platform-browser": "^20.0.6",
-    "@angular/platform-browser-dynamic": "^20.0.6",
-    "@angular/router": "^20.0.6",
-    "@fontsource-variable/roboto": "^5.2.10",
-    "@fontsource/material-icons": "^5.2.7",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.15.1"
-  },
-  "devDependencies": {
-    "@angular-eslint/builder": "20.7.0",
-    "@angular-eslint/eslint-plugin": "20.7.0",
-    "@angular-eslint/eslint-plugin-template": "20.7.0",
-    "@angular-eslint/schematics": "20.7.0",
-    "@angular-eslint/template-parser": "20.7.0",
-    "@angular/build": "^20.0.5",
-    "@angular/cli": "~20.3.0",
-    "@angular/compiler-cli": "^20.0.6",
-    "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^9.11.1",
-    "@types/jasmine": "~6.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "eslint": "^9.0.0",
-    "jasmine-core": "~6.1.0",
-    "karma": "~6.4.2",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.2.0",
-    "oxfmt": "^0.36.0",
-    "typescript": "~5.9.0"
-  },
-  "devEngines": {
-    "packageManager": {
-      "name": "npm",
-      "onFail": "error"
+    "name": "console",
+    "version": "0.13.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "ng": "ng",
+        "start": "ng serve",
+        "build": "ng build",
+        "watch": "ng build --watch --configuration development",
+        "test": "ng test",
+        "lint": "ng lint",
+        "fmt": "oxfmt",
+        "fmt:check": "oxfmt --check"
+    },
+    "dependencies": {
+        "@angular/cdk": "^20.0.5",
+        "@angular/common": "^20.0.6",
+        "@angular/compiler": "^20.0.6",
+        "@angular/core": "^20.0.6",
+        "@angular/forms": "^20.0.6",
+        "@angular/material": "^20.0.5",
+        "@angular/platform-browser": "^20.0.6",
+        "@angular/platform-browser-dynamic": "^20.0.6",
+        "@angular/router": "^20.0.6",
+        "@fontsource-variable/roboto": "^5.2.10",
+        "@fontsource/material-icons": "^5.2.7",
+        "rxjs": "~7.8.0",
+        "tslib": "^2.3.0",
+        "zone.js": "~0.15.1"
+    },
+    "devDependencies": {
+        "@angular-eslint/builder": "20.7.0",
+        "@angular-eslint/eslint-plugin": "20.7.0",
+        "@angular-eslint/eslint-plugin-template": "20.7.0",
+        "@angular-eslint/schematics": "20.7.0",
+        "@angular-eslint/template-parser": "20.7.0",
+        "@angular/build": "^20.0.5",
+        "@angular/cli": "~20.3.0",
+        "@angular/compiler-cli": "^20.0.6",
+        "@eslint/eslintrc": "^3.1.0",
+        "@eslint/js": "^9.11.1",
+        "@types/jasmine": "~6.0.0",
+        "@typescript-eslint/eslint-plugin": "^8.0.0",
+        "@typescript-eslint/parser": "^8.0.0",
+        "eslint": "^9.0.0",
+        "jasmine-core": "~6.1.0",
+        "karma": "~6.4.2",
+        "karma-chrome-launcher": "~3.2.0",
+        "karma-coverage": "~2.2.0",
+        "karma-jasmine": "~5.1.0",
+        "karma-jasmine-html-reporter": "~2.2.0",
+        "oxfmt": "^0.36.0",
+        "typescript": "~5.9.0"
+    },
+    "devEngines": {
+        "packageManager": {
+            "name": "npm",
+            "onFail": "error"
+        }
     }
-  }
 }

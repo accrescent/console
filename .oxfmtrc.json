@@ -1,19 +1,19 @@
 {
-  "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "bracketSameLine": true,
-  "overrides": [
-    {
-      "files": ["*.json", "*.yaml"],
-      "options": {
-        "tabWidth": 2
-      }
-    },
-    {
-      "files": ["*.yaml"],
-      "options": {
-        "singleQuote": true
-      }
-    }
-  ],
-  "tabWidth": 4
+    "$schema": "./node_modules/oxfmt/configuration_schema.json",
+    "bracketSameLine": true,
+    "overrides": [
+        {
+            "files": ["*.yaml"],
+            "options": {
+                "tabWidth": 2
+            }
+        },
+        {
+            "files": ["*.yaml"],
+            "options": {
+                "singleQuote": true
+            }
+        }
+    ],
+    "tabWidth": 4
 }
