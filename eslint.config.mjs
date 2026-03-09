@@ -2,37 +2,21 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+// @ts-check
+import eslint from "@eslint/js";
+import { defineConfig } from "eslint/config";
+import tseslint from "typescript-eslint";
+import angular from "angular-eslint";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all,
-});
-
-export default [
-    {
-        ignores: ["projects/**/*"],
-    },
-    ...compat
-        .extends(
-            "eslint:recommended",
-            "plugin:@typescript-eslint/recommended",
-            "plugin:@angular-eslint/recommended",
-            "plugin:@angular-eslint/template/process-inline-templates",
-        )
-        .map((config) => ({
-            ...config,
-            files: ["**/*.ts"],
-        })),
+export default defineConfig([
     {
         files: ["**/*.ts"],
-
+        extends: [
+            eslint.configs.recommended,
+            tseslint.configs.recommended,
+            angular.configs.tsRecommended,
+        ],
+        processor: angular.processInlineTemplates,
         rules: {
             "@angular-eslint/directive-selector": [
                 "error",
@@ -42,7 +26,6 @@ export default [
                     style: "camelCase",
                 },
             ],
-
             "@angular-eslint/component-selector": [
                 "error",
                 {
@@ -51,22 +34,13 @@ export default [
                     style: "kebab-case",
                 },
             ],
-
             "@typescript-eslint/explicit-function-return-type": "error",
             eqeqeq: ["error", "always"],
         },
     },
-    ...compat
-        .extends(
-            "plugin:@angular-eslint/template/recommended",
-            "plugin:@angular-eslint/template/accessibility",
-        )
-        .map((config) => ({
-            ...config,
-            files: ["**/*.html"],
-        })),
     {
         files: ["**/*.html"],
+        extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
         rules: {},
     },
-];
+]);
