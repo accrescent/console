@@ -13,8 +13,8 @@ import { Update } from '../update';
     selector: 'acc-update-submission-dialog',
     imports: [MatButtonModule, MatDialogModule],
     templateUrl: './update-submission-dialog.component.html',
-    styleUrl: './update-submission-dialog.component.scss'
+    styleUrl: './update-submission-dialog.component.scss',
 })
 export class UpdateSubmissionDialogComponent {
-    data = inject<{ app: App; update: Update; }>(MAT_DIALOG_DATA);
+    data = inject<{ app: App; update: Update }>(MAT_DIALOG_DATA);
 }

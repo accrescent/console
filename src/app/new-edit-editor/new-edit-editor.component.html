@@ -13,7 +13,7 @@ SPDX-License-Identifier: AGPL-3.0-only
         <mat-card-content>
             <mat-form-field appearance="outline">
                 <mat-label>Short description</mat-label>
-                <input type="text" formControlName="shortDescription" matInput>
+                <input type="text" formControlName="shortDescription" matInput />
                 @if (shouldShowLengthError()) {
                     <mat-error>Must be between 3 and 80 characters</mat-error>
                 }
@@ -21,9 +21,7 @@ SPDX-License-Identifier: AGPL-3.0-only
         </mat-card-content>
 
         <mat-card-actions align="end">
-            <button type="submit" [disabled]="form.invalid" matButton="filled">
-                Create
-            </button>
+            <button type="submit" [disabled]="form.invalid" matButton="filled">Create</button>
         </mat-card-actions>
     </form>
 </mat-card>

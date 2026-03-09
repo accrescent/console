@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-only
         <mat-card-subtitle>{{ app().id }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <br>
+        <br />
         <h4>App info</h4>
         <ul>
             <li>Version code: {{ app().version_code }}</li>
@@ -19,8 +19,6 @@ SPDX-License-Identifier: AGPL-3.0-only
         </ul>
     </mat-card-content>
     <mat-card-actions align="end">
-        <button matButton="filled" [routerLink]="[app().id, 'details']">
-            View details
-        </button>
+        <button matButton="filled" [routerLink]="[app().id, 'details']">View details</button>
     </mat-card-actions>
 </mat-card>

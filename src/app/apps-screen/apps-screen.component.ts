@@ -13,9 +13,7 @@ import { AppCardComponent } from '../app-card/app-card.component';
 import { AppService } from '../app.service';
 import { Draft, DraftStatus } from '../draft';
 import { DraftCardComponent } from '../draft-card/draft-card.component';
-import {
-    DraftDeletionDialogComponent,
-} from '../draft-deletion-dialog/draft-deletion-dialog.component';
+import { DraftDeletionDialogComponent } from '../draft-deletion-dialog/draft-deletion-dialog.component';
 import { DraftService } from '../draft.service';
 
 @Component({
@@ -40,36 +38,35 @@ export class AppsScreenComponent implements OnInit {
     drafts: Draft[] = [];
 
     ngOnInit(): void {
-        this.appService.getApps().subscribe(apps => this.apps = apps);
-        this.draftService.getDrafts().subscribe(drafts => this.drafts = drafts);
+        this.appService.getApps().subscribe((apps) => (this.apps = apps));
+        this.draftService.getDrafts().subscribe((drafts) => (this.drafts = drafts));
     }
 
     deleteDraft(id: string): void {
-        const draft = this.drafts.find(d => d.id === id);
+        const draft = this.drafts.find((d) => d.id === id);
 
         this.dialog
             .open(DraftDeletionDialogComponent, { data: draft })
             .afterClosed()
-            .subscribe(confirmed => {
+            .subscribe((confirmed) => {
                 if (confirmed) {
                     this.draftService.deleteDraft(id).subscribe(() => {
                         // Remove from the UI
-                        const i = this.drafts.findIndex(d => d.id === id);
+                        const i = this.drafts.findIndex((d) => d.id === id);
                         if (i > -1) {
                             this.drafts.splice(i, 1);
                         }
                     });
                 }
             });
-
     }
 
     submitDraft(id: string): void {
         this.draftService.submitDraft(id).subscribe(() => {
             // Mark as submitted in the UI
-            const draft = this
-                .drafts
-                .find(draft => draft.id === id && draft.status === DraftStatus.Unsubmitted);
+            const draft = this.drafts.find(
+                (draft) => draft.id === id && draft.status === DraftStatus.Unsubmitted,
+            );
             if (draft !== undefined) {
                 draft.status = DraftStatus.Submitted;
             }

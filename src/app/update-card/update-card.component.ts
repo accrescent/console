@@ -23,8 +23,10 @@ export class UpdateCardComponent {
     canDelete(): boolean {
         const update = this.update();
 
-        return update.status === UpdateStatus.Unsubmitted ||
-            update.status === UpdateStatus.PendingReview;
+        return (
+            update.status === UpdateStatus.Unsubmitted ||
+            update.status === UpdateStatus.PendingReview
+        );
     }
 
     onDelete(): void {

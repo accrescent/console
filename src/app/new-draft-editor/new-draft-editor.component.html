@@ -13,72 +13,66 @@ SPDX-License-Identifier: AGPL-3.0-only
         <mat-card-content class="col">
             <mat-form-field appearance="outline">
                 <mat-label>Display name</mat-label>
-                <input type="text" formControlName="label" matInput>
+                <input type="text" formControlName="label" matInput />
                 @if (labelLengthError()) {
                     <mat-error>Must be between 3 and 30 characters</mat-error>
                 }
-                @if (form.controls['label'].hasError('required')) {
+                @if (form.controls["label"].hasError("required")) {
                     <mat-error>Display name is required</mat-error>
                 }
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Short description</mat-label>
-                <input type="text" formControlName="shortDescription" matInput>
+                <input type="text" formControlName="shortDescription" matInput />
                 @if (shortDescriptionLengthError()) {
                     <mat-error>Must be between 3 and 80 characters</mat-error>
                 }
-                @if (form.controls['shortDescription'].hasError('required')) {
+                @if (form.controls["shortDescription"].hasError("required")) {
                     <mat-error>Short description is required</mat-error>
                 }
             </mat-form-field>
 
             <h3 class="no-spacing">Icon</h3>
             <h5>Must be a 512 x 512 PNG</h5>
-            <input id="icon" #iconinput type="file" accept="image/png" formControlName="icon">
+            <input id="icon" #iconinput type="file" accept="image/png" formControlName="icon" />
             @if (form.value.icon) {
                 <p class="no-spacing">
-                    {{ form.value.icon!!.replace('C:\\fakepath\\', '') }}
+                    {{ form.value.icon!!.replace("C:\\fakepath\\", "") }}
                 </p>
             } @else {
                 <i>No icon selected</i>
             }
 
-            <button
-                type="button"
-                matButton="filled"
-                (click)="iconinput.click()"
-                class="btn">
+            <button type="button" matButton="filled" (click)="iconinput.click()" class="btn">
                 Select
             </button>
 
             <h3 class="no-spacing">APK set</h3>
-            <h5>Must comply with <a href="https://accrescent.app/docs/guide/publish/requirements.html">app requirements</a></h5>
-            <input id="apkset" #apksetinput type="file" accept=".apks" formControlName="apkSet">
+            <h5>
+                Must comply with
+                <a href="https://accrescent.app/docs/guide/publish/requirements.html"
+                    >app requirements</a
+                >
+            </h5>
+            <input id="apkset" #apksetinput type="file" accept=".apks" formControlName="apkSet" />
             @if (form.value.apkSet) {
                 <p class="no-spacing">
-                    {{ form.value.apkSet!!.replace('C:\\fakepath\\', '') }}
+                    {{ form.value.apkSet!!.replace("C:\\fakepath\\", "") }}
                 </p>
             } @else {
                 <i>No APK set selected</i>
             }
 
-            <button
-                type="button"
-                matButton="filled"
-                (click)="apksetinput.click()"
-                class="btn">
+            <button type="button" matButton="filled" (click)="apksetinput.click()" class="btn">
                 Select
             </button>
 
-            <ng-content/>
+            <ng-content />
         </mat-card-content>
 
         <mat-card-actions align="end">
-            <button
-                type="submit"
-                [disabled]="form.invalid || submitDisabled()"
-                matButton="filled">
+            <button type="submit" [disabled]="form.invalid || submitDisabled()" matButton="filled">
                 Upload
             </button>
         </mat-card-actions>

@@ -10,32 +10,33 @@ SPDX-License-Identifier: AGPL-3.0-only
     src="https://accrescent.app/badges/get-it-on.png"
     alt="Get it on Accrescent"
     width="323"
-    height="125">
+    height="125" />
 
 <p>Use the following HTML badge to share your app:</p>
 <mat-form-field>
-<textarea rows="4" readonly matInput>
+    <textarea rows="4" readonly matInput>
 <a href="https://accrescent.app/app/{{ app?.id }}">
     <img alt="Get it on Accrescent" src="https://accrescent.app/badges/get-it-on.png" height="80">
 </a>
-</textarea>
+</textarea
+    >
 </mat-form-field>
 
-<mat-divider/>
+<mat-divider />
 
 <div class="grid-forms">
     <acc-new-update-editor (formSubmit)="createUpdate($event)">
         @if (uploadProgress !== undefined) {
-            <mat-progress-bar [value]="uploadProgress"/>
+            <mat-progress-bar [value]="uploadProgress" />
         } @else if (submitDisabled) {
-            <mat-progress-bar mode="indeterminate"/>
+            <mat-progress-bar mode="indeterminate" />
         }
     </acc-new-update-editor>
 
-    <acc-new-edit-editor (formSubmit)="createEdit($event)"/>
+    <acc-new-edit-editor (formSubmit)="createEdit($event)" />
 </div>
 
-<mat-divider/>
+<mat-divider />
 
 <h2 class="section-header">Updates</h2>
 <mat-chip-listbox multiple>
@@ -51,17 +52,20 @@ SPDX-License-Identifier: AGPL-3.0-only
     </mat-chip-option>
 </mat-chip-listbox>
 <div class="grid-cards">
-    @for (update of updates | updateFilter : showRejectedUpdates : showPublishedUpdates; track update) {
+    @for (
+        update of updates | updateFilter: showRejectedUpdates : showPublishedUpdates;
+        track update
+    ) {
         <acc-update-card
             [update]="update"
             (delete)="deleteUpdate($event)"
-            (submitForReview)="submitUpdate($event)"/>
+            (submitForReview)="submitUpdate($event)" />
     } @empty {
         <p>No updates</p>
     }
 </div>
 
-<mat-divider/>
+<mat-divider />
 
 <h2 class="section-header">Edits</h2>
 <mat-chip-listbox multiple>
@@ -77,14 +81,13 @@ SPDX-License-Identifier: AGPL-3.0-only
     </mat-chip-option>
 </mat-chip-listbox>
 <div class="grid-cards">
-    @for (edit of edits | editFilter : showRejectedEdits : showPublishedEdits; track edit) {
-<acc-edit-card
-       
-        [edit]="edit"
-        (delete)="deleteEdit($event)"
-        (submitForReview)="submitEdit($event)"/>
-}
+    @for (edit of edits | editFilter: showRejectedEdits : showPublishedEdits; track edit) {
+        <acc-edit-card
+            [edit]="edit"
+            (delete)="deleteEdit($event)"
+            (submitForReview)="submitEdit($event)" />
+    }
     @if (edits.length === 0) {
-<p>No edits</p>
-}
+        <p>No edits</p>
+    }
 </div>

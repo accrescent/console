@@ -25,7 +25,7 @@ import { Review, ReviewResult } from '../review';
         ReactiveFormsModule,
     ],
     templateUrl: './review-editor.component.html',
-    styleUrl: './review-editor.component.scss'
+    styleUrl: './review-editor.component.scss',
 })
 export class ReviewEditorComponent {
     private fb = inject(NonNullableFormBuilder);
@@ -55,12 +55,12 @@ export class ReviewEditorComponent {
     updateFormFields(result: ReviewResult): void {
         // Enable the 'reasons' field if and only if the review is a rejection
         switch (result) {
-        case ReviewResult.Approved:
-            this.form.controls['reasons'].disable();
-            break;
-        case ReviewResult.Rejected:
-            this.form.controls['reasons'].enable();
-            break;
+            case ReviewResult.Approved:
+                this.form.controls['reasons'].disable();
+                break;
+            case ReviewResult.Rejected:
+                this.form.controls['reasons'].enable();
+                break;
         }
     }
 

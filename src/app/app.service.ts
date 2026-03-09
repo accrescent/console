@@ -10,7 +10,7 @@ import { App } from './app';
 import { environment } from '../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AppService {
     private http = inject(HttpClient);

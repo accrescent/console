@@ -12,9 +12,7 @@ import { EditService } from '../edit.service';
 import { ReviewDialogComponent } from '../review-dialog/review-dialog.component';
 import { ReviewerDraftCardComponent } from '../reviewer-draft-card/reviewer-draft-card.component';
 import { ReviewerEditCardComponent } from '../reviewer-edit-card/reviewer-edit-card.component';
-import {
-    ReviewerUpdateCardComponent,
-} from '../reviewer-update-card/reviewer-update-card.component';
+import { ReviewerUpdateCardComponent } from '../reviewer-update-card/reviewer-update-card.component';
 import { Update } from '../../update';
 import { UpdateService } from '../update.service';
 
@@ -40,20 +38,20 @@ export class ReviewScreenComponent implements OnInit {
     updates: Update[] = [];
 
     ngOnInit(): void {
-        this.draftService.getAssigned().subscribe(drafts => this.drafts = drafts);
-        this.editService.getAssigned().subscribe(edits => this.edits = edits);
-        this.updateService.getAssigned().subscribe(updates => this.updates = updates);
+        this.draftService.getAssigned().subscribe((drafts) => (this.drafts = drafts));
+        this.editService.getAssigned().subscribe((edits) => (this.edits = edits));
+        this.updateService.getAssigned().subscribe((updates) => (this.updates = updates));
     }
 
     openDraftReviewDialog(draftId: string): void {
         this.dialog
             .open(ReviewDialogComponent)
             .afterClosed()
-            .subscribe(review => {
+            .subscribe((review) => {
                 if (review !== undefined) {
                     this.draftService.createReviewForDraft(draftId, review).subscribe(() => {
                         // Remove draft card from the UI
-                        const i = this.drafts.findIndex(d => d.id === draftId);
+                        const i = this.drafts.findIndex((d) => d.id === draftId);
                         if (i > -1) {
                             this.drafts.splice(i, 1);
                         }
@@ -66,11 +64,11 @@ export class ReviewScreenComponent implements OnInit {
         this.dialog
             .open(ReviewDialogComponent)
             .afterClosed()
-            .subscribe(review => {
+            .subscribe((review) => {
                 if (review !== undefined) {
                     this.editService.createReviewForEdit(editId, review).subscribe(() => {
                         // Remove edit card from the UI
-                        const i = this.edits.findIndex(e => e.id === editId);
+                        const i = this.edits.findIndex((e) => e.id === editId);
                         if (i > -1) {
                             this.edits.splice(i, 1);
                         }
@@ -83,11 +81,11 @@ export class ReviewScreenComponent implements OnInit {
         this.dialog
             .open(ReviewDialogComponent)
             .afterClosed()
-            .subscribe(review => {
+            .subscribe((review) => {
                 if (review !== undefined) {
                     this.updateService.createReviewForUpdate(updateId, review).subscribe(() => {
                         // Remove update card from the UI
-                        const i = this.updates.findIndex(u => u.id === updateId);
+                        const i = this.updates.findIndex((u) => u.id === updateId);
                         if (i > -1) {
                             this.updates.splice(i, 1);
                         }

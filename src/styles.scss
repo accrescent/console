@@ -6,20 +6,22 @@
 
 /* You can add global styles to this file, and also import other style files */
 
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
-@use '_theme-colors' as theme;
+@use "_theme-colors" as theme;
 
 html {
-    @include mat.theme((
-        color: (
-            theme-type: dark,
-            primary: theme.$primary-palette,
-            tertiary: theme.$tertiary-palette,
-        ),
-        typography: "Roboto Variable",
-        density: 0,
-    ));
+    @include mat.theme(
+        (
+            color: (
+                theme-type: dark,
+                primary: theme.$primary-palette,
+                tertiary: theme.$tertiary-palette,
+            ),
+            typography: "Roboto Variable",
+            density: 0,
+        )
+    );
 }
 
 body {
@@ -28,25 +30,35 @@ body {
 }
 
 :root {
-    @include mat.sidenav-overrides((
-        container-background-color: var(--mat-sys-surface-container-low),
-    ));
-    @include mat.toolbar-overrides((
-        container-background-color: var(--mat-sys-surface-container-high),
-    ));
+    @include mat.sidenav-overrides(
+        (
+            container-background-color: var(--mat-sys-surface-container-low),
+        )
+    );
+    @include mat.toolbar-overrides(
+        (
+            container-background-color: var(--mat-sys-surface-container-high),
+        )
+    );
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: "Roboto Variable", "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: "Roboto Variable", "Helvetica Neue", sans-serif;
+}
 
 // Sourced verbatim from
 // https://developers.google.com/fonts/docs/material_icons#setup_method_2_self_hosting (which is
 // repeated at https://fontsource.org/docs/getting-started/material-icons)
 .material-icons {
-    font-family: 'Material Icons';
+    font-family: "Material Icons";
     font-weight: normal;
     font-style: normal;
-    font-size: 24px;  /* Preferred icon size */
+    font-size: 24px; /* Preferred icon size */
     display: inline-block;
     line-height: 1;
     text-transform: none;
@@ -64,5 +76,5 @@ body { margin: 0; font-family: "Roboto Variable", "Helvetica Neue", sans-serif; 
     -moz-osx-font-smoothing: grayscale;
 
     /* Support for IE. */
-    font-feature-settings: 'liga';
+    font-feature-settings: "liga";
 }

@@ -12,7 +12,7 @@ import { Draft } from '../draft';
     selector: 'acc-draft-submission-dialog',
     imports: [MatButtonModule, MatDialogModule],
     templateUrl: './draft-submission-dialog.component.html',
-    styleUrl: './draft-submission-dialog.component.scss'
+    styleUrl: './draft-submission-dialog.component.scss',
 })
 export class DraftSubmissionDialogComponent {
     data = inject<Draft>(MAT_DIALOG_DATA);

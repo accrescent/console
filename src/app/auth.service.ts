@@ -11,7 +11,7 @@ import { AuthResult } from './auth-result';
 import { environment } from '../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AuthService {
     private http = inject(HttpClient);
@@ -36,24 +36,23 @@ export class AuthService {
 
     logIn(code: string, state: string): Observable<boolean> {
         const params = new HttpParams().append('code', code).append('state', state);
-        return this.http.get<AuthResult>(this.callbackUrl, { observe: 'response', params })
-            .pipe(
-                tap(res => {
-                    const body = res.body!;
+        return this.http.get<AuthResult>(this.callbackUrl, { observe: 'response', params }).pipe(
+            tap((res) => {
+                const body = res.body!;
 
-                    localStorage.setItem(this.reviewerStorageKey, body.reviewer.toString());
-                    localStorage.setItem(this.publisherStorageKey, body.publisher.toString());
-                }),
-                map(res => res.status === HttpStatusCode.Ok),
-                tap(res => localStorage.setItem(this.loggedInStorageKey, res.toString())),
-                catchError(err => {
-                    if (err.status === HttpStatusCode.Forbidden) {
-                        return of(false);
-                    } else {
-                        return throwError(err);
-                    }
-                }),
-            );
+                localStorage.setItem(this.reviewerStorageKey, body.reviewer.toString());
+                localStorage.setItem(this.publisherStorageKey, body.publisher.toString());
+            }),
+            map((res) => res.status === HttpStatusCode.Ok),
+            tap((res) => localStorage.setItem(this.loggedInStorageKey, res.toString())),
+            catchError((err) => {
+                if (err.status === HttpStatusCode.Forbidden) {
+                    return of(false);
+                } else {
+                    return throwError(err);
+                }
+            }),
+        );
     }
 
     logOut(): Observable<void> {

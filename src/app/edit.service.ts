@@ -11,7 +11,7 @@ import { NewEditForm } from './new-edit-form';
 import { environment } from '../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class EditService {
     private http = inject(HttpClient);

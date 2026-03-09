@@ -42,15 +42,19 @@ export class NewDraftEditorComponent {
     labelLengthError(): boolean {
         const label = this.form.controls['label'];
 
-        return (label.hasError('minlength') || label.hasError('maxlength')) &&
-            !label.hasError('required');
+        return (
+            (label.hasError('minlength') || label.hasError('maxlength')) &&
+            !label.hasError('required')
+        );
     }
 
     shortDescriptionLengthError(): boolean {
         const shortDescription = this.form.controls['shortDescription'];
 
-        return (shortDescription.hasError('minlength') || shortDescription.hasError('maxlength')) &&
-            !shortDescription.hasError('required');
+        return (
+            (shortDescription.hasError('minlength') || shortDescription.hasError('maxlength')) &&
+            !shortDescription.hasError('required')
+        );
     }
 
     emitForm(): void {

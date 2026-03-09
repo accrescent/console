@@ -23,8 +23,7 @@ export class EditCardComponent {
     canDelete(): boolean {
         const edit = this.edit();
 
-        return edit.status === EditStatus.Unsubmitted ||
-            edit.status === EditStatus.Submitted;
+        return edit.status === EditStatus.Unsubmitted || edit.status === EditStatus.Submitted;
     }
 
     onDelete(): void {

@@ -22,16 +22,19 @@ import { NewEditForm } from '../new-edit-form';
         ReactiveFormsModule,
     ],
     templateUrl: './new-edit-editor.component.html',
-    styleUrls: ['./new-edit-editor.component.scss']
+    styleUrls: ['./new-edit-editor.component.scss'],
 })
 export class NewEditEditorComponent {
     private fb = inject(NonNullableFormBuilder);
 
     readonly formSubmit = output<NewEditForm>();
 
-    form = this.fb.group({
-        shortDescription: ['', [Validators.minLength(3), Validators.maxLength(80)]],
-    }, { validators: atLeastOne(Validators.required) });
+    form = this.fb.group(
+        {
+            shortDescription: ['', [Validators.minLength(3), Validators.maxLength(80)]],
+        },
+        { validators: atLeastOne(Validators.required) },
+    );
 
     shouldShowLengthError(): boolean {
         const shortDescription = this.form.controls['shortDescription'];

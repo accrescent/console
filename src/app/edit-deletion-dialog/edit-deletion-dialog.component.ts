@@ -12,7 +12,7 @@ import { Edit } from '../edit';
     selector: 'acc-edit-deletion-dialog',
     imports: [MatButtonModule, MatDialogModule],
     templateUrl: './edit-deletion-dialog.component.html',
-    styleUrl: './edit-deletion-dialog.component.scss'
+    styleUrl: './edit-deletion-dialog.component.scss',
 })
 export class EditDeletionDialogComponent {
     data = inject<Edit>(MAT_DIALOG_DATA);

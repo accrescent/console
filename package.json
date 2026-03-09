@@ -1,6 +1,7 @@
 {
   "name": "console",
   "version": "0.13.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "ng": "ng",
@@ -8,9 +9,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
   },
-  "private": true,
   "dependencies": {
     "@angular/cdk": "^20.0.5",
     "@angular/common": "^20.0.6",
@@ -48,6 +50,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.2.0",
+    "oxfmt": "^0.36.0",
     "typescript": "~5.9.0"
   },
   "devEngines": {

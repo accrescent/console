@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <h2>Drafts</h2>
 <div class="grid-container">
     @for (draft of drafts; track draft) {
-        <acc-publisher-draft-card [draft]="draft" (publish)="publishDraft($event)"/>
+        <acc-publisher-draft-card [draft]="draft" (publish)="publishDraft($event)" />
     } @empty {
         <p>No drafts to publish</p>
     }

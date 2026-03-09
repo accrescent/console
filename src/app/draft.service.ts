@@ -11,7 +11,7 @@ import { NewDraftForm } from './new-draft-form';
 import { environment } from '../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class DraftService {
     private http = inject(HttpClient);

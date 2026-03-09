@@ -12,7 +12,7 @@ import { Draft } from '../draft';
     selector: 'acc-draft-deletion-dialog',
     imports: [MatButtonModule, MatDialogModule],
     templateUrl: './draft-deletion-dialog.component.html',
-    styleUrl: './draft-deletion-dialog.component.scss'
+    styleUrl: './draft-deletion-dialog.component.scss',
 })
 export class DraftDeletionDialogComponent {
     data = inject<Draft>(MAT_DIALOG_DATA);

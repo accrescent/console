@@ -10,7 +10,7 @@ import { Draft } from '../draft';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class DraftService {
     private http = inject(HttpClient);

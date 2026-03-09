@@ -11,7 +11,7 @@ import { Update } from './update';
 import { environment } from '../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class UpdateService {
     private http = inject(HttpClient);
@@ -23,11 +23,9 @@ export class UpdateService {
         const formData = new FormData();
         formData.append('apk_set', form.apkSet);
 
-        const req = new HttpRequest(
-            'POST',
-            `${this.appsUrl}/${appId}/updates`,
-            formData, { reportProgress: true },
-        );
+        const req = new HttpRequest('POST', `${this.appsUrl}/${appId}/updates`, formData, {
+            reportProgress: true,
+        });
 
         return this.http.request(req);
     }

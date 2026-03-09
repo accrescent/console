@@ -22,8 +22,7 @@ export class DraftCardComponent {
 
     canDelete(): boolean {
         const draft = this.draft();
-        return draft.status === DraftStatus.Unsubmitted ||
-            draft.status === DraftStatus.Submitted;
+        return draft.status === DraftStatus.Unsubmitted || draft.status === DraftStatus.Submitted;
     }
 
     onDelete(): void {

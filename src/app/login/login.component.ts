@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
     loading = true;
 
     ngOnInit(): void {
-        this.activatedRoute.queryParams.subscribe(params => {
-            this.authService.logIn(params['code'], params['state']).subscribe(success => {
+        this.activatedRoute.queryParams.subscribe((params) => {
+            this.authService.logIn(params['code'], params['state']).subscribe((success) => {
                 if (success) {
                     this.router.navigate(['apps']);
                 } else {

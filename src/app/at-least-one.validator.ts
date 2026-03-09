@@ -4,16 +4,16 @@
 
 import { AbstractControl, isFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export const atLeastOne = (validator: ValidatorFn) => (
-    control: AbstractControl,
-): ValidationErrors | null => {
-    if (isFormGroup(control)) {
-        const hasAtLeastOne = Object
-            .keys(control.controls)
-            .some(k => !validator(control.controls[k]));
+export const atLeastOne =
+    (validator: ValidatorFn) =>
+    (control: AbstractControl): ValidationErrors | null => {
+        if (isFormGroup(control)) {
+            const hasAtLeastOne = Object.keys(control.controls).some(
+                (k) => !validator(control.controls[k]),
+            );
 
-        return hasAtLeastOne ? null : { atLeastOne: true };
-    } else {
-        return { atLeastOne: true };
-    }
-};
+            return hasAtLeastOne ? null : { atLeastOne: true };
+        } else {
+            return { atLeastOne: true };
+        }
+    };

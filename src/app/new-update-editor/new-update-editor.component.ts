@@ -13,7 +13,7 @@ import { NewUpdateForm } from '../new-update-form';
     selector: 'acc-new-update-editor',
     imports: [MatButtonModule, MatCardModule, ReactiveFormsModule],
     templateUrl: './new-update-editor.component.html',
-    styleUrl: './new-update-editor.component.scss'
+    styleUrl: './new-update-editor.component.scss',
 })
 export class NewUpdateEditorComponent {
     private fb = inject(NonNullableFormBuilder);

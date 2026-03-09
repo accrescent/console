@@ -8,24 +8,24 @@
     "compatibility_date": "2025-08-12",
     "assets": {
         "directory": "./dist/console/browser",
-        "not_found_handling": "single-page-application"
+        "not_found_handling": "single-page-application",
     },
     "env": {
         "production": {
             "routes": [
                 {
                     "pattern": "console.accrescent.app",
-                    "custom_domain": true
-                }
-            ]
+                    "custom_domain": true,
+                },
+            ],
         },
         "testing": {
             "routes": [
                 {
                     "pattern": "testing.console.accrescent.app",
-                    "custom_domain": true
-                }
-            ]
-        }
-    }
+                    "custom_domain": true,
+                },
+            ],
+        },
+    },
 }

@@ -15,11 +15,11 @@ export class EditFilterPipe implements PipeTransform {
     transform(edits: Edit[], showRejected: boolean, showPublished: boolean): Edit[] {
         const filter = (edit: Edit): boolean => {
             return !(
-                edit.status === EditStatus.Rejected && !showRejected ||
-                edit.status === EditStatus.Published && !showPublished
+                (edit.status === EditStatus.Rejected && !showRejected) ||
+                (edit.status === EditStatus.Published && !showPublished)
             );
         };
 
-        return edits.filter(edit => filter(edit));
+        return edits.filter((edit) => filter(edit));
     }
 }

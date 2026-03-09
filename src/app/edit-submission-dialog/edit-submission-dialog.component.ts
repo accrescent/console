@@ -13,8 +13,8 @@ import { Edit } from '../edit';
     selector: 'acc-edit-submission-dialog',
     imports: [MatButtonModule, MatDialogModule],
     templateUrl: './edit-submission-dialog.component.html',
-    styleUrl: './edit-submission-dialog.component.scss'
+    styleUrl: './edit-submission-dialog.component.scss',
 })
 export class EditSubmissionDialogComponent {
-    data = inject<{ app: App; edit: Edit; }>(MAT_DIALOG_DATA);
+    data = inject<{ app: App; edit: Edit }>(MAT_DIALOG_DATA);
 }

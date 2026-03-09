@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "bracketSameLine": true,
+  "overrides": [
+    {
+      "files": ["*.json", "*.yaml"],
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": ["*.ts", "*.yaml"],
+      "options": {
+        "singleQuote": true
+      }
+    }
+  ],
+  "tabWidth": 4
+}

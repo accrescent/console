@@ -15,11 +15,11 @@ export class UpdateFilterPipe implements PipeTransform {
     transform(updates: Update[], showRejected: boolean, showPublished: boolean): Update[] {
         const filter = (update: Update): boolean => {
             return !(
-                update.status === UpdateStatus.Rejected && !showRejected ||
-                update.status === UpdateStatus.Published && !showPublished
+                (update.status === UpdateStatus.Rejected && !showRejected) ||
+                (update.status === UpdateStatus.Published && !showPublished)
             );
         };
 
-        return updates.filter(update => filter(update));
+        return updates.filter((update) => filter(update));
     }
 }

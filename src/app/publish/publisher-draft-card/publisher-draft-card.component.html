@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-only
         <mat-card-subtitle>{{ draft().app_id }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <br>
+        <br />
         <h4>Draft info</h4>
         <ul>
             <li>Version name: {{ draft().version_name }}</li>
@@ -19,11 +19,7 @@ SPDX-License-Identifier: AGPL-3.0-only
         </ul>
     </mat-card-content>
     <mat-card-actions align="end">
-        <a [href]="apkSetLink" matButton="outlined">
-            Download APK set
-        </a>
-        <button type="button" (click)="onPublish()" matButton="filled">
-            Publish
-        </button>
+        <a [href]="apkSetLink" matButton="outlined"> Download APK set </a>
+        <button type="button" (click)="onPublish()" matButton="filled">Publish</button>
     </mat-card-actions>
 </mat-card>

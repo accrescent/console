@@ -12,7 +12,7 @@ import { Update } from '../update';
     selector: 'acc-update-deletion-dialog',
     imports: [MatButtonModule, MatDialogModule],
     templateUrl: './update-deletion-dialog.component.html',
-    styleUrl: './update-deletion-dialog.component.scss'
+    styleUrl: './update-deletion-dialog.component.scss',
 })
 export class UpdateDeletionDialogComponent {
     data = inject<Update>(MAT_DIALOG_DATA);

@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only
         <mat-card-title>{{ edit().app_id }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <br>
+        <br />
         <h4>Edit info</h4>
         <ul>
             @if (edit().short_description) {
@@ -18,8 +18,6 @@ SPDX-License-Identifier: AGPL-3.0-only
         </ul>
     </mat-card-content>
     <mat-card-actions align="end">
-        <button type="button" (click)="onPostReview()" matButton="filled">
-            Post review
-        </button>
+        <button type="button" (click)="onPostReview()" matButton="filled">Post review</button>
     </mat-card-actions>
 </mat-card>

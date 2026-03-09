@@ -11,7 +11,7 @@ import { Update } from '../update';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class UpdateService {
     private http = inject(HttpClient);

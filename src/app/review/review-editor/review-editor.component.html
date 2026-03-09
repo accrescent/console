@@ -11,7 +11,10 @@ SPDX-License-Identifier: AGPL-3.0-only
         </mat-card-header>
 
         <mat-card-content>
-            <mat-radio-group formControlName="result" (change)="updateFormFields($event.value)" required>
+            <mat-radio-group
+                formControlName="result"
+                (change)="updateFormFields($event.value)"
+                required>
                 <mat-radio-button [value]="reviewResultEnum.Approved">Approve</mat-radio-button>
                 <mat-radio-button [value]="reviewResultEnum.Rejected">Reject</mat-radio-button>
             </mat-radio-group>
@@ -21,8 +24,8 @@ SPDX-License-Identifier: AGPL-3.0-only
                     @for (reason of reasons.controls; track reason; let i = $index) {
                         <mat-form-field class="text-field">
                             <mat-label>Reason</mat-label>
-                            <input type="text" [formControlName]="i" matInput>
-                            @if (form.controls['reasons'].controls[i].hasError('required')) {
+                            <input type="text" [formControlName]="i" matInput />
+                            @if (form.controls["reasons"].controls[i].hasError("required")) {
                                 <mat-error>Reason must not be empty</mat-error>
                             }
                         </mat-form-field>
@@ -45,15 +48,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 
             <mat-form-field class="text-field">
                 <mat-label>Additional notes</mat-label>
-                <input type="text" formControlName="additional_notes" matInput>
+                <input type="text" formControlName="additional_notes" matInput />
             </mat-form-field>
-
         </mat-card-content>
 
         <mat-card-actions align="end">
-            <button type="submit" [disabled]="form.invalid" matButton="filled">
-                Submit
-            </button>
+            <button type="submit" [disabled]="form.invalid" matButton="filled">Submit</button>
         </mat-card-actions>
     </form>
 </mat-card>
