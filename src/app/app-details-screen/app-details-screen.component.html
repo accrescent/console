@@ -15,7 +15,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <p>Use the following HTML badge to share your app:</p>
 <mat-form-field>
     <textarea rows="4" readonly matInput>
-<a href="https://accrescent.app/app/{{ app?.id }}">
+<a href="https://accrescent.app/app/{{ app()?.id }}">
     <img alt="Get it on Accrescent" src="https://accrescent.app/badges/get-it-on.png" height="80">
 </a>
 </textarea
@@ -26,9 +26,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <div class="grid-forms">
     <acc-new-update-editor (formSubmit)="createUpdate($event)">
-        @if (uploadProgress !== undefined) {
-            <mat-progress-bar [value]="uploadProgress" />
-        } @else if (submitDisabled) {
+        @if (uploadProgress() !== undefined) {
+            <mat-progress-bar [value]="uploadProgress()" />
+        } @else if (submitDisabled()) {
             <mat-progress-bar mode="indeterminate" />
         }
     </acc-new-update-editor>
@@ -41,19 +41,19 @@ SPDX-License-Identifier: AGPL-3.0-only
 <h2 class="section-header">Updates</h2>
 <mat-chip-listbox multiple>
     <mat-chip-option
-        [selected]="showRejectedUpdates"
-        (selectionChange)="showRejectedUpdates = $event.selected">
+        [selected]="showRejectedUpdates()"
+        (selectionChange)="showRejectedUpdates.set($event.selected)">
         Rejected
     </mat-chip-option>
     <mat-chip-option
-        [selected]="showPublishedUpdates"
-        (selectionChange)="showPublishedUpdates = $event.selected">
+        [selected]="showPublishedUpdates()"
+        (selectionChange)="showPublishedUpdates.set($event.selected)">
         Published
     </mat-chip-option>
 </mat-chip-listbox>
 <div class="grid-cards">
     @for (
-        update of updates | updateFilter: showRejectedUpdates : showPublishedUpdates;
+        update of updates() | updateFilter: showRejectedUpdates() : showPublishedUpdates();
         track update
     ) {
         <acc-update-card
@@ -70,24 +70,24 @@ SPDX-License-Identifier: AGPL-3.0-only
 <h2 class="section-header">Edits</h2>
 <mat-chip-listbox multiple>
     <mat-chip-option
-        [selected]="showRejectedEdits"
-        (selectionChange)="showRejectedEdits = $event.selected">
+        [selected]="showRejectedEdits()"
+        (selectionChange)="showRejectedEdits.set($event.selected)">
         Rejected
     </mat-chip-option>
     <mat-chip-option
-        [selected]="showPublishedEdits"
-        (selectionChange)="showPublishedEdits = $event.selected">
+        [selected]="showPublishedEdits()"
+        (selectionChange)="showPublishedEdits.set($event.selected)">
         Published
     </mat-chip-option>
 </mat-chip-listbox>
 <div class="grid-cards">
-    @for (edit of edits | editFilter: showRejectedEdits : showPublishedEdits; track edit) {
+    @for (edit of edits() | editFilter: showRejectedEdits() : showPublishedEdits(); track edit) {
         <acc-edit-card
             [edit]="edit"
             (delete)="deleteEdit($event)"
             (submitForReview)="submitEdit($event)" />
     }
-    @if (edits.length === 0) {
+    @if (edits().length === 0) {
         <p>No edits</p>
     }
 </div>

@@ -9,7 +9,6 @@ import { Update, UpdateStatus } from "./update";
 @Pipe({
     name: "updateFilter",
     standalone: true,
-    pure: false,
 })
 export class UpdateFilterPipe implements PipeTransform {
     transform(updates: Update[], showRejected: boolean, showPublished: boolean): Update[] {

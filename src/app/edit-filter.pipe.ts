@@ -9,7 +9,6 @@ import { Edit, EditStatus } from "./edit";
 @Pipe({
     name: "editFilter",
     standalone: true,
-    pure: false,
 })
 export class EditFilterPipe implements PipeTransform {
     transform(edits: Edit[], showRejected: boolean, showPublished: boolean): Edit[] {

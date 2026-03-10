@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, signal } from "@angular/core";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
@@ -36,21 +36,21 @@ export class ReviewScreenComponent implements OnInit {
     private snackbar = inject(MatSnackBar);
     private updateService = inject(UpdateService);
 
-    drafts: Draft[] = [];
-    edits: Edit[] = [];
-    updates: Update[] = [];
+    readonly drafts = signal<Draft[]>([]);
+    readonly edits = signal<Edit[]>([]);
+    readonly updates = signal<Update[]>([]);
 
     ngOnInit(): void {
         this.draftService.getAssigned().subscribe({
-            next: (drafts) => (this.drafts = drafts),
+            next: (drafts) => this.drafts.set(drafts),
             error: showApiErrorSnackbar(this.snackbar),
         });
         this.editService.getAssigned().subscribe({
-            next: (edits) => (this.edits = edits),
+            next: (edits) => this.edits.set(edits),
             error: showApiErrorSnackbar(this.snackbar),
         });
         this.updateService.getAssigned().subscribe({
-            next: (updates) => (this.updates = updates),
+            next: (updates) => this.updates.set(updates),
             error: showApiErrorSnackbar(this.snackbar),
         });
     }
@@ -64,10 +64,7 @@ export class ReviewScreenComponent implements OnInit {
                     this.draftService.createReviewForDraft(draftId, review).subscribe({
                         next: () => {
                             // Remove draft card from the UI
-                            const i = this.drafts.findIndex((d) => d.id === draftId);
-                            if (i > -1) {
-                                this.drafts.splice(i, 1);
-                            }
+                            this.drafts.update((drafts) => drafts.filter((d) => d.id !== draftId));
                         },
                         error: showApiErrorSnackbar(this.snackbar),
                     });
@@ -84,10 +81,7 @@ export class ReviewScreenComponent implements OnInit {
                     this.editService.createReviewForEdit(editId, review).subscribe({
                         next: () => {
                             // Remove edit card from the UI
-                            const i = this.edits.findIndex((e) => e.id === editId);
-                            if (i > -1) {
-                                this.edits.splice(i, 1);
-                            }
+                            this.edits.update((edits) => edits.filter((e) => e.id !== editId));
                         },
                         error: showApiErrorSnackbar(this.snackbar),
                     });
@@ -104,10 +98,9 @@ export class ReviewScreenComponent implements OnInit {
                     this.updateService.createReviewForUpdate(updateId, review).subscribe({
                         next: () => {
                             // Remove update card from the UI
-                            const i = this.updates.findIndex((u) => u.id === updateId);
-                            if (i > -1) {
-                                this.updates.splice(i, 1);
-                            }
+                            this.updates.update((updates) =>
+                                updates.filter((u) => u.id !== updateId),
+                            );
                         },
                         error: showApiErrorSnackbar(this.snackbar),
                     });

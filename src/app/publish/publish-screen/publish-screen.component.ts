@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { showApiErrorSnackbar } from "../../api-error-handler";
@@ -22,11 +22,11 @@ export class PublishScreenComponent implements OnInit {
     private draftService = inject(DraftService);
     private snackbar = inject(MatSnackBar);
 
-    drafts: Draft[] = [];
+    readonly drafts = signal<Draft[]>([]);
 
     ngOnInit(): void {
         this.draftService.getApproved().subscribe({
-            next: (drafts) => (this.drafts = drafts),
+            next: (drafts) => this.drafts.set(drafts),
             error: showApiErrorSnackbar(this.snackbar),
         });
     }
@@ -35,10 +35,7 @@ export class PublishScreenComponent implements OnInit {
         this.appService.publishDraft(draftId).subscribe({
             next: () => {
                 // Remove the draft card from the UI
-                const i = this.drafts.findIndex((d) => d.id === draftId);
-                if (i > -1) {
-                    this.drafts.splice(i, 1);
-                }
+                this.drafts.update((drafts) => drafts.filter((d) => d.id !== draftId));
             },
             error: showApiErrorSnackbar(this.snackbar),
         });

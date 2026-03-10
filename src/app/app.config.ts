@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
-import { ApplicationConfig, provideZoneChangeDetection } from "@angular/core";
+import { ApplicationConfig } from "@angular/core";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
 import { provideRouter } from "@angular/router";
 
@@ -19,6 +19,5 @@ export const appConfig: ApplicationConfig = {
             useValue: { duration: 5000 },
         },
         provideRouter(routes),
-        provideZoneChangeDetection({ eventCoalescing: true }),
     ],
 };

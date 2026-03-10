@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, signal } from "@angular/core";
 import { HttpEventType, HttpResponse } from "@angular/common/http";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
@@ -62,16 +62,16 @@ export class AppDetailsScreenComponent implements OnInit {
     private snackbar = inject(MatSnackBar);
     private updateService = inject(UpdateService);
 
-    app?: App;
-    updates: Update[] = [];
-    edits: Edit[] = [];
-    uploadProgress?: number = undefined;
+    readonly app = signal<App | undefined>(undefined);
+    readonly updates = signal<Update[]>([]);
+    readonly edits = signal<Edit[]>([]);
+    readonly uploadProgress = signal<number | undefined>(undefined);
 
-    showRejectedEdits = false;
-    showPublishedEdits = false;
-    showRejectedUpdates = false;
-    showPublishedUpdates = false;
-    submitDisabled = false;
+    readonly showRejectedEdits = signal(false);
+    readonly showPublishedEdits = signal(false);
+    readonly showRejectedUpdates = signal(false);
+    readonly showPublishedUpdates = signal(false);
+    readonly submitDisabled = signal(false);
 
     ngOnInit(): void {
         this.activatedRoute.paramMap.subscribe((params) => {
@@ -79,15 +79,15 @@ export class AppDetailsScreenComponent implements OnInit {
             const appId = params.get("id");
             if (appId !== null) {
                 this.appService.getApp(appId).subscribe({
-                    next: (app) => (this.app = app),
+                    next: (app) => this.app.set(app),
                     error: showApiErrorSnackbar(this.snackbar),
                 });
                 this.editService.getEdits(appId).subscribe({
-                    next: (edits) => (this.edits = edits),
+                    next: (edits) => this.edits.set(edits),
                     error: showApiErrorSnackbar(this.snackbar),
                 });
                 this.updateService.getUpdates(appId).subscribe({
-                    next: (updates) => (this.updates = updates),
+                    next: (updates) => this.updates.set(updates),
                     error: showApiErrorSnackbar(this.snackbar),
                 });
             }
@@ -95,27 +95,28 @@ export class AppDetailsScreenComponent implements OnInit {
     }
 
     createUpdate(form: NewUpdateForm): void {
-        if (this.app !== undefined) {
-            this.submitDisabled = true;
+        const app = this.app();
+        if (app !== undefined) {
+            this.submitDisabled.set(true);
             this.updateService
-                .createUpdate(this.app.id, form)
-                .pipe(finalize(() => (this.submitDisabled = false)))
+                .createUpdate(app.id, form)
+                .pipe(finalize(() => this.submitDisabled.set(false)))
                 .subscribe({
                     next: (event) => {
                         if (event.type === HttpEventType.UploadProgress) {
-                            this.uploadProgress = (100 * event.loaded) / event.total!;
+                            this.uploadProgress.set((100 * event.loaded) / event.total!);
 
                             // Clear the progress bar once the upload is complete
                             if (event.loaded === event.total!) {
-                                this.uploadProgress = undefined;
+                                this.uploadProgress.set(undefined);
                             }
                         } else if (event instanceof HttpResponse) {
                             const update = event.body!;
 
-                            this.updates.push(update);
+                            this.updates.update((updates) => [...updates, update]);
                             this.dialog
                                 .open(UpdateSubmissionDialogComponent, {
-                                    data: { app: this.app, update: update },
+                                    data: { app, update },
                                 })
                                 .afterClosed()
                                 .subscribe((confirmed) => {
@@ -134,19 +135,20 @@ export class AppDetailsScreenComponent implements OnInit {
         this.updateService.submitUpdate(id).subscribe({
             next: (submittedUpdate) => {
                 // Mark as submitted in the UI
-                const update = this.updates.find(
-                    (update) => update.id === id && update.status === UpdateStatus.Unsubmitted,
+                this.updates.update((updates) =>
+                    updates.map((update) =>
+                        update.id === id && update.status === UpdateStatus.Unsubmitted
+                            ? { ...update, status: submittedUpdate.status }
+                            : update,
+                    ),
                 );
-                if (update !== undefined) {
-                    update.status = submittedUpdate.status;
-                }
             },
             error: showApiErrorSnackbar(this.snackbar),
         });
     }
 
     deleteUpdate(id: string): void {
-        const update = this.updates.find((update) => update.id === id);
+        const update = this.updates().find((update) => update.id === id);
 
         this.dialog
             .open(UpdateDeletionDialogComponent, { data: update })
@@ -156,10 +158,9 @@ export class AppDetailsScreenComponent implements OnInit {
                     this.updateService.deleteUpdate(id).subscribe({
                         next: () => {
                             // Remove update from the UI
-                            const i = this.updates.findIndex((update) => update.id === id);
-                            if (i > -1) {
-                                this.updates.splice(i, 1);
-                            }
+                            this.updates.update((updates) =>
+                                updates.filter((update) => update.id !== id),
+                            );
                         },
                         error: showApiErrorSnackbar(this.snackbar),
                     });
@@ -168,16 +169,17 @@ export class AppDetailsScreenComponent implements OnInit {
     }
 
     createEdit(form: NewEditForm): void {
-        if (this.app !== undefined) {
-            this.editService.createEdit(this.app.id, form).subscribe({
+        const app = this.app();
+        if (app !== undefined) {
+            this.editService.createEdit(app.id, form).subscribe({
                 next: (event) => {
                     if (event instanceof HttpResponse) {
                         const edit = event.body!;
 
-                        this.edits.push(edit);
+                        this.edits.update((edits) => [...edits, edit]);
                         this.dialog
                             .open(EditSubmissionDialogComponent, {
-                                data: { app: this.app, edit: edit },
+                                data: { app, edit },
                             })
                             .afterClosed()
                             .subscribe((confirmed) => {
@@ -196,19 +198,20 @@ export class AppDetailsScreenComponent implements OnInit {
         this.editService.submitEdit(id).subscribe({
             next: () => {
                 // Mark as submitted in the UI
-                const edit = this.edits.find(
-                    (edit) => edit.id === id && edit.status === EditStatus.Unsubmitted,
+                this.edits.update((edits) =>
+                    edits.map((edit) =>
+                        edit.id === id && edit.status === EditStatus.Unsubmitted
+                            ? { ...edit, status: EditStatus.Submitted }
+                            : edit,
+                    ),
                 );
-                if (edit !== undefined) {
-                    edit.status = EditStatus.Submitted;
-                }
             },
             error: showApiErrorSnackbar(this.snackbar),
         });
     }
 
     deleteEdit(id: string): void {
-        const edit = this.edits.find((edit) => edit.id === id);
+        const edit = this.edits().find((edit) => edit.id === id);
 
         this.dialog
             .open(EditDeletionDialogComponent, { data: edit })
@@ -217,11 +220,8 @@ export class AppDetailsScreenComponent implements OnInit {
                 if (confirmed) {
                     this.editService.deleteEdit(id).subscribe({
                         next: () => {
-                            // Remove update from the UI
-                            const i = this.edits.findIndex((edit) => edit.id === id);
-                            if (i > -1) {
-                                this.edits.splice(i, 1);
-                            }
+                            // Remove edit from the UI
+                            this.edits.update((edits) => edits.filter((edit) => edit.id !== id));
                         },
                         error: showApiErrorSnackbar(this.snackbar),
                     });

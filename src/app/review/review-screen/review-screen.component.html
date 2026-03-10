@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <h2>Drafts</h2>
 <div class="grid-container">
-    @for (draft of drafts; track draft) {
+    @for (draft of drafts(); track draft) {
         <acc-reviewer-draft-card [draft]="draft" (postReview)="openDraftReviewDialog($event)" />
     } @empty {
         <p>No drafts to review</p>
@@ -15,7 +15,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <h2 class="section-header">Edits</h2>
 <div class="grid-container">
-    @for (edit of edits; track edit) {
+    @for (edit of edits(); track edit) {
         <acc-reviewer-edit-card [edit]="edit" (postReview)="openEditReviewDialog($event)" />
     } @empty {
         <p>No edits to review</p>
@@ -24,7 +24,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <h2 class="section-header">Updates</h2>
 <div class="grid-container">
-    @for (update of updates; track update) {
+    @for (update of updates(); track update) {
         <acc-reviewer-update-card [update]="update" (postReview)="openUpdateReviewDialog($event)" />
     } @empty {
         <p>No updates to review</p>

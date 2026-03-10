@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, inject } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import { HttpEventType, HttpResponse } from "@angular/common/http";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
@@ -27,22 +27,22 @@ export class NewDraftScreenComponent {
     private router = inject(Router);
     private snackbar = inject(MatSnackBar);
 
-    uploadProgress?: number = undefined;
-    submitDisabled = false;
+    readonly uploadProgress = signal<number | undefined>(undefined);
+    readonly submitDisabled = signal(false);
 
     createDraft(form: NewDraftForm): void {
-        this.submitDisabled = true;
+        this.submitDisabled.set(true);
         this.draftService
             .createDraft(form)
-            .pipe(finalize(() => (this.submitDisabled = false)))
+            .pipe(finalize(() => this.submitDisabled.set(false)))
             .subscribe({
                 next: (event) => {
                     if (event.type === HttpEventType.UploadProgress) {
-                        this.uploadProgress = (100 * event.loaded) / event.total!;
+                        this.uploadProgress.set((100 * event.loaded) / event.total!);
 
                         // Clear the progress bar once the upload is complete
                         if (event.loaded === event.total!) {
-                            this.uploadProgress = undefined;
+                            this.uploadProgress.set(undefined);
                         }
                     } else if (event instanceof HttpResponse) {
                         const draft = event.body!;

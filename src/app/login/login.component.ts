@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, signal } from "@angular/core";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     private router = inject(Router);
     private snackbar = inject(MatSnackBar);
 
-    loading = true;
+    readonly loading = signal(true);
 
     ngOnInit(): void {
         this.activatedRoute.queryParams.subscribe((params) => {
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
                     if (success) {
                         this.router.navigate(["apps"]);
                     } else {
-                        this.loading = false;
+                        this.loading.set(false);
                     }
                 },
                 error: showApiErrorSnackbar(this.snackbar),
