@@ -11,6 +11,11 @@
             "extends": ["monorepo:angular"],
             "matchUpdateTypes": ["minor", "patch"],
             "automerge": true
+        },
+        {
+            "extends": ["monorepo:angularmaterial"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "automerge": true
         }
     ]
 }
