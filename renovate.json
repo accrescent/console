@@ -5,5 +5,12 @@
         "enabled": true,
         "automerge": true,
         "commitMessageAction": "Update lock file"
-    }
+    },
+    "packageRules": [
+        {
+            "extends": ["monorepo:angular"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "automerge": true
+        }
+    ]
 }
