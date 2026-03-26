@@ -16,6 +16,14 @@
             "extends": ["monorepo:angularmaterial"],
             "matchUpdateTypes": ["minor", "patch"],
             "automerge": true
+        },
+        {
+            "matchDepTypes": ["devDependencies"],
+            "automerge": true
+        },
+        {
+            "matchPackageNames": ["tailwindcss"],
+            "automerge": false
         }
     ]
 }
