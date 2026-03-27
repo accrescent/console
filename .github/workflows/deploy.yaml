@@ -30,7 +30,7 @@ jobs:
       - run: npm install -g @angular/cli && npm ci && ng build --configuration ${{ matrix.env }}
       - uses: cloudflare/wrangler-action@v3
         with:
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           environment: ${{ matrix.env }}
           wranglerVersion: 'latest'
