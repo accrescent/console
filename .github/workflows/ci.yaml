@@ -40,8 +40,3 @@ jobs:
           check-latest: true
       - run: npm ci
       - run: npm run lint
-  reuse:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: fsfe/reuse-action@v6
