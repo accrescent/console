@@ -19,13 +19,5 @@
                 },
             ],
         },
-        "testing": {
-            "routes": [
-                {
-                    "pattern": "testing.console.accrescent.app",
-                    "custom_domain": true,
-                },
-            ],
-        },
     },
 }

@@ -15,11 +15,6 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env:
-          - production
-          - testing
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
@@ -27,10 +22,10 @@ jobs:
           node-version: 24
           check-latest: true
           cache: npm
-      - run: npm install -g @angular/cli && npm ci && ng build --configuration ${{ matrix.env }}
+      - run: npm install -g @angular/cli && npm ci && ng build --configuration production
       - uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3.14.1
         with:
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          environment: ${{ matrix.env }}
+          environment: 'production'
           wranglerVersion: 'latest'
