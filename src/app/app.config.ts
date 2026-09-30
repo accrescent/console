@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { provideHttpClient, withInterceptors, withXhr } from "@angular/common/http";
-import { ApplicationConfig } from "@angular/core";
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from "@angular/core";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
 import { provideRouter } from "@angular/router";
 
@@ -13,6 +13,7 @@ import { withCredentialsInterceptor } from "./with-credentials.interceptor";
 
 export const appConfig: ApplicationConfig = {
     providers: [
+        provideBrowserGlobalErrorListeners(),
         provideHttpClient(
             withXhr(),
             withInterceptors([unauthorizedInterceptor, withCredentialsInterceptor]),
