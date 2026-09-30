@@ -7,6 +7,7 @@ import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
 import angular from "angular-eslint";
+import tsdoc from "eslint-plugin-tsdoc";
 
 export default defineConfig([
     {
@@ -17,6 +18,9 @@ export default defineConfig([
             angular.configs.tsRecommended,
         ],
         processor: angular.processInlineTemplates,
+        plugins: {
+            tsdoc,
+        },
         rules: {
             "@angular-eslint/directive-selector": [
                 "error",
@@ -36,6 +40,7 @@ export default defineConfig([
             ],
             "@typescript-eslint/explicit-function-return-type": "error",
             eqeqeq: ["error", "always"],
+            "tsdoc/syntax": "error",
         },
     },
     {
