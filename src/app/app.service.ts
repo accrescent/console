@@ -6,7 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { App } from "./app";
+import { AppInfo } from "./app-info";
 import { environment } from "../environments/environment";
 
 @Injectable({
@@ -17,11 +17,11 @@ export class AppService {
 
     private readonly appsUrl = `${environment.developerApiUrl}/api/v1/apps`;
 
-    getApp(id: string): Observable<App> {
-        return this.http.get<App>(`${this.appsUrl}/${id}`);
+    getApp(id: string): Observable<AppInfo> {
+        return this.http.get<AppInfo>(`${this.appsUrl}/${id}`);
     }
 
-    getApps(): Observable<App[]> {
-        return this.http.get<App[]>(this.appsUrl);
+    getApps(): Observable<AppInfo[]> {
+        return this.http.get<AppInfo[]>(this.appsUrl);
     }
 }

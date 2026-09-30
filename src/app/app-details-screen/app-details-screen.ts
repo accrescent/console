@@ -14,30 +14,30 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { finalize } from "rxjs";
 
-import { App } from "../app";
+import { AppInfo } from "../app-info";
 import { showApiErrorSnackbar } from "../api-error-handler";
 import { AppService } from "../app.service";
 import { Edit, EditStatus } from "../edit";
-import { EditCardComponent } from "../edit-card/edit-card.component";
-import { EditDeletionDialogComponent } from "../edit-deletion-dialog/edit-deletion-dialog.component";
+import { EditCard } from "../edit-card/edit-card";
+import { EditDeletionDialog } from "../edit-deletion-dialog/edit-deletion-dialog";
 import { EditFilterPipe } from "../edit-filter.pipe";
 import { EditService } from "../edit.service";
-import { EditSubmissionDialogComponent } from "../edit-submission-dialog/edit-submission-dialog.component";
-import { NewEditEditorComponent } from "../new-edit-editor/new-edit-editor.component";
+import { EditSubmissionDialog } from "../edit-submission-dialog/edit-submission-dialog";
+import { NewEditEditor } from "../new-edit-editor/new-edit-editor";
 import { NewEditForm } from "../new-edit-form";
-import { NewUpdateEditorComponent } from "../new-update-editor/new-update-editor.component";
+import { NewUpdateEditor } from "../new-update-editor/new-update-editor";
 import { NewUpdateForm } from "../new-update-form";
 import { Update, UpdateStatus } from "../update";
-import { UpdateCardComponent } from "../update-card/update-card.component";
+import { UpdateCard } from "../update-card/update-card";
 import { UpdateFilterPipe } from "../update-filter.pipe";
 import { UpdateService } from "../update.service";
-import { UpdateDeletionDialogComponent } from "../update-deletion-dialog/update-deletion-dialog.component";
-import { UpdateSubmissionDialogComponent } from "../update-submission-dialog/update-submission-dialog.component";
+import { UpdateDeletionDialog } from "../update-deletion-dialog/update-deletion-dialog";
+import { UpdateSubmissionDialog } from "../update-submission-dialog/update-submission-dialog";
 
 @Component({
     selector: "acc-app-details-screen",
     imports: [
-        EditCardComponent,
+        EditCard,
         EditFilterPipe,
         MatChipsModule,
         MatDialogModule,
@@ -45,15 +45,15 @@ import { UpdateSubmissionDialogComponent } from "../update-submission-dialog/upd
         MatFormFieldModule,
         MatInputModule,
         MatProgressBarModule,
-        NewEditEditorComponent,
-        NewUpdateEditorComponent,
-        UpdateCardComponent,
+        NewEditEditor,
+        NewUpdateEditor,
+        UpdateCard,
         UpdateFilterPipe,
     ],
     templateUrl: "./app-details-screen.component.html",
-    styleUrl: "./app-details-screen.component.scss",
+    styleUrl: "./app-details-screen.scss",
 })
-export class AppDetailsScreenComponent implements OnInit {
+export class AppDetailsScreen implements OnInit {
     private activatedRoute = inject(ActivatedRoute);
     private appService = inject(AppService);
     private dialog = inject(MatDialog);
@@ -62,7 +62,7 @@ export class AppDetailsScreenComponent implements OnInit {
     private snackbar = inject(MatSnackBar);
     private updateService = inject(UpdateService);
 
-    readonly app = signal<App | undefined>(undefined);
+    readonly app = signal<AppInfo | undefined>(undefined);
     readonly updates = signal<Update[]>([]);
     readonly edits = signal<Edit[]>([]);
     readonly uploadProgress = signal<number | undefined>(undefined);
@@ -115,7 +115,7 @@ export class AppDetailsScreenComponent implements OnInit {
 
                             this.updates.update((updates) => [...updates, update]);
                             this.dialog
-                                .open(UpdateSubmissionDialogComponent, {
+                                .open(UpdateSubmissionDialog, {
                                     data: { app, update },
                                 })
                                 .afterClosed()
@@ -151,7 +151,7 @@ export class AppDetailsScreenComponent implements OnInit {
         const update = this.updates().find((update) => update.id === id);
 
         this.dialog
-            .open(UpdateDeletionDialogComponent, { data: update })
+            .open(UpdateDeletionDialog, { data: update })
             .afterClosed()
             .subscribe((confirmed) => {
                 if (confirmed) {
@@ -178,7 +178,7 @@ export class AppDetailsScreenComponent implements OnInit {
 
                         this.edits.update((edits) => [...edits, edit]);
                         this.dialog
-                            .open(EditSubmissionDialogComponent, {
+                            .open(EditSubmissionDialog, {
                                 data: { app, edit },
                             })
                             .afterClosed()
@@ -214,7 +214,7 @@ export class AppDetailsScreenComponent implements OnInit {
         const edit = this.edits().find((edit) => edit.id === id);
 
         this.dialog
-            .open(EditDeletionDialogComponent, { data: edit })
+            .open(EditDeletionDialog, { data: edit })
             .afterClosed()
             .subscribe((confirmed) => {
                 if (confirmed) {

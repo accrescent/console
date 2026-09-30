@@ -13,9 +13,9 @@ import { NewUpdateForm } from "../new-update-form";
     selector: "acc-new-update-editor",
     imports: [MatButtonModule, MatCardModule, ReactiveFormsModule],
     templateUrl: "./new-update-editor.component.html",
-    styleUrl: "./new-update-editor.component.scss",
+    styleUrl: "./new-update-editor.scss",
 })
-export class NewUpdateEditorComponent {
+export class NewUpdateEditor {
     private fb = inject(NonNullableFormBuilder);
 
     readonly submitDisabled = input(false);

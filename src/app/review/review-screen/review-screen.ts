@@ -11,25 +11,20 @@ import { Edit } from "../../edit";
 import { showApiErrorSnackbar } from "../../api-error-handler";
 import { DraftService } from "../draft.service";
 import { EditService } from "../edit.service";
-import { ReviewDialogComponent } from "../review-dialog/review-dialog.component";
-import { ReviewerDraftCardComponent } from "../reviewer-draft-card/reviewer-draft-card.component";
-import { ReviewerEditCardComponent } from "../reviewer-edit-card/reviewer-edit-card.component";
-import { ReviewerUpdateCardComponent } from "../reviewer-update-card/reviewer-update-card.component";
+import { ReviewDialog } from "../review-dialog/review-dialog";
+import { ReviewerDraftCard } from "../reviewer-draft-card/reviewer-draft-card";
+import { ReviewerEditCard } from "../reviewer-edit-card/reviewer-edit-card";
+import { ReviewerUpdateCard } from "../reviewer-update-card/reviewer-update-card";
 import { Update } from "../../update";
 import { UpdateService } from "../update.service";
 
 @Component({
     selector: "acc-review-screen",
-    imports: [
-        MatDialogModule,
-        ReviewerDraftCardComponent,
-        ReviewerEditCardComponent,
-        ReviewerUpdateCardComponent,
-    ],
+    imports: [MatDialogModule, ReviewerDraftCard, ReviewerEditCard, ReviewerUpdateCard],
     templateUrl: "./review-screen.component.html",
-    styleUrl: "./review-screen.component.scss",
+    styleUrl: "./review-screen.scss",
 })
-export class ReviewScreenComponent implements OnInit {
+export class ReviewScreen implements OnInit {
     private dialog = inject(MatDialog);
     private draftService = inject(DraftService);
     private editService = inject(EditService);
@@ -57,7 +52,7 @@ export class ReviewScreenComponent implements OnInit {
 
     openDraftReviewDialog(draftId: string): void {
         this.dialog
-            .open(ReviewDialogComponent)
+            .open(ReviewDialog)
             .afterClosed()
             .subscribe((review) => {
                 if (review !== undefined) {
@@ -74,7 +69,7 @@ export class ReviewScreenComponent implements OnInit {
 
     openEditReviewDialog(editId: string): void {
         this.dialog
-            .open(ReviewDialogComponent)
+            .open(ReviewDialog)
             .afterClosed()
             .subscribe((review) => {
                 if (review !== undefined) {
@@ -91,7 +86,7 @@ export class ReviewScreenComponent implements OnInit {
 
     openUpdateReviewDialog(updateId: string): void {
         this.dialog
-            .open(ReviewDialogComponent)
+            .open(ReviewDialog)
             .afterClosed()
             .subscribe((review) => {
                 if (review !== undefined) {

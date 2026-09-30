@@ -9,35 +9,28 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { RouterLink } from "@angular/router";
 
-import { App } from "../app";
+import { AppInfo } from "../app-info";
 import { showApiErrorSnackbar } from "../api-error-handler";
-import { AppCardComponent } from "../app-card/app-card.component";
+import { AppCard } from "../app-card/app-card";
 import { AppService } from "../app.service";
 import { Draft, DraftStatus } from "../draft";
-import { DraftCardComponent } from "../draft-card/draft-card.component";
-import { DraftDeletionDialogComponent } from "../draft-deletion-dialog/draft-deletion-dialog.component";
+import { DraftCard } from "../draft-card/draft-card";
+import { DraftDeletionDialog } from "../draft-deletion-dialog/draft-deletion-dialog";
 import { DraftService } from "../draft.service";
 
 @Component({
     selector: "acc-apps-screen",
-    imports: [
-        AppCardComponent,
-        DraftCardComponent,
-        MatCardModule,
-        MatDialogModule,
-        MatDividerModule,
-        RouterLink,
-    ],
+    imports: [AppCard, DraftCard, MatCardModule, MatDialogModule, MatDividerModule, RouterLink],
     templateUrl: "./apps-screen.component.html",
-    styleUrl: "./apps-screen.component.scss",
+    styleUrl: "./apps-screen.scss",
 })
-export class AppsScreenComponent implements OnInit {
+export class AppsScreen implements OnInit {
     private appService = inject(AppService);
     private dialog = inject(MatDialog);
     private draftService = inject(DraftService);
     private snackbar = inject(MatSnackBar);
 
-    readonly apps = signal<App[]>([]);
+    readonly apps = signal<AppInfo[]>([]);
     readonly drafts = signal<Draft[]>([]);
 
     ngOnInit(): void {
@@ -55,7 +48,7 @@ export class AppsScreenComponent implements OnInit {
         const draft = this.drafts().find((d) => d.id === id);
 
         this.dialog
-            .open(DraftDeletionDialogComponent, { data: draft })
+            .open(DraftDeletionDialog, { data: draft })
             .afterClosed()
             .subscribe((confirmed) => {
                 if (confirmed) {

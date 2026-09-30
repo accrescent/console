@@ -6,14 +6,14 @@ import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
-import { Draft } from "../draft";
+import { Update } from "../update";
 
 @Component({
-    selector: "acc-draft-submission-dialog",
+    selector: "acc-update-deletion-dialog",
     imports: [MatButtonModule, MatDialogModule],
-    templateUrl: "./draft-submission-dialog.component.html",
-    styleUrl: "./draft-submission-dialog.component.scss",
+    templateUrl: "./update-deletion-dialog.component.html",
+    styleUrl: "./update-deletion-dialog.scss",
 })
-export class DraftSubmissionDialogComponent {
-    data = inject<Draft>(MAT_DIALOG_DATA);
+export class UpdateDeletionDialog {
+    data = inject<Update>(MAT_DIALOG_DATA);
 }

@@ -13,7 +13,7 @@ import { Update, UpdateStatus } from "../update";
     imports: [MatButtonModule, MatCardModule],
     templateUrl: "./update-card.component.html",
 })
-export class UpdateCardComponent {
+export class UpdateCard {
     readonly update = input.required<Update>();
     readonly delete = output<string>();
     readonly submitForReview = output<string>();

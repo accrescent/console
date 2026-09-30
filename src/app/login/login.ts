@@ -13,10 +13,10 @@ import { AuthService } from "../auth.service";
 @Component({
     selector: "acc-login",
     templateUrl: "./login.component.html",
-    styleUrl: "./login.component.scss",
+    styleUrl: "./login.scss",
     imports: [MatProgressSpinnerModule],
 })
-export class LoginComponent implements OnInit {
+export class Login implements OnInit {
     private activatedRoute = inject(ActivatedRoute);
     private authService = inject(AuthService);
     private router = inject(Router);

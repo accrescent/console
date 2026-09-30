@@ -22,9 +22,9 @@ import { NewEditForm } from "../new-edit-form";
         ReactiveFormsModule,
     ],
     templateUrl: "./new-edit-editor.component.html",
-    styleUrls: ["./new-edit-editor.component.scss"],
+    styleUrls: ["./new-edit-editor.scss"],
 })
-export class NewEditEditorComponent {
+export class NewEditEditor {
     private fb = inject(NonNullableFormBuilder);
 
     readonly formSubmit = output<NewEditForm>();

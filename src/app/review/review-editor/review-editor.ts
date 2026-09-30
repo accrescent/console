@@ -25,9 +25,9 @@ import { Review, ReviewResult } from "../review";
         ReactiveFormsModule,
     ],
     templateUrl: "./review-editor.component.html",
-    styleUrl: "./review-editor.component.scss",
+    styleUrl: "./review-editor.scss",
 })
-export class ReviewEditorComponent {
+export class ReviewEditor {
     private fb = inject(NonNullableFormBuilder);
 
     readonly formSubmit = output<Review>();

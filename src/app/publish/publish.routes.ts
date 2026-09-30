@@ -4,6 +4,6 @@
 
 import { Routes } from "@angular/router";
 
-import { PublishScreenComponent } from "./publish-screen/publish-screen.component";
+import { PublishScreen } from "./publish-screen/publish-screen";
 
-export const PUBLISH_ROUTES: Routes = [{ path: "", component: PublishScreenComponent }];
+export const PUBLISH_ROUTES: Routes = [{ path: "", component: PublishScreen }];

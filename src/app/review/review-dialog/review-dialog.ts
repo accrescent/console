@@ -7,15 +7,15 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 
 import { Review } from "../review";
-import { ReviewEditorComponent } from "../review-editor/review-editor.component";
+import { ReviewEditor } from "../review-editor/review-editor";
 
 @Component({
     selector: "acc-review-dialog",
-    imports: [MatButtonModule, MatDialogModule, ReviewEditorComponent],
+    imports: [MatButtonModule, MatDialogModule, ReviewEditor],
     templateUrl: "./review-dialog.component.html",
 })
-export class ReviewDialogComponent {
-    private dialogRef = inject<MatDialogRef<ReviewDialogComponent>>(MatDialogRef);
+export class ReviewDialog {
+    private dialogRef = inject<MatDialogRef<ReviewDialog>>(MatDialogRef);
 
     closeWithReview(review: Review): void {
         this.dialogRef.close(review);

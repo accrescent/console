@@ -9,15 +9,15 @@ import { showApiErrorSnackbar } from "../../api-error-handler";
 import { AppService } from "../app.service";
 import { Draft } from "../../draft";
 import { DraftService } from "../draft.service";
-import { PublisherDraftCardComponent } from "../publisher-draft-card/publisher-draft-card.component";
+import { PublisherDraftCard } from "../publisher-draft-card/publisher-draft-card";
 
 @Component({
     selector: "acc-publish-screen",
-    imports: [PublisherDraftCardComponent],
+    imports: [PublisherDraftCard],
     templateUrl: "./publish-screen.component.html",
-    styleUrl: "./publish-screen.component.scss",
+    styleUrl: "./publish-screen.scss",
 })
-export class PublishScreenComponent implements OnInit {
+export class PublishScreen implements OnInit {
     private appService = inject(AppService);
     private draftService = inject(DraftService);
     private snackbar = inject(MatSnackBar);

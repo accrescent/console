@@ -13,7 +13,7 @@ import { Edit } from "../../edit";
     imports: [MatButtonModule, MatCardModule],
     templateUrl: "./reviewer-edit-card.component.html",
 })
-export class ReviewerEditCardComponent {
+export class ReviewerEditCard {
     readonly edit = input.required<Edit>();
     readonly postReview = output<string>();
 

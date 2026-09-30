@@ -8,7 +8,7 @@ import { MatButtonModule } from "@angular/material/button";
 @Component({
     selector: "acc-page-not-found",
     templateUrl: "./page-not-found.component.html",
-    styleUrl: "./page-not-found.component.scss",
+    styleUrl: "./page-not-found.scss",
     imports: [MatButtonModule],
 })
-export class PageNotFoundComponent {}
+export class PageNotFound {}

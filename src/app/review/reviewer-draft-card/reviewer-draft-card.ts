@@ -6,22 +6,22 @@ import { Component, computed, input, output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 
-import { Update } from "../../update";
+import { Draft } from "../../draft";
 import { environment } from "../../../environments/environment";
 
 @Component({
-    selector: "acc-reviewer-update-card",
+    selector: "acc-reviewer-draft-card",
     imports: [MatButtonModule, MatCardModule],
-    templateUrl: "./reviewer-update-card.component.html",
+    templateUrl: "./reviewer-draft-card.component.html",
 })
-export class ReviewerUpdateCardComponent {
-    readonly update = input.required<Update>();
+export class ReviewerDraftCard {
+    readonly draft = input.required<Draft>();
     readonly postReview = output<string>();
     readonly apkSetLink = computed(
-        () => `${environment.developerApiUrl}/api/v1/updates/${this.update().id}/apkset`,
+        () => `${environment.developerApiUrl}/api/v1/drafts/${this.draft().id}/apkset`,
     );
 
     onPostReview(): void {
-        this.postReview.emit(this.update().id);
+        this.postReview.emit(this.draft().id);
     }
 }

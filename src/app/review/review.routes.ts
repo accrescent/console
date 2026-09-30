@@ -4,6 +4,6 @@
 
 import { Routes } from "@angular/router";
 
-import { ReviewScreenComponent } from "./review-screen/review-screen.component";
+import { ReviewScreen } from "./review-screen/review-screen";
 
-export const REVIEW_ROUTES: Routes = [{ path: "", component: ReviewScreenComponent }];
+export const REVIEW_ROUTES: Routes = [{ path: "", component: ReviewScreen }];
