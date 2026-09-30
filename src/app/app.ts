@@ -10,6 +10,4 @@ import { RouterOutlet } from "@angular/router";
     templateUrl: "./app.component.html",
     imports: [RouterOutlet],
 })
-export class App {
-    title = "console";
-}
+export class App {}
