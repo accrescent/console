@@ -9,33 +9,25 @@ import { authGuard } from "./auth.guard";
 export const routes: Routes = [
     {
         path: "",
-        loadComponent: () =>
-            import("./console-layout/console-layout.component").then(
-                (m) => m.ConsoleLayoutComponent,
-            ),
+        loadComponent: () => import("./console-layout/console-layout").then((m) => m.ConsoleLayout),
         canActivate: [authGuard],
         children: [
             { path: "", redirectTo: "apps", pathMatch: "full" },
             {
                 path: "apps",
-                loadComponent: () =>
-                    import("./apps-screen/apps-screen.component").then(
-                        (m) => m.AppsScreenComponent,
-                    ),
+                loadComponent: () => import("./apps-screen/apps-screen").then((m) => m.AppsScreen),
             },
             {
                 path: "apps/:id/details",
                 loadComponent: () =>
-                    import("./app-details-screen/app-details-screen.component").then(
-                        (m) => m.AppDetailsScreenComponent,
+                    import("./app-details-screen/app-details-screen").then(
+                        (m) => m.AppDetailsScreen,
                     ),
             },
             {
                 path: "drafts/new",
                 loadComponent: () =>
-                    import("./new-draft-screen/new-draft-screen.component").then(
-                        (m) => m.NewDraftScreenComponent,
-                    ),
+                    import("./new-draft-screen/new-draft-screen").then((m) => m.NewDraftScreen),
             },
             {
                 path: "review",
@@ -50,18 +42,14 @@ export const routes: Routes = [
     },
     {
         path: "login",
-        loadComponent: () =>
-            import("./login-screen/login-screen.component").then((m) => m.LoginScreenComponent),
+        loadComponent: () => import("./login-screen/login-screen").then((m) => m.LoginScreen),
     },
     {
         path: "auth/github/callback",
-        loadComponent: () => import("./login/login.component").then((m) => m.LoginComponent),
+        loadComponent: () => import("./login/login").then((m) => m.Login),
     },
     {
         path: "**",
-        loadComponent: () =>
-            import("./page-not-found/page-not-found.component").then(
-                (m) => m.PageNotFoundComponent,
-            ),
+        loadComponent: () => import("./page-not-found/page-not-found").then((m) => m.PageNotFound),
     },
 ];

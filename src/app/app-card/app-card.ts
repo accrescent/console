@@ -7,13 +7,13 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { RouterLink } from "@angular/router";
 
-import { App } from "../app";
+import { AppInfo } from "../app-info";
 
 @Component({
     selector: "acc-app-card",
     imports: [MatButtonModule, MatCardModule, RouterLink],
     templateUrl: "./app-card.component.html",
 })
-export class AppCardComponent {
-    readonly app = input.required<App>();
+export class AppCard {
+    readonly app = input.required<AppInfo>();
 }

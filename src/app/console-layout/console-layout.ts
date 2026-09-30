@@ -17,7 +17,7 @@ import { AuthService } from "../auth.service";
 @Component({
     selector: "acc-console-layout",
     templateUrl: "./console-layout.component.html",
-    styleUrl: "./console-layout.component.scss",
+    styleUrl: "./console-layout.scss",
     imports: [
         MatButtonModule,
         MatIconModule,
@@ -28,7 +28,7 @@ import { AuthService } from "../auth.service";
         RouterOutlet,
     ],
 })
-export class ConsoleLayoutComponent {
+export class ConsoleLayout {
     private authService = inject(AuthService);
     private router = inject(Router);
     private snackbar = inject(MatSnackBar);

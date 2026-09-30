@@ -21,9 +21,9 @@ import { NewDraftForm } from "../new-draft-form";
         ReactiveFormsModule,
     ],
     templateUrl: "./new-draft-editor.component.html",
-    styleUrl: "./new-draft-editor.component.scss",
+    styleUrl: "./new-draft-editor.scss",
 })
-export class NewDraftEditorComponent {
+export class NewDraftEditor {
     private fb = inject(NonNullableFormBuilder);
 
     readonly submitDisabled = input(false);

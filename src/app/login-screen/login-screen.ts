@@ -10,9 +10,9 @@ import { environment } from "../../environments/environment";
 @Component({
     selector: "acc-login-screen",
     templateUrl: "./login-screen.component.html",
-    styleUrl: "./login-screen.component.scss",
+    styleUrl: "./login-screen.scss",
     imports: [MatButtonModule],
 })
-export class LoginScreenComponent {
+export class LoginScreen {
     readonly loginUrl = `${environment.developerApiUrl}/auth/github/login`;
 }

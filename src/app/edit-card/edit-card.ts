@@ -6,30 +6,31 @@ import { Component, input, output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 
-import { Draft, DraftStatus } from "../draft";
+import { Edit, EditStatus } from "../edit";
 
 @Component({
-    selector: "acc-draft-card",
+    selector: "acc-edit-card",
     imports: [MatButtonModule, MatCardModule],
-    templateUrl: "./draft-card.component.html",
+    templateUrl: "./edit-card.component.html",
 })
-export class DraftCardComponent {
-    readonly draft = input.required<Draft>();
+export class EditCard {
+    readonly edit = input.required<Edit>();
     readonly delete = output<string>();
     readonly submitForReview = output<string>();
 
-    draftStatusEnum = DraftStatus;
+    editStatusEnum = EditStatus;
 
     canDelete(): boolean {
-        const draft = this.draft();
-        return draft.status === DraftStatus.Unsubmitted || draft.status === DraftStatus.Submitted;
+        const edit = this.edit();
+
+        return edit.status === EditStatus.Unsubmitted || edit.status === EditStatus.Submitted;
     }
 
     onDelete(): void {
-        this.delete.emit(this.draft().id);
+        this.delete.emit(this.edit().id);
     }
 
     onSubmitForReview(): void {
-        this.submitForReview.emit(this.draft().id);
+        this.submitForReview.emit(this.edit().id);
     }
 }

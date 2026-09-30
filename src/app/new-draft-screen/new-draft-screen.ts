@@ -12,16 +12,16 @@ import { finalize } from "rxjs";
 
 import { showApiErrorSnackbar } from "../api-error-handler";
 import { DraftService } from "../draft.service";
-import { DraftSubmissionDialogComponent } from "../draft-submission-dialog/draft-submission-dialog.component";
-import { NewDraftEditorComponent } from "../new-draft-editor/new-draft-editor.component";
+import { DraftSubmissionDialog } from "../draft-submission-dialog/draft-submission-dialog";
+import { NewDraftEditor } from "../new-draft-editor/new-draft-editor";
 import { NewDraftForm } from "../new-draft-form";
 
 @Component({
     selector: "acc-new-draft-screen",
-    imports: [MatDialogModule, MatProgressBarModule, NewDraftEditorComponent],
+    imports: [MatDialogModule, MatProgressBarModule, NewDraftEditor],
     templateUrl: "./new-draft-screen.component.html",
 })
-export class NewDraftScreenComponent {
+export class NewDraftScreen {
     private dialog = inject(MatDialog);
     private draftService = inject(DraftService);
     private router = inject(Router);
@@ -47,7 +47,7 @@ export class NewDraftScreenComponent {
                     } else if (event instanceof HttpResponse) {
                         const draft = event.body!;
                         this.dialog
-                            .open(DraftSubmissionDialogComponent, { data: draft })
+                            .open(DraftSubmissionDialog, { data: draft })
                             .afterClosed()
                             .subscribe((confirmed) => {
                                 if (confirmed) {

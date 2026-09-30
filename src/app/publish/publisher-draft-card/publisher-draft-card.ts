@@ -14,7 +14,7 @@ import { environment } from "../../../environments/environment";
     imports: [MatButtonModule, MatCardModule],
     templateUrl: "./publisher-draft-card.component.html",
 })
-export class PublisherDraftCardComponent {
+export class PublisherDraftCard {
     readonly draft = input.required<Draft>();
     readonly publish = output<string>();
     readonly apkSetLink = computed(
