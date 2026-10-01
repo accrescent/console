@@ -4,9 +4,9 @@
 
 import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import type { Observable } from "rxjs";
 
-import { Draft } from "../draft";
+import type { Draft } from "../draft";
 import { environment } from "../../environments/environment";
 
 @Injectable({

@@ -6,7 +6,7 @@ import { Component, input, output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 
-import { Draft, DraftStatus } from "../draft";
+import { type Draft, DraftStatus } from "../draft";
 
 @Component({
     selector: "acc-draft-card",

@@ -6,7 +6,7 @@ import { Component, computed, input, output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 
-import { Draft } from "../../draft";
+import type { Draft } from "../../draft";
 import { environment } from "../../../environments/environment";
 
 @Component({

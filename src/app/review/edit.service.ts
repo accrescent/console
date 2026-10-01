@@ -4,10 +4,10 @@
 
 import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import type { Observable } from "rxjs";
 
-import { Edit } from "../edit";
-import { Review } from "./review";
+import type { Edit } from "../edit";
+import type { Review } from "./review";
 import { environment } from "../../environments/environment";
 
 @Injectable({

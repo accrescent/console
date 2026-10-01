@@ -6,7 +6,7 @@ import { Component, input, output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 
-import { Update, UpdateStatus } from "../update";
+import { type Update, UpdateStatus } from "../update";
 
 @Component({
     selector: "acc-update-card",

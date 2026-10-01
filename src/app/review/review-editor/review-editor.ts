@@ -3,7 +3,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { Component, output, inject } from "@angular/core";
-import { FormArray, NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import {
+    type FormArray,
+    NonNullableFormBuilder,
+    ReactiveFormsModule,
+    Validators,
+} from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -11,7 +16,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatRadioModule } from "@angular/material/radio";
 
-import { Review, ReviewResult } from "../review";
+import { type Review, ReviewResult } from "../review";
 
 @Component({
     selector: "acc-review-editor",

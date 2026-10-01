@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject, signal } from "@angular/core";
+import { Component, inject, type OnInit, signal } from "@angular/core";
 import { HttpEventType, HttpResponse } from "@angular/common/http";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
@@ -14,20 +14,20 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { finalize } from "rxjs";
 
-import { AppInfo } from "../app-info";
+import type { AppInfo } from "../app-info";
 import { showApiErrorSnackbar } from "../api-error-handler";
 import { AppService } from "../app.service";
-import { Edit, EditStatus } from "../edit";
+import { type Edit, EditStatus } from "../edit";
 import { EditCard } from "../edit-card/edit-card";
 import { EditDeletionDialog } from "../edit-deletion-dialog/edit-deletion-dialog";
 import { EditFilterPipe } from "../edit-filter.pipe";
 import { EditService } from "../edit.service";
 import { EditSubmissionDialog } from "../edit-submission-dialog/edit-submission-dialog";
 import { NewEditEditor } from "../new-edit-editor/new-edit-editor";
-import { NewEditForm } from "../new-edit-form";
+import type { NewEditForm } from "../new-edit-form";
 import { NewUpdateEditor } from "../new-update-editor/new-update-editor";
-import { NewUpdateForm } from "../new-update-form";
-import { Update, UpdateStatus } from "../update";
+import type { NewUpdateForm } from "../new-update-form";
+import { type Update, UpdateStatus } from "../update";
 import { UpdateCard } from "../update-card/update-card";
 import { UpdateFilterPipe } from "../update-filter.pipe";
 import { UpdateService } from "../update.service";

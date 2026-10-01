@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { HttpErrorResponse } from "@angular/common/http";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import type { MatSnackBar } from "@angular/material/snack-bar";
 
 import { isApiError } from "./api-error";
 
