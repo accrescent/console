@@ -6,7 +6,7 @@ import { Component, input, output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 
-import { Edit, EditStatus } from "../edit";
+import { type Edit, EditStatus } from "../edit";
 
 @Component({
     selector: "acc-edit-card",

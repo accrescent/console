@@ -7,7 +7,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angula
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 
-import { NewUpdateForm } from "../new-update-form";
+import type { NewUpdateForm } from "../new-update-form";
 
 @Component({
     selector: "acc-new-update-editor",

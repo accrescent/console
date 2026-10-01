@@ -6,7 +6,7 @@ import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
-import { Edit } from "../edit";
+import type { Edit } from "../edit";
 
 @Component({
     selector: "acc-edit-deletion-dialog",

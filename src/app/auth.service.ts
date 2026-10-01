@@ -5,9 +5,9 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient, HttpParams, HttpStatusCode } from "@angular/common/http";
 
-import { Observable, catchError, map, of, tap, throwError } from "rxjs";
+import { catchError, map, type Observable, of, tap, throwError } from "rxjs";
 
-import { AuthResult } from "./auth-result";
+import type { AuthResult } from "./auth-result";
 import { environment } from "../environments/environment";
 
 @Injectable({

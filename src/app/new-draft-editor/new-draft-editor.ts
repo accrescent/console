@@ -9,7 +9,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 
-import { NewDraftForm } from "../new-draft-form";
+import type { NewDraftForm } from "../new-draft-form";
 
 @Component({
     selector: "acc-new-draft-editor",

@@ -10,7 +10,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 
 import { atLeastOne } from "../at-least-one.validator";
-import { NewEditForm } from "../new-edit-form";
+import type { NewEditForm } from "../new-edit-form";
 
 @Component({
     selector: "acc-new-edit-editor",

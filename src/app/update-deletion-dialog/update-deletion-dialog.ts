@@ -6,7 +6,7 @@ import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
-import { Update } from "../update";
+import type { Update } from "../update";
 
 @Component({
     selector: "acc-update-deletion-dialog",

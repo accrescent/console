@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject, signal } from "@angular/core";
+import { Component, inject, type OnInit, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { showApiErrorSnackbar } from "../../api-error-handler";
 import { AppService } from "../app.service";
-import { Draft } from "../../draft";
+import type { Draft } from "../../draft";
 import { DraftService } from "../draft.service";
 import { PublisherDraftCard } from "../publisher-draft-card/publisher-draft-card";
 

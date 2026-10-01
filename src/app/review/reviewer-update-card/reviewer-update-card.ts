@@ -6,7 +6,7 @@ import { Component, computed, input, output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 
-import { Update } from "../../update";
+import type { Update } from "../../update";
 import { environment } from "../../../environments/environment";
 
 @Component({

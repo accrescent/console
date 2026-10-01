@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject, signal } from "@angular/core";
+import { Component, inject, type OnInit, signal } from "@angular/core";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { Draft } from "../../draft";
-import { Edit } from "../../edit";
+import type { Draft } from "../../draft";
+import type { Edit } from "../../edit";
 import { showApiErrorSnackbar } from "../../api-error-handler";
 import { DraftService } from "../draft.service";
 import { EditService } from "../edit.service";
@@ -15,7 +15,7 @@ import { ReviewDialog } from "../review-dialog/review-dialog";
 import { ReviewerDraftCard } from "../reviewer-draft-card/reviewer-draft-card";
 import { ReviewerEditCard } from "../reviewer-edit-card/reviewer-edit-card";
 import { ReviewerUpdateCard } from "../reviewer-update-card/reviewer-update-card";
-import { Update } from "../../update";
+import type { Update } from "../../update";
 import { UpdateService } from "../update.service";
 
 @Component({

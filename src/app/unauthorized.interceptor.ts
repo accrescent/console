@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { HttpErrorResponse, HttpInterceptorFn, HttpStatusCode } from "@angular/common/http";
+import { HttpErrorResponse, type HttpInterceptorFn, HttpStatusCode } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { tap } from "rxjs";

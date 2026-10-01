@@ -7,7 +7,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { RouterLink } from "@angular/router";
 
-import { AppInfo } from "../app-info";
+import type { AppInfo } from "../app-info";
 
 @Component({
     selector: "acc-app-card",

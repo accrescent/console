@@ -14,7 +14,7 @@ import { showApiErrorSnackbar } from "../api-error-handler";
 import { DraftService } from "../draft.service";
 import { DraftSubmissionDialog } from "../draft-submission-dialog/draft-submission-dialog";
 import { NewDraftEditor } from "../new-draft-editor/new-draft-editor";
-import { NewDraftForm } from "../new-draft-form";
+import type { NewDraftForm } from "../new-draft-form";
 
 @Component({
     selector: "acc-new-draft-screen",

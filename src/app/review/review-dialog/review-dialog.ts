@@ -6,7 +6,7 @@ import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 
-import { Review } from "../review";
+import type { Review } from "../review";
 import { ReviewEditor } from "../review-editor/review-editor";
 
 @Component({

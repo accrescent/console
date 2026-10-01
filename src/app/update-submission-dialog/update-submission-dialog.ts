@@ -6,8 +6,8 @@ import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
-import { AppInfo } from "../app-info";
-import { Update } from "../update";
+import type { AppInfo } from "../app-info";
+import type { Update } from "../update";
 
 @Component({
     selector: "acc-update-submission-dialog",

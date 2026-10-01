@@ -3,11 +3,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { Injectable, inject } from "@angular/core";
-import { HttpClient, HttpEvent, HttpRequest } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { HttpClient, type HttpEvent, HttpRequest } from "@angular/common/http";
+import type { Observable } from "rxjs";
 
-import { Edit } from "./edit";
-import { NewEditForm } from "./new-edit-form";
+import type { Edit } from "./edit";
+import type { NewEditForm } from "./new-edit-form";
 import { environment } from "../environments/environment";
 
 @Injectable({

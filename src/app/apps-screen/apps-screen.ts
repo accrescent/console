@@ -2,18 +2,18 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, OnInit, inject, signal } from "@angular/core";
+import { Component, inject, type OnInit, signal } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { RouterLink } from "@angular/router";
 
-import { AppInfo } from "../app-info";
+import type { AppInfo } from "../app-info";
 import { showApiErrorSnackbar } from "../api-error-handler";
 import { AppCard } from "../app-card/app-card";
 import { AppService } from "../app.service";
-import { Draft, DraftStatus } from "../draft";
+import { type Draft, DraftStatus } from "../draft";
 import { DraftCard } from "../draft-card/draft-card";
 import { DraftDeletionDialog } from "../draft-deletion-dialog/draft-deletion-dialog";
 import { DraftService } from "../draft.service";
