@@ -38,6 +38,7 @@ export default defineConfig([
                     style: "kebab-case",
                 },
             ],
+            "@typescript-eslint/consistent-type-definitions": "error",
             "@typescript-eslint/consistent-type-imports": [
                 "error",
                 { fixStyle: "inline-type-imports" },
