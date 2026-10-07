@@ -3,27 +3,6 @@
     "extends": ["config:base", ":disableDependencyDashboard"],
     "lockFileMaintenance": {
         "enabled": true,
-        "automerge": true,
         "commitMessageAction": "Update lock file"
-    },
-    "packageRules": [
-        {
-            "extends": ["monorepo:angular"],
-            "matchUpdateTypes": ["minor", "patch"],
-            "automerge": true
-        },
-        {
-            "extends": ["monorepo:angularmaterial"],
-            "matchUpdateTypes": ["minor", "patch"],
-            "automerge": true
-        },
-        {
-            "matchDepTypes": ["devDependencies"],
-            "automerge": true
-        },
-        {
-            "matchPackageNames": ["tailwindcss"],
-            "automerge": false
-        }
-    ]
+    }
 }
