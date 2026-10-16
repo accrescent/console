@@ -11,7 +11,7 @@ import { type Draft, DraftStatus } from "../draft";
 @Component({
     selector: "acc-draft-card",
     imports: [MatButtonModule, MatCardModule],
-    templateUrl: "./draft-card.component.html",
+    templateUrl: "./draft-card.html",
 })
 export class DraftCard {
     readonly draft = input.required<Draft>();

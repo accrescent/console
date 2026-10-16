@@ -11,7 +11,7 @@ import type { Update } from "../update";
 @Component({
     selector: "acc-update-deletion-dialog",
     imports: [MatButtonModule, MatDialogModule],
-    templateUrl: "./update-deletion-dialog.component.html",
+    templateUrl: "./update-deletion-dialog.html",
     styleUrl: "./update-deletion-dialog.scss",
 })
 export class UpdateDeletionDialog {

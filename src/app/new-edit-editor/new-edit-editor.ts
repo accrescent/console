@@ -21,7 +21,7 @@ import type { NewEditForm } from "../new-edit-form";
         MatInputModule,
         ReactiveFormsModule,
     ],
-    templateUrl: "./new-edit-editor.component.html",
+    templateUrl: "./new-edit-editor.html",
     styleUrls: ["./new-edit-editor.scss"],
 })
 export class NewEditEditor {

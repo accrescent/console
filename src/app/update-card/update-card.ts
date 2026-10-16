@@ -11,7 +11,7 @@ import { type Update, UpdateStatus } from "../update";
 @Component({
     selector: "acc-update-card",
     imports: [MatButtonModule, MatCardModule],
-    templateUrl: "./update-card.component.html",
+    templateUrl: "./update-card.html",
 })
 export class UpdateCard {
     readonly update = input.required<Update>();

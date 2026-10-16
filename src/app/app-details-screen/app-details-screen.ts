@@ -50,7 +50,7 @@ import { UpdateSubmissionDialog } from "../update-submission-dialog/update-submi
         UpdateCard,
         UpdateFilterPipe,
     ],
-    templateUrl: "./app-details-screen.component.html",
+    templateUrl: "./app-details-screen.html",
     styleUrl: "./app-details-screen.scss",
 })
 export class AppDetailsScreen implements OnInit {

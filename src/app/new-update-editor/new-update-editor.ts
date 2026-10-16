@@ -12,7 +12,7 @@ import type { NewUpdateForm } from "../new-update-form";
 @Component({
     selector: "acc-new-update-editor",
     imports: [MatButtonModule, MatCardModule, ReactiveFormsModule],
-    templateUrl: "./new-update-editor.component.html",
+    templateUrl: "./new-update-editor.html",
     styleUrl: "./new-update-editor.scss",
 })
 export class NewUpdateEditor {

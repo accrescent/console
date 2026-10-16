@@ -20,7 +20,7 @@ import type { NewDraftForm } from "../new-draft-form";
         MatInputModule,
         ReactiveFormsModule,
     ],
-    templateUrl: "./new-draft-editor.component.html",
+    templateUrl: "./new-draft-editor.html",
     styleUrl: "./new-draft-editor.scss",
 })
 export class NewDraftEditor {

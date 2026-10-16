@@ -12,7 +12,7 @@ import type { Edit } from "../edit";
 @Component({
     selector: "acc-edit-submission-dialog",
     imports: [MatButtonModule, MatDialogModule],
-    templateUrl: "./edit-submission-dialog.component.html",
+    templateUrl: "./edit-submission-dialog.html",
     styleUrl: "./edit-submission-dialog.scss",
 })
 export class EditSubmissionDialog {

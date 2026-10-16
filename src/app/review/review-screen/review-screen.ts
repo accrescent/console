@@ -21,7 +21,7 @@ import { UpdateService } from "../update.service";
 @Component({
     selector: "acc-review-screen",
     imports: [MatDialogModule, ReviewerDraftCard, ReviewerEditCard, ReviewerUpdateCard],
-    templateUrl: "./review-screen.component.html",
+    templateUrl: "./review-screen.html",
     styleUrl: "./review-screen.scss",
 })
 export class ReviewScreen implements OnInit {

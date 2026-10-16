@@ -12,7 +12,7 @@ import { AuthService } from "../auth.service";
 
 @Component({
     selector: "acc-login",
-    templateUrl: "./login.component.html",
+    templateUrl: "./login.html",
     styleUrl: "./login.scss",
     imports: [MatProgressSpinnerModule],
 })

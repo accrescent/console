@@ -7,7 +7,7 @@ import { RouterOutlet } from "@angular/router";
 
 @Component({
     selector: "acc-root",
-    templateUrl: "./app.component.html",
+    templateUrl: "./app.html",
     imports: [RouterOutlet],
 })
 export class App {}

@@ -16,7 +16,7 @@ import { AuthService } from "../auth.service";
 
 @Component({
     selector: "acc-console-layout",
-    templateUrl: "./console-layout.component.html",
+    templateUrl: "./console-layout.html",
     styleUrl: "./console-layout.scss",
     imports: [
         MatButtonModule,

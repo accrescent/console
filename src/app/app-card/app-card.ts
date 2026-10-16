@@ -12,7 +12,7 @@ import type { AppInfo } from "../app-info";
 @Component({
     selector: "acc-app-card",
     imports: [MatButtonModule, MatCardModule, RouterLink],
-    templateUrl: "./app-card.component.html",
+    templateUrl: "./app-card.html",
 })
 export class AppCard {
     readonly app = input.required<AppInfo>();

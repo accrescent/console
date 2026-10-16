@@ -12,7 +12,7 @@ import { environment } from "../../../environments/environment";
 @Component({
     selector: "acc-reviewer-draft-card",
     imports: [MatButtonModule, MatCardModule],
-    templateUrl: "./reviewer-draft-card.component.html",
+    templateUrl: "./reviewer-draft-card.html",
 })
 export class ReviewerDraftCard {
     readonly draft = input.required<Draft>();

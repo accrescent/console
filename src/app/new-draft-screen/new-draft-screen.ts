@@ -19,7 +19,7 @@ import type { NewDraftForm } from "../new-draft-form";
 @Component({
     selector: "acc-new-draft-screen",
     imports: [MatDialogModule, MatProgressBarModule, NewDraftEditor],
-    templateUrl: "./new-draft-screen.component.html",
+    templateUrl: "./new-draft-screen.html",
 })
 export class NewDraftScreen {
     private dialog = inject(MatDialog);
