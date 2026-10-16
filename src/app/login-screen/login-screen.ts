@@ -9,7 +9,7 @@ import { environment } from "../../environments/environment";
 
 @Component({
     selector: "acc-login-screen",
-    templateUrl: "./login-screen.component.html",
+    templateUrl: "./login-screen.html",
     styleUrl: "./login-screen.scss",
     imports: [MatButtonModule],
 })

@@ -29,7 +29,7 @@ import { type Review, ReviewResult } from "../review";
         MatRadioModule,
         ReactiveFormsModule,
     ],
-    templateUrl: "./review-editor.component.html",
+    templateUrl: "./review-editor.html",
     styleUrl: "./review-editor.scss",
 })
 export class ReviewEditor {

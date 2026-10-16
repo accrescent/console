@@ -11,7 +11,7 @@ import type { Edit } from "../../edit";
 @Component({
     selector: "acc-reviewer-edit-card",
     imports: [MatButtonModule, MatCardModule],
-    templateUrl: "./reviewer-edit-card.component.html",
+    templateUrl: "./reviewer-edit-card.html",
 })
 export class ReviewerEditCard {
     readonly edit = input.required<Edit>();

@@ -12,7 +12,7 @@ import { ReviewEditor } from "../review-editor/review-editor";
 @Component({
     selector: "acc-review-dialog",
     imports: [MatButtonModule, MatDialogModule, ReviewEditor],
-    templateUrl: "./review-dialog.component.html",
+    templateUrl: "./review-dialog.html",
 })
 export class ReviewDialog {
     private dialogRef = inject<MatDialogRef<ReviewDialog>>(MatDialogRef);

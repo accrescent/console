@@ -11,7 +11,7 @@ import type { Edit } from "../edit";
 @Component({
     selector: "acc-edit-deletion-dialog",
     imports: [MatButtonModule, MatDialogModule],
-    templateUrl: "./edit-deletion-dialog.component.html",
+    templateUrl: "./edit-deletion-dialog.html",
     styleUrl: "./edit-deletion-dialog.scss",
 })
 export class EditDeletionDialog {

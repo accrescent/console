@@ -11,7 +11,7 @@ import type { Draft } from "../draft";
 @Component({
     selector: "acc-draft-deletion-dialog",
     imports: [MatButtonModule, MatDialogModule],
-    templateUrl: "./draft-deletion-dialog.component.html",
+    templateUrl: "./draft-deletion-dialog.html",
     styleUrl: "./draft-deletion-dialog.scss",
 })
 export class DraftDeletionDialog {

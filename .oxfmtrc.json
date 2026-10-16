@@ -1,5 +1,11 @@
 {
     "$schema": "./node_modules/oxfmt/configuration_schema.json",
+    "associations": [
+        {
+            "files": ["src/app/**/*.html"],
+            "language": "angular-html"
+        }
+    ],
     "bracketSameLine": true,
     "overrides": [
         {

@@ -21,7 +21,7 @@ import { DraftService } from "../draft.service";
 @Component({
     selector: "acc-apps-screen",
     imports: [AppCard, DraftCard, MatCardModule, MatDialogModule, MatDividerModule, RouterLink],
-    templateUrl: "./apps-screen.component.html",
+    templateUrl: "./apps-screen.html",
     styleUrl: "./apps-screen.scss",
 })
 export class AppsScreen implements OnInit {

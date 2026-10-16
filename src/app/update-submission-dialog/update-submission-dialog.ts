@@ -12,7 +12,7 @@ import type { Update } from "../update";
 @Component({
     selector: "acc-update-submission-dialog",
     imports: [MatButtonModule, MatDialogModule],
-    templateUrl: "./update-submission-dialog.component.html",
+    templateUrl: "./update-submission-dialog.html",
     styleUrl: "./update-submission-dialog.scss",
 })
 export class UpdateSubmissionDialog {

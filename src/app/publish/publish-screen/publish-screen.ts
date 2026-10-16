@@ -14,7 +14,7 @@ import { PublisherDraftCard } from "../publisher-draft-card/publisher-draft-card
 @Component({
     selector: "acc-publish-screen",
     imports: [PublisherDraftCard],
-    templateUrl: "./publish-screen.component.html",
+    templateUrl: "./publish-screen.html",
     styleUrl: "./publish-screen.scss",
 })
 export class PublishScreen implements OnInit {
