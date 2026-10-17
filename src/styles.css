@@ -1,0 +1,25 @@
+/*
+ * SPDX-FileCopyrightText: © 2026 Logan Magee
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
+@import "tailwindcss";
+
+/*
+ * Sourced from https://developers.google.com/fonts/docs/material_symbols#self-hosting_the_font,
+ * which is repeated at https://fontsource.org/docs/getting-started/material-symbols.
+ */
+.material-symbols-rounded {
+    font-family: "Material Symbols Rounded Variable";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px; /* Preferred icon size */
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+}
