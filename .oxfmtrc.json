@@ -21,5 +21,6 @@
             }
         }
     ],
+    "sortTailwindcss": true,
     "tabWidth": 4
 }
