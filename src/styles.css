@@ -7,6 +7,20 @@
 @import "tailwindcss";
 
 /*
+ * Match the user's system preference unless overridden with a `data-theme` attribute
+ */
+@custom-variant dark {
+    &:where([data-theme="dark"], [data-theme="dark"] *) {
+        @slot;
+    }
+    @media (prefers-color-scheme: dark) {
+        &:not(:where([data-theme="light"], [data-theme="light"] *)) {
+            @slot;
+        }
+    }
+}
+
+/*
  * Sourced from https://developers.google.com/fonts/docs/material_symbols#self-hosting_the_font,
  * which is repeated at https://fontsource.org/docs/getting-started/material-symbols.
  */

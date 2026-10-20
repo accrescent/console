@@ -7,6 +7,7 @@ import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
 import angular from "angular-eslint";
+import storybook from "eslint-plugin-storybook";
 import tsdoc from "eslint-plugin-tsdoc";
 
 export default defineConfig([
@@ -56,4 +57,5 @@ export default defineConfig([
         extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
         rules: {},
     },
+    storybook.configs["flat/recommended"],
 ]);

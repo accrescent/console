@@ -25,6 +25,9 @@
                                 "input": "public"
                             }
                         ],
+                        "loader": {
+                            ".svg": "file"
+                        },
                         "styles": [
                             "@fontsource-variable/material-symbols-rounded/index.css",
                             "@fontsource-variable/roboto/index.css",
@@ -63,6 +66,9 @@
                 },
                 "serve": {
                     "builder": "@angular/build:dev-server",
+                    "options": {
+                        "proxyConfig": "proxy.conf.json"
+                    },
                     "configurations": {
                         "production": {
                             "buildTarget": "console:build:production"
@@ -79,7 +85,31 @@
                 "lint": {
                     "builder": "@angular-eslint/builder:lint",
                     "options": {
-                        "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+                        "lintFilePatterns": ["src/**/*.ts", "src/**/*.html", ".storybook/**/*.ts"]
+                    }
+                },
+                "storybook": {
+                    "builder": "@storybook/angular-vite:start-storybook",
+                    "options": {
+                        "browserTarget": "console:build",
+                        "styles": [
+                            "@fontsource-variable/material-symbols-rounded/index.css",
+                            "@fontsource-variable/roboto/index.css",
+                            "src/material-theme.scss",
+                            "src/styles.css"
+                        ]
+                    }
+                },
+                "build-storybook": {
+                    "builder": "@storybook/angular-vite:build-storybook",
+                    "options": {
+                        "browserTarget": "console:build",
+                        "styles": [
+                            "@fontsource-variable/material-symbols-rounded/index.css",
+                            "@fontsource-variable/roboto/index.css",
+                            "src/material-theme.scss",
+                            "src/styles.css"
+                        ]
                     }
                 }
             }

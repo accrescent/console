@@ -9,6 +9,11 @@
 @use "theme-colors" as theme;
 
 html {
+    // Use the theme matching the user's system preference
+    //
+    // https://material.angular.dev/guide/theming#supporting-light-and-dark-mode
+    color-scheme: light dark;
+
     @include mat.theme(
         (
             color: (
@@ -18,14 +23,17 @@ html {
             typography: "Roboto Variable",
         )
     );
+
+    // Allow overriding the user's system preference
+    &[data-theme="light"] {
+        color-scheme: light;
+    }
+    &[data-theme="dark"] {
+        color-scheme: dark;
+    }
 }
 
 body {
-    // Use the theme matching the user's system preference
-    //
-    // https://material.angular.dev/guide/theming#supporting-light-and-dark-mode
-    color-scheme: light dark;
-
     // Apply default Material styles
     background-color: var(--mat-sys-surface);
     color: var(--mat-sys-on-surface);
