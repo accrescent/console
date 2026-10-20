@@ -1,0 +1,44 @@
+<!--
+SPDX-FileCopyrightText: © 2026 Logan Magee
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
+<main class="flex min-h-screen items-center justify-center p-4">
+    <div
+        class="flex w-full max-w-sm flex-col items-center gap-6 rounded-(--mat-sys-corner-extra-large) border border-(--mat-sys-outline-variant) bg-(--mat-sys-surface-container) px-8 py-10 text-center shadow-(--mat-sys-level1)">
+        <img [src]="accrescentLogo" alt="Accrescent logo" width="140" height="140" />
+        <div class="flex flex-col gap-2">
+            <h1 class="[font:var(--mat-sys-headline-small)]">Log in to Accrescent</h1>
+            <p class="text-(--mat-sys-on-surface-variant)">Publish and manage your Android apps</p>
+        </div>
+
+        <button
+            matButton="filled"
+            class="[--mat-button-filled-progress-active-indicator-color:var(--mat-sys-on-surface)]"
+            type="button"
+            [disabled]="loading()"
+            disabledInteractive
+            [showProgress]="loading()"
+            [attr.aria-label]="loading() ? 'Logging in with GitHub' : null"
+            (click)="loading() || login.emit()">
+            <img
+                matButtonIcon
+                [src]="githubInvertocat"
+                alt=""
+                width="98"
+                height="96"
+                class="me-2 h-4.5 w-auto dark:invert" />
+            Log in with GitHub
+            <!--
+            Set tabindex="" to make the progress spinner noninteractable. See
+            https://material.angular.dev/components/button/overview#buttons-with-progress-indicators.
+            -->
+            <mat-progress-spinner
+                progressIndicator
+                mode="indeterminate"
+                diameter="18"
+                tabindex="" />
+        </button>
+    </div>
+</main>

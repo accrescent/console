@@ -9,6 +9,7 @@
 /tmp
 /out-tsc
 /bazel-out
+/storybook-static
 
 # Node
 /node_modules
