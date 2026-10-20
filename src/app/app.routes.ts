@@ -10,4 +10,9 @@ export const routes: Routes = [
         loadComponent: () =>
             import("./components/login-container/login-container").then((m) => m.LoginContainer),
     },
+    {
+        path: "**",
+        loadComponent: () =>
+            import("./components/not-found-page/not-found-page").then((m) => m.NotFoundPage),
+    },
 ];
