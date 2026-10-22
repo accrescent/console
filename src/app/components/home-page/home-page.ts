@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { Component, input, output } from "@angular/core";
-import { MatButton } from "@angular/material/button";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { LoadingButton } from "../loading-button/loading-button";
 
 /**
  * The state of the {@link HomePage}.
@@ -30,7 +30,7 @@ export enum HomePageState {
  * The page shown while determining where to send the user on entering the console.
  */
 @Component({
-    imports: [MatButton, MatProgressSpinner],
+    imports: [LoadingButton, MatProgressSpinner],
     selector: "acc-home-page",
     templateUrl: "./home-page.html",
 })

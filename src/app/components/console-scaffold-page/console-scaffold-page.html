@@ -1,0 +1,56 @@
+<!--
+SPDX-FileCopyrightText: © 2026 Logan Magee
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
+<div class="flex h-dvh flex-col">
+    <mat-toolbar
+        class="gap-2 [--mat-toolbar-container-background-color:var(--mat-sys-surface-container-highest)]">
+        @if (handset()) {
+            <button
+                matIconButton
+                type="button"
+                aria-label="Toggle navigation"
+                [attr.aria-expanded]="drawer.opened"
+                (click)="drawer.toggle()">
+                <mat-icon>{{ drawer.opened ? "close" : "menu" }}</mat-icon>
+            </button>
+        }
+        <img [src]="accrescentLogo" alt="" width="32" height="32" />
+        <span>Accrescent Console</span>
+
+        <acc-loading-button
+            class="ms-auto"
+            [loading]="loggingOut()"
+            loadingLabel="Logging out"
+            (press)="logOut.emit()">
+            Log out
+        </acc-loading-button>
+    </mat-toolbar>
+
+    <mat-sidenav-container class="flex-1">
+        <mat-sidenav
+            #drawer
+            class="w-64 [--mat-sidenav-container-background-color:var(--mat-sys-surface-container)]"
+            [disableClose]="!handset()"
+            [mode]="handset() ? 'over' : 'side'"
+            [opened]="!handset()">
+            <mat-nav-list>
+                <a
+                    mat-list-item
+                    routerLink="/dashboard"
+                    routerLinkActive
+                    #dashboardLink="routerLinkActive"
+                    [activated]="dashboardLink.isActive"
+                    (click)="handset() && drawer.close()">
+                    <mat-icon matListItemIcon>dashboard</mat-icon>
+                    <span matListItemTitle>Dashboard</span>
+                </a>
+            </mat-nav-list>
+        </mat-sidenav>
+        <mat-sidenav-content>
+            <ng-content />
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

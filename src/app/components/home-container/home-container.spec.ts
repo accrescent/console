@@ -6,6 +6,7 @@ import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { provideRouter, Router } from "@angular/router";
 import { err, ok, type Result } from "../../../core/result";
+import { DELAY_MS } from "../../../domain/delay";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
 import type { GetSelfError } from "../../../domain/ports/console/errors";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
@@ -28,6 +29,25 @@ describe("HomeContainer", () => {
                 { provide: CONSOLE_API, useValue: consoleApi },
             ],
         });
+        vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
+    });
+
+    it("should show progress for the minimum duration even if loading finishes quickly", async () => {
+        consoleApi.selfResult = err({ kind: "unknown" });
+        const fixture = TestBed.createComponent(HomeContainer);
+        const page = fixture.debugElement.query(By.directive(HomePage)).injector.get(HomePage);
+
+        await vi.advanceTimersByTimeAsync(DELAY_MS - 1);
+        fixture.detectChanges();
+        expect(page.state()).toBe(HomePageState.Loading);
+
+        await vi.advanceTimersByTimeAsync(1);
+        fixture.detectChanges();
+        expect(page.state()).toBe(HomePageState.LoadingFailed);
     });
 
     it("should redirect to the dashboard when authenticated", async () => {
@@ -71,18 +91,10 @@ describe("HomeContainer", () => {
         });
 
         describe("when reloading", () => {
-            beforeEach(() => {
-                vi.useFakeTimers();
-            });
-
-            afterEach(() => {
-                vi.useRealTimers();
-            });
-
             it("should show progress for the minimum duration even if reloading fails quickly", async () => {
                 clickReload();
 
-                await vi.advanceTimersByTimeAsync(499);
+                await vi.advanceTimersByTimeAsync(DELAY_MS - 1);
                 expect(pageState()).toBe(HomePageState.Reloading);
 
                 await vi.advanceTimersByTimeAsync(1);
@@ -93,7 +105,7 @@ describe("HomeContainer", () => {
                 consoleApi.selfResult = ok({ user: USER });
 
                 clickReload();
-                await vi.advanceTimersByTimeAsync(500);
+                await vi.advanceTimersByTimeAsync(DELAY_MS);
 
                 expect(TestBed.inject(Router).url).toBe("/dashboard");
             });
@@ -106,6 +118,7 @@ describe("HomeContainer", () => {
  */
 async function render(): Promise<ComponentFixture<HomeContainer>> {
     const fixture = TestBed.createComponent(HomeContainer);
+    await vi.advanceTimersByTimeAsync(DELAY_MS);
     await fixture.whenStable();
     return fixture;
 }

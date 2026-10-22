@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
+import { ok, type Result } from "../../../core/result";
 import type { AuthnApi } from "../../../domain/ports/authn/authn-api";
+import type { LogOutError } from "../../../domain/ports/authn/errors";
 import { AUTHN_API } from "../../tokens";
 import { LoginContainer } from "./login-container";
 
@@ -68,5 +70,9 @@ class FakeAuthnApi implements AuthnApi {
 
     logInWithGitHub(): void {
         this.gitHubLoginCount++;
+    }
+
+    async logOut(): Promise<Result<void, LogOutError>> {
+        return ok(undefined);
     }
 }
