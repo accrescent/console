@@ -1,0 +1,25 @@
+<!--
+SPDX-FileCopyrightText: © 2026 Logan Magee
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
+<!--
+The progress indicator only shows while the button is disabled, so color it like disabled content
+-->
+<button
+    [matButton]="appearance()"
+    class="[--mat-button-filled-progress-active-indicator-color:var(--mat-sys-on-surface)]"
+    type="button"
+    [disabled]="loading()"
+    disabledInteractive
+    [showProgress]="loading()"
+    [attr.aria-label]="loading() ? loadingLabel() : null"
+    (click)="loading() || press.emit()">
+    <ng-content />
+    <!--
+    Set tabindex="" to make the progress spinner noninteractable. See
+    https://material.angular.dev/components/button/overview#buttons-with-progress-indicators.
+    -->
+    <mat-progress-spinner progressIndicator mode="indeterminate" diameter="18" tabindex="" />
+</button>

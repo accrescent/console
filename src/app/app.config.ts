@@ -12,16 +12,19 @@ import { routes } from "./app.routes";
 import { AUTHN_API, CONSOLE_API } from "./tokens";
 
 const CONSOLE_API_URL = "/";
-const CONSOLE_API_TIMEOUT_MS = 10_000;
+const DEFAULT_TIMEOUT_MS = 10_000;
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideBrowserGlobalErrorListeners(),
         provideRouter(routes),
-        { provide: AUTHN_API, useFactory: () => new RemoteAuthnApi(inject(DOCUMENT)) },
+        {
+            provide: AUTHN_API,
+            useFactory: () => new RemoteAuthnApi(inject(DOCUMENT), DEFAULT_TIMEOUT_MS),
+        },
         {
             provide: CONSOLE_API,
-            useFactory: () => new GrpcWebConsoleApi(CONSOLE_API_URL, CONSOLE_API_TIMEOUT_MS),
+            useFactory: () => new GrpcWebConsoleApi(CONSOLE_API_URL, DEFAULT_TIMEOUT_MS),
         },
     ],
 };

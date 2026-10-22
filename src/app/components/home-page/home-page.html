@@ -20,26 +20,13 @@ SPDX-License-Identifier: AGPL-3.0-only
                         We couldn't load the console. Please try again.
                     </p>
                 </div>
-                <button
-                    matButton="filled"
-                    class="[--mat-button-filled-progress-active-indicator-color:var(--mat-sys-on-surface)]"
-                    type="button"
-                    [disabled]="reloading"
-                    disabledInteractive
-                    [showProgress]="reloading"
-                    [attr.aria-label]="reloading ? 'Trying again' : null"
-                    (click)="reloading || reload.emit()">
+                <acc-loading-button
+                    appearance="filled"
+                    [loading]="reloading"
+                    loadingLabel="Trying again"
+                    (press)="reload.emit()">
                     Try again
-                    <!--
-                    Set tabindex="" to make the progress spinner noninteractable. See
-                    https://material.angular.dev/components/button/overview#buttons-with-progress-indicators.
-                    -->
-                    <mat-progress-spinner
-                        progressIndicator
-                        mode="indeterminate"
-                        diameter="18"
-                        tabindex="" />
-                </button>
+                </acc-loading-button>
             </div>
         }
         @default never;
