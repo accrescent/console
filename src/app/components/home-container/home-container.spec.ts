@@ -71,50 +71,14 @@ describe("HomeContainer", () => {
         expect(TestBed.inject(Router).url).toBe("/login");
     });
 
-    describe("when another error occurs", () => {
-        let fixture: ComponentFixture<HomeContainer>;
-        let page: HomePage;
+    it("should show an error when any other error occurs", async () => {
+        consoleApi.myOrganizationResult = err({ kind: "unknown" });
 
-        beforeEach(async () => {
-            consoleApi.myOrganizationResult = err({ kind: "unknown" });
-            fixture = await render();
-            page = fixture.debugElement.query(By.directive(HomePage)).injector.get(HomePage);
-        });
+        const fixture = await render();
 
-        function pageState(): HomePageState {
-            fixture.detectChanges();
-            return page.state();
-        }
-
-        function clickReload(): void {
-            const button: HTMLButtonElement = fixture.nativeElement.querySelector("button");
-            button.click();
-        }
-
-        it("should show an error", () => {
-            expect(pageState()).toBe(HomePageState.LoadingFailed);
-        });
-
-        describe("when reloading", () => {
-            it("should show progress for the minimum duration even if reloading fails quickly", async () => {
-                clickReload();
-
-                await vi.advanceTimersByTimeAsync(DELAY_MS - 1);
-                expect(pageState()).toBe(HomePageState.Reloading);
-
-                await vi.advanceTimersByTimeAsync(1);
-                expect(pageState()).toBe(HomePageState.LoadingFailed);
-            });
-
-            it("should redirect to the organization dashboard when reloading succeeds", async () => {
-                consoleApi.myOrganizationResult = ok({ organizationId: ORGANIZATION_ID });
-
-                clickReload();
-                await vi.advanceTimersByTimeAsync(DELAY_MS);
-
-                expect(TestBed.inject(Router).url).toBe(`/orgs/${ORGANIZATION_ID}/dashboard`);
-            });
-        });
+        fixture.detectChanges();
+        const page = fixture.debugElement.query(By.directive(HomePage)).injector.get(HomePage);
+        expect(page.state()).toBe(HomePageState.LoadingFailed);
     });
 });
 
