@@ -1,0 +1,78 @@
+<!--
+SPDX-FileCopyrightText: © 2026 Logan Magee
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
+<main class="flex min-h-full flex-col p-6">
+    @let currentState = state();
+    @let kind = currentState.kind;
+    @switch (kind) {
+        @case ("loading") {
+            <div class="m-auto">
+                <mat-progress-spinner mode="indeterminate" aria-label="Loading" />
+            </div>
+        }
+        @case ("loadingFailed")
+        @case ("reloading") {
+            <div class="m-auto flex max-w-sm flex-col items-center gap-6 text-center">
+                <div class="flex flex-col gap-2" role="alert">
+                    <h1 class="[font:var(--mat-sys-headline-small)]">Something went wrong</h1>
+                    <p class="text-(--mat-sys-on-surface-variant)">
+                        We couldn't load this organization. Please try again.
+                    </p>
+                </div>
+                <acc-loading-button
+                    appearance="filled"
+                    [loading]="currentState.kind === 'reloading'"
+                    loadingLabel="Trying again"
+                    (press)="reload.emit()">
+                    Try again
+                </acc-loading-button>
+            </div>
+        }
+        @case ("permissionDenied") {
+            <div class="m-auto flex max-w-sm flex-col items-center gap-6 text-center">
+                <span
+                    class="flex size-16 items-center justify-center rounded-full bg-(--mat-sys-error-container) text-(--mat-sys-on-error-container)">
+                    <mat-icon class="size-8! text-[32px]!">lock</mat-icon>
+                </span>
+                <div class="flex flex-col gap-2">
+                    <h1 class="[font:var(--mat-sys-headline-small)]">No access</h1>
+                    <p class="text-(--mat-sys-on-surface-variant)">
+                        You don't have permission to view this organization (or it might not exist).
+                    </p>
+                </div>
+                <a matButton="filled" routerLink="/">Go to my organization</a>
+            </div>
+        }
+        @case ("loaded") {
+            @let organization = currentState.organization;
+            <div class="mx-auto flex w-full max-w-5xl flex-col gap-8">
+                <h1 class="[font:var(--mat-sys-headline-medium)]">Dashboard</h1>
+
+                <section class="flex flex-col gap-4">
+                    <h2 class="[font:var(--mat-sys-title-large)]">App limits</h2>
+
+                    <div class="grid gap-6 sm:grid-cols-2">
+                        <acc-quota-card
+                            label="Published apps"
+                            description="Apps available in the store"
+                            icon="storefront"
+                            [count]="organization.publishedAppCount"
+                            [limit]="organization.publishedAppLimit"
+                            fullAction="Check back later for a way to increase this limit." />
+                        <acc-quota-card
+                            label="App drafts"
+                            description="New apps that aren't published yet"
+                            icon="draft"
+                            [count]="organization.activeAppDraftCount"
+                            [limit]="organization.activeAppDraftLimit"
+                            fullAction="Delete or publish an app draft to create another one." />
+                    </div>
+                </section>
+            </div>
+        }
+        @default never;
+    }
+</main>

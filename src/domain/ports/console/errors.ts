@@ -15,10 +15,36 @@ export type GetSelfError =
     | UnknownError;
 
 /**
+ * An error returned by {@link ConsoleApi.getMyOrganization}.
+ */
+export type GetMyOrganizationError =
+    | UnauthenticatedError
+    | InternalError
+    | ServiceUnavailableError
+    | UnknownError;
+
+/**
+ * An error returned by {@link ConsoleApi.getOrganization}.
+ */
+export type GetOrganizationError =
+    | UnauthenticatedError
+    | PermissionDeniedError
+    | InternalError
+    | ServiceUnavailableError
+    | UnknownError;
+
+/**
  * An error indicating the user isn't authenticated.
  */
 export interface UnauthenticatedError {
     readonly kind: "unauthenticated";
+}
+
+/**
+ * An error indicating the user doesn't have permission to perform the operation.
+ */
+export interface PermissionDeniedError {
+    readonly kind: "permissionDenied";
 }
 
 /**

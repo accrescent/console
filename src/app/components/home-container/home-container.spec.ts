@@ -8,14 +8,19 @@ import { provideRouter, Router } from "@angular/router";
 import { err, ok, type Result } from "../../../core/result";
 import { DELAY_MS } from "../../../domain/delay";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
-import type { GetSelfError } from "../../../domain/ports/console/errors";
+import type {
+    GetMyOrganizationError,
+    GetOrganizationError,
+    GetSelfError,
+} from "../../../domain/ports/console/errors";
+import type { GetMyOrganizationResponse } from "../../../domain/ports/console/get-my-organization-response";
+import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
-import type { User } from "../../../domain/ports/console/user";
 import { CONSOLE_API } from "../../tokens";
 import { HomePage, HomePageState } from "../home-page/home-page";
 import { HomeContainer } from "./home-container";
 
-const USER: User = { id: "user-123", roles: new Set() };
+const ORGANIZATION_ID = "org-123";
 
 describe("HomeContainer", () => {
     let consoleApi: FakeConsoleApi;
@@ -37,7 +42,7 @@ describe("HomeContainer", () => {
     });
 
     it("should show progress for the minimum duration even if loading finishes quickly", async () => {
-        consoleApi.selfResult = err({ kind: "unknown" });
+        consoleApi.myOrganizationResult = err({ kind: "unknown" });
         const fixture = TestBed.createComponent(HomeContainer);
         const page = fixture.debugElement.query(By.directive(HomePage)).injector.get(HomePage);
 
@@ -50,16 +55,16 @@ describe("HomeContainer", () => {
         expect(page.state()).toBe(HomePageState.LoadingFailed);
     });
 
-    it("should redirect to the dashboard when authenticated", async () => {
-        consoleApi.selfResult = ok({ user: USER });
+    it("should redirect to the organization dashboard when authenticated", async () => {
+        consoleApi.myOrganizationResult = ok({ organizationId: ORGANIZATION_ID });
 
         await render();
 
-        expect(TestBed.inject(Router).url).toBe("/dashboard");
+        expect(TestBed.inject(Router).url).toBe(`/orgs/${ORGANIZATION_ID}/dashboard`);
     });
 
     it("should redirect to the login page when unauthenticated", async () => {
-        consoleApi.selfResult = err({ kind: "unauthenticated" });
+        consoleApi.myOrganizationResult = err({ kind: "unauthenticated" });
 
         await render();
 
@@ -71,7 +76,7 @@ describe("HomeContainer", () => {
         let page: HomePage;
 
         beforeEach(async () => {
-            consoleApi.selfResult = err({ kind: "unknown" });
+            consoleApi.myOrganizationResult = err({ kind: "unknown" });
             fixture = await render();
             page = fixture.debugElement.query(By.directive(HomePage)).injector.get(HomePage);
         });
@@ -101,13 +106,13 @@ describe("HomeContainer", () => {
                 expect(pageState()).toBe(HomePageState.LoadingFailed);
             });
 
-            it("should redirect to the dashboard when reloading succeeds", async () => {
-                consoleApi.selfResult = ok({ user: USER });
+            it("should redirect to the organization dashboard when reloading succeeds", async () => {
+                consoleApi.myOrganizationResult = ok({ organizationId: ORGANIZATION_ID });
 
                 clickReload();
                 await vi.advanceTimersByTimeAsync(DELAY_MS);
 
-                expect(TestBed.inject(Router).url).toBe("/dashboard");
+                expect(TestBed.inject(Router).url).toBe(`/orgs/${ORGANIZATION_ID}/dashboard`);
             });
         });
     });
@@ -127,9 +132,19 @@ async function render(): Promise<ComponentFixture<HomeContainer>> {
  * {@link ConsoleApi} that returns preconfigured results.
  */
 class FakeConsoleApi implements ConsoleApi {
-    selfResult: Result<GetSelfResponse, GetSelfError> = ok({ user: USER });
+    myOrganizationResult: Result<GetMyOrganizationResponse, GetMyOrganizationError> = ok({
+        organizationId: ORGANIZATION_ID,
+    });
 
-    async getSelf(): Promise<Result<GetSelfResponse, GetSelfError>> {
-        return this.selfResult;
+    getSelf(): Promise<Result<GetSelfResponse, GetSelfError>> {
+        throw new Error("not used by HomeContainer");
+    }
+
+    getOrganization(): Promise<Result<GetOrganizationResponse, GetOrganizationError>> {
+        throw new Error("not used by HomeContainer");
+    }
+
+    async getMyOrganization(): Promise<Result<GetMyOrganizationResponse, GetMyOrganizationError>> {
+        return this.myOrganizationResult;
     }
 }

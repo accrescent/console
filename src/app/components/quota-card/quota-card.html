@@ -1,0 +1,68 @@
+<!--
+SPDX-FileCopyrightText: © 2026 Logan Magee
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
+<mat-card appearance="outlined" class="h-full">
+    <mat-card-header>
+        <span
+            mat-card-avatar
+            class="flex items-center justify-center bg-(--mat-sys-primary-container) text-(--mat-sys-on-primary-container)">
+            <mat-icon>{{ icon() }}</mat-icon>
+        </span>
+        <h3 mat-card-title>{{ label() }}</h3>
+        <p mat-card-subtitle>{{ description() }}</p>
+    </mat-card-header>
+
+    <mat-card-content>
+        <!--
+        Lay out content inside a div so that Material styles don't override Tailwind utilities
+        -->
+        <div class="flex flex-col gap-3">
+            <p class="flex items-baseline gap-2">
+                <span class="[font:var(--mat-sys-display-small)]">{{ count() }}</span>
+                <span
+                    class="text-(--mat-sys-on-surface-variant) [font:var(--mat-sys-title-medium)]">
+                    of {{ limit() }}
+                </span>
+            </p>
+
+            @let currentLevel = level();
+
+            <!--
+            Decorative/hidden since the surrounding text conveys the same information
+            -->
+            <mat-progress-bar
+                aria-hidden="true"
+                class="rounded-full [--mat-progress-bar-active-indicator-height:0.5rem] [--mat-progress-bar-track-color:var(--mat-sys-surface-container-highest)] [--mat-progress-bar-track-height:0.5rem]"
+                [style.--mat-progress-bar-active-indicator-color]="
+                    currentLevel === 'full' ? 'var(--mat-sys-tertiary)' : null
+                "
+                [value]="percentUsed()" />
+
+            @switch (currentLevel) {
+                @case ("available") {}
+                @case ("nearlyFull") {
+                    <p
+                        class="flex items-center gap-2 text-(--mat-sys-primary) [font:var(--mat-sys-label-large)]">
+                        <mat-icon class="size-5! text-[20px]!">info</mat-icon>
+                        Almost full
+                    </p>
+                }
+                @case ("full") {
+                    <p
+                        class="flex items-center gap-2 text-(--mat-sys-tertiary) [font:var(--mat-sys-label-large)]">
+                        <mat-icon class="size-5! text-[20px]!">warning</mat-icon>
+                        Limit reached
+                    </p>
+                    <p
+                        class="text-(--mat-sys-on-surface-variant) [font:var(--mat-sys-body-medium)]">
+                        {{ fullAction() }}
+                    </p>
+                }
+                @default never;
+            }
+        </div>
+    </mat-card-content>
+</mat-card>

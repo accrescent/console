@@ -4,7 +4,7 @@
 
 import { DOCUMENT } from "@angular/common";
 import { type ApplicationConfig, inject, provideBrowserGlobalErrorListeners } from "@angular/core";
-import { provideRouter } from "@angular/router";
+import { provideRouter, withComponentInputBinding } from "@angular/router";
 
 import { RemoteAuthnApi } from "../adapters/authn/remote/remote-authn-api";
 import { GrpcWebConsoleApi } from "../adapters/console/grpcweb/grpc-web-console-api";
@@ -17,7 +17,7 @@ const DEFAULT_TIMEOUT_MS = 10_000;
 export const appConfig: ApplicationConfig = {
     providers: [
         provideBrowserGlobalErrorListeners(),
-        provideRouter(routes),
+        provideRouter(routes, withComponentInputBinding()),
         {
             provide: AUTHN_API,
             useFactory: () => new RemoteAuthnApi(inject(DOCUMENT), DEFAULT_TIMEOUT_MS),
