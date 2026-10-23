@@ -10,23 +10,18 @@ SPDX-License-Identifier: AGPL-3.0-only
         @case (HomePageState.Loading) {
             <mat-progress-spinner mode="indeterminate" aria-label="Loading" />
         }
-        @case (HomePageState.LoadingFailed)
-        @case (HomePageState.Reloading) {
-            @let reloading = currentState === HomePageState.Reloading;
+        @case (HomePageState.LoadingFailed) {
             <div class="flex max-w-sm flex-col items-center gap-6 text-center">
                 <div class="flex flex-col gap-2" role="alert">
                     <h1 class="[font:var(--mat-sys-headline-small)]">Something went wrong</h1>
                     <p class="text-(--mat-sys-on-surface-variant)">
-                        We couldn't load the console. Please try again.
+                        We couldn't load the console. This isn't caused by anything you did. Please
+                        try again in a few minutes, or check out our documentation in the meantime.
                     </p>
                 </div>
-                <acc-loading-button
-                    appearance="filled"
-                    [loading]="reloading"
-                    loadingLabel="Trying again"
-                    (press)="reload.emit()">
-                    Try again
-                </acc-loading-button>
+                <a matButton="filled" href="https://accrescent.app/docs/" target="_blank">
+                    Read the docs
+                </a>
             </div>
         }
         @default never;

@@ -56,12 +56,6 @@ export const LoadingFailed: Story = {
     },
 };
 
-export const Reloading: Story = {
-    args: {
-        state: { kind: "reloading" },
-    },
-};
-
 export const PermissionDenied: Story = {
     args: {
         state: { kind: "permissionDenied" },

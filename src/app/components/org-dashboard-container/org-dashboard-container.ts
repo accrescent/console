@@ -38,11 +38,8 @@ export class OrgDashboardContainer {
             withDelay(this.consoleApi.getOrganization(params, abortSignal)),
     });
     protected readonly state = computed((): OrgDashboardPageState => {
-        switch (this.organization.status()) {
-            case "reloading":
-                return { kind: "reloading" };
-            case "error":
-                return { kind: "loadingFailed" };
+        if (this.organization.status() === "error") {
+            return { kind: "loadingFailed" };
         }
         return this.organization.hasValue()
             ? toPageState(this.organization.value())
@@ -60,10 +57,6 @@ export class OrgDashboardContainer {
                 this.router.navigate(["/login"], { replaceUrl: true });
             }
         });
-    }
-
-    protected reload(): void {
-        this.organization.reload();
     }
 }
 

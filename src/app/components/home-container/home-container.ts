@@ -25,27 +25,15 @@ export class HomeContainer {
     protected readonly state = signal(HomePageState.Loading);
 
     constructor() {
-        this.redirect();
-    }
-
-    /**
-     * Reloads the page, trying to determine where to redirect to after previously failing to do so.
-     */
-    protected reload(): void {
-        this.state.set(HomePageState.Reloading);
-        this.redirect();
+        // Run as a pending task so that the app isn't considered stable until we've redirected or
+        // displayed an error
+        this.pendingTasks.run(() => this.redirect());
     }
 
     /**
      * Determines where to send the user and redirects them there, displaying an error on failure.
      */
-    private redirect(): void {
-        // Run as a pending task so that the app isn't considered stable until we've redirected or
-        // displayed an error
-        this.pendingTasks.run(() => this.tryRedirect());
-    }
-
-    private async tryRedirect(): Promise<void> {
+    private async redirect(): Promise<void> {
         const result = await withDelay(this.consoleApi.getMyOrganization());
 
         if (result.ok) {

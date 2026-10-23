@@ -27,9 +27,3 @@ export const LoadingFailed: Story = {
         state: HomePageState.LoadingFailed,
     },
 };
-
-export const Reloading: Story = {
-    args: {
-        state: HomePageState.Reloading,
-    },
-};

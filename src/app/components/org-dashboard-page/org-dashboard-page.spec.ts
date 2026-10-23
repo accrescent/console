@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { inputBinding, outputBinding, signal } from "@angular/core";
+import { inputBinding, signal } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import type { Organization } from "../../../domain/ports/console/organization";
@@ -17,11 +17,8 @@ const ORGANIZATION: Organization = {
 };
 
 describe("OrgDashboardPage", () => {
-    let reloadCount: number;
-
     beforeEach(() => {
         TestBed.configureTestingModule({ providers: [provideRouter([])] });
-        reloadCount = 0;
     });
 
     /**
@@ -31,10 +28,7 @@ describe("OrgDashboardPage", () => {
         state: OrgDashboardPageState,
     ): Promise<ComponentFixture<OrgDashboardPage>> {
         const fixture = TestBed.createComponent(OrgDashboardPage, {
-            bindings: [
-                inputBinding("state", signal(state)),
-                outputBinding("reload", () => reloadCount++),
-            ],
+            bindings: [inputBinding("state", signal(state))],
         });
         await fixture.whenStable();
         return fixture;
@@ -46,40 +40,16 @@ describe("OrgDashboardPage", () => {
         expect(fixture.nativeElement.querySelector("mat-progress-spinner")).not.toBeNull();
     });
 
-    it.each(["loadingFailed", "reloading"] as const)(
-        "should show an error when %s",
-        async (kind) => {
-            const fixture = await render({ kind });
-
-            const alert: HTMLElement = fixture.nativeElement.querySelector("[role=alert]");
-            expect(alert.textContent).toContain("Something went wrong");
-        },
-    );
-
-    it("should emit reload when the reload button is clicked after loading failed", async () => {
-        const fixture = await render({ kind: "loadingFailed" });
-
-        fixture.nativeElement.querySelector("button").click();
-
-        expect(reloadCount).toBe(1);
-    });
-
-    describe("when reloading", () => {
+    describe("when loading failed", () => {
         let fixture: ComponentFixture<OrgDashboardPage>;
 
         beforeEach(async () => {
-            fixture = await render({ kind: "reloading" });
+            fixture = await render({ kind: "loadingFailed" });
         });
 
-        it("should show a progress indicator in the reload button", () => {
-            const button: HTMLButtonElement = fixture.nativeElement.querySelector("button");
-            expect(button.querySelector("mat-progress-spinner")).not.toBeNull();
-        });
-
-        it("should not emit reload when the reload button is clicked", () => {
-            fixture.nativeElement.querySelector("button").click();
-
-            expect(reloadCount).toBe(0);
+        it("should show an error", () => {
+            const alert: HTMLElement = fixture.nativeElement.querySelector("[role=alert]");
+            expect(alert.textContent).toContain("Something went wrong");
         });
     });
 

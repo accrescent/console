@@ -105,46 +105,12 @@ describe("OrgDashboardContainer", () => {
         expect(TestBed.inject(Router).url).toBe("/login");
     });
 
-    describe("when another error occurs", () => {
-        let fixture: ComponentFixture<OrgDashboardContainer>;
+    it("should show an error when any other error occurs", async () => {
+        consoleApi.organizationResult = err({ kind: "unknown" });
 
-        beforeEach(async () => {
-            consoleApi.organizationResult = err({ kind: "unknown" });
-            fixture = await render();
-        });
+        const fixture = await render();
 
-        function clickReload(): void {
-            const button: HTMLButtonElement = fixture.nativeElement.querySelector("button");
-            button.click();
-        }
-
-        it("should show an error", () => {
-            expect(pageState(fixture)).toEqual({ kind: "loadingFailed" });
-        });
-
-        describe("when reloading", () => {
-            it("should show progress for the minimum duration even if reloading fails quickly", async () => {
-                clickReload();
-
-                await vi.advanceTimersByTimeAsync(DELAY_MS - 1);
-                expect(pageState(fixture)).toEqual({ kind: "reloading" });
-
-                await vi.advanceTimersByTimeAsync(1);
-                expect(pageState(fixture)).toEqual({ kind: "loadingFailed" });
-            });
-
-            it("should show the organization when reloading succeeds", async () => {
-                consoleApi.organizationResult = ok({ organization: ORGANIZATION });
-
-                clickReload();
-                await vi.advanceTimersByTimeAsync(DELAY_MS);
-
-                expect(pageState(fixture)).toEqual({
-                    kind: "loaded",
-                    organization: ORGANIZATION,
-                });
-            });
-        });
+        expect(pageState(fixture)).toEqual({ kind: "loadingFailed" });
     });
 });
 
