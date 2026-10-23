@@ -4,10 +4,33 @@
 
 import { Code, ConnectError } from "@connectrpc/connect";
 
-import type { GetSelfError } from "../../../domain/ports/console/errors";
+import type {
+    GetMyOrganizationError,
+    GetOrganizationError,
+    GetSelfError,
+    InternalError,
+    ServiceUnavailableError,
+    UnauthenticatedError,
+    UnknownError,
+} from "../../../domain/ports/console/errors";
+
+export function toGetMyOrganizationError(e: unknown): GetMyOrganizationError {
+    return toCommonError(ConnectError.from(e).code);
+}
+
+export function toGetOrganizationError(e: unknown): GetOrganizationError {
+    const code = ConnectError.from(e).code;
+    return code === Code.PermissionDenied ? { kind: "permissionDenied" } : toCommonError(code);
+}
 
 export function toGetSelfError(e: unknown): GetSelfError {
-    switch (ConnectError.from(e).code) {
+    return toCommonError(ConnectError.from(e).code);
+}
+
+function toCommonError(
+    code: Code,
+): UnauthenticatedError | InternalError | ServiceUnavailableError | UnknownError {
+    switch (code) {
         case Code.Unauthenticated:
             return { kind: "unauthenticated" };
         case Code.Internal:

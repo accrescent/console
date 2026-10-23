@@ -4,7 +4,11 @@
 
 import { Code, ConnectError } from "@connectrpc/connect";
 
-import { toGetSelfError } from "./error-converters";
+import {
+    toGetMyOrganizationError,
+    toGetOrganizationError,
+    toGetSelfError,
+} from "./error-converters";
 
 describe("toGetSelfError", () => {
     it("converts known codes", () => {
@@ -19,5 +23,44 @@ describe("toGetSelfError", () => {
 
     it("converts other errors to unknown", () => {
         expect(toGetSelfError(new Error())).toEqual({ kind: "unknown" });
+    });
+});
+
+describe("toGetMyOrganizationError", () => {
+    it("converts known codes", () => {
+        expect(toGetMyOrganizationError(new ConnectError("", Code.Unauthenticated))).toEqual({
+            kind: "unauthenticated",
+        });
+        expect(toGetMyOrganizationError(new ConnectError("", Code.Internal))).toEqual({
+            kind: "internal",
+        });
+        expect(toGetMyOrganizationError(new ConnectError("", Code.Unavailable))).toEqual({
+            kind: "serviceUnavailable",
+        });
+    });
+
+    it("converts other errors to unknown", () => {
+        expect(toGetMyOrganizationError(new Error())).toEqual({ kind: "unknown" });
+    });
+});
+
+describe("toGetOrganizationError", () => {
+    it("converts known codes", () => {
+        expect(toGetOrganizationError(new ConnectError("", Code.Unauthenticated))).toEqual({
+            kind: "unauthenticated",
+        });
+        expect(toGetOrganizationError(new ConnectError("", Code.PermissionDenied))).toEqual({
+            kind: "permissionDenied",
+        });
+        expect(toGetOrganizationError(new ConnectError("", Code.Internal))).toEqual({
+            kind: "internal",
+        });
+        expect(toGetOrganizationError(new ConnectError("", Code.Unavailable))).toEqual({
+            kind: "serviceUnavailable",
+        });
+    });
+
+    it("converts other errors to unknown", () => {
+        expect(toGetOrganizationError(new Error())).toEqual({ kind: "unknown" });
     });
 });

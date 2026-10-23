@@ -9,8 +9,8 @@ import { CONSOLE_API } from "../../tokens";
 import { HomePage, HomePageState } from "../home-page/home-page";
 
 /**
- * Effectful container for the home page which redirects the user to the dashboard if they're
- * authenticated or the login page if they aren't.
+ * Effectful container for the home page which redirects the user to their organization's dashboard
+ * if they're authenticated or the login page if they aren't.
  */
 @Component({
     imports: [HomePage],
@@ -46,10 +46,12 @@ export class HomeContainer {
     }
 
     private async tryRedirect(): Promise<void> {
-        const result = await withDelay(this.consoleApi.getSelf());
+        const result = await withDelay(this.consoleApi.getMyOrganization());
 
         if (result.ok) {
-            await this.router.navigate(["/dashboard"], { replaceUrl: true });
+            await this.router.navigate(["/orgs", result.value.organizationId, "dashboard"], {
+                replaceUrl: true,
+            });
         } else if (result.error.kind === "unauthenticated") {
             await this.router.navigate(["/login"], { replaceUrl: true });
         } else {

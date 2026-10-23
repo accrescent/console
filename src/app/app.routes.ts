@@ -17,17 +17,18 @@ export const routes: Routes = [
             import("./components/login-container/login-container").then((m) => m.LoginContainer),
     },
     {
-        path: "",
+        path: "orgs/:orgId",
         loadComponent: () =>
             import("./components/console-scaffold-container/console-scaffold-container").then(
                 (m) => m.ConsoleScaffoldContainer,
             ),
         children: [
+            { path: "", pathMatch: "full", redirectTo: "dashboard" },
             {
                 path: "dashboard",
                 loadComponent: () =>
-                    import("./components/dashboard-page/dashboard-page").then(
-                        (m) => m.DashboardPage,
+                    import("./components/org-dashboard-container/org-dashboard-container").then(
+                        (m) => m.OrgDashboardContainer,
                     ),
             },
         ],
