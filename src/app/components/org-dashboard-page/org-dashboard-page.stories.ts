@@ -52,13 +52,22 @@ export const Loading: Story = {
 
 export const LoadingFailed: Story = {
     args: {
-        state: { kind: "loadingFailed" },
+        state: {
+            kind: "error",
+            error: { kind: "unavailable", resource: { kind: "organization", id: ORGANIZATION.id } },
+        },
     },
 };
 
 export const PermissionDenied: Story = {
     args: {
-        state: { kind: "permissionDenied" },
+        state: {
+            kind: "error",
+            error: {
+                kind: "permissionDenied",
+                resource: { kind: "organization", id: ORGANIZATION.id },
+            },
+        },
     },
 };
 

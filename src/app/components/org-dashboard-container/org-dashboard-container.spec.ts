@@ -94,7 +94,13 @@ describe("OrgDashboardContainer", () => {
 
         const fixture = await render();
 
-        expect(pageState(fixture)).toEqual({ kind: "permissionDenied" });
+        expect(pageState(fixture)).toEqual({
+            kind: "error",
+            error: {
+                kind: "permissionDenied",
+                resource: { kind: "organization", id: ORGANIZATION.id },
+            },
+        });
     });
 
     it("should redirect to the login page when unauthenticated", async () => {
@@ -110,7 +116,10 @@ describe("OrgDashboardContainer", () => {
 
         const fixture = await render();
 
-        expect(pageState(fixture)).toEqual({ kind: "loadingFailed" });
+        expect(pageState(fixture)).toEqual({
+            kind: "error",
+            error: { kind: "unavailable", resource: { kind: "organization", id: ORGANIZATION.id } },
+        });
     });
 });
 

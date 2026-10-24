@@ -6,7 +6,7 @@ import { Component, inject, PendingTasks, signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { withDelay } from "../../../domain/delay";
 import { CONSOLE_API } from "../../tokens";
-import { HomePage, HomePageState } from "../home-page/home-page";
+import { HomePage, type HomePageState } from "../home-page/home-page";
 
 /**
  * Effectful container for the home page which redirects the user to their organization's dashboard
@@ -22,7 +22,7 @@ export class HomeContainer {
     private readonly router = inject(Router);
     private readonly pendingTasks = inject(PendingTasks);
 
-    protected readonly state = signal(HomePageState.Loading);
+    protected readonly state = signal<HomePageState>({ kind: "loading" });
 
     constructor() {
         // Run as a pending task so that the app isn't considered stable until we've redirected or
@@ -43,7 +43,10 @@ export class HomeContainer {
         } else if (result.error.kind === "unauthenticated") {
             await this.router.navigate(["/login"], { replaceUrl: true });
         } else {
-            this.state.set(HomePageState.LoadingFailed);
+            this.state.set({
+                kind: "error",
+                error: { kind: "unavailable", resource: { kind: "console" } },
+            });
         }
     }
 }
