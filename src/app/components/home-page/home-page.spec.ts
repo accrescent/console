@@ -4,7 +4,7 @@
 
 import { inputBinding, signal } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
-import { HomePage, HomePageState } from "./home-page";
+import { HomePage, type HomePageState } from "./home-page";
 
 describe("HomePage", () => {
     beforeEach(async () => {
@@ -28,7 +28,7 @@ describe("HomePage", () => {
         let fixture: ComponentFixture<HomePage>;
 
         beforeEach(async () => {
-            fixture = await render(HomePageState.Loading);
+            fixture = await render({ kind: "loading" });
         });
 
         it("should show a progress indicator", () => {
@@ -40,7 +40,10 @@ describe("HomePage", () => {
         let fixture: ComponentFixture<HomePage>;
 
         beforeEach(async () => {
-            fixture = await render(HomePageState.LoadingFailed);
+            fixture = await render({
+                kind: "error",
+                error: { kind: "unavailable", resource: { kind: "console" } },
+            });
         });
 
         it("should show an error", () => {

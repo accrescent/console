@@ -13,35 +13,8 @@ SPDX-License-Identifier: AGPL-3.0-only
                 <mat-progress-spinner mode="indeterminate" aria-label="Loading" />
             </div>
         }
-        @case ("loadingFailed") {
-            <div class="m-auto flex max-w-sm flex-col items-center gap-6 text-center">
-                <div class="flex flex-col gap-2" role="alert">
-                    <h1 class="[font:var(--mat-sys-headline-small)]">Something went wrong</h1>
-                    <p class="text-(--mat-sys-on-surface-variant)">
-                        We couldn't load your organization. This isn't caused by anything you did.
-                        Please try again in a few minutes, or check out our documentation in the
-                        meantime.
-                    </p>
-                </div>
-                <a matButton="filled" href="https://accrescent.app/docs/" target="_blank">
-                    Read the docs
-                </a>
-            </div>
-        }
-        @case ("permissionDenied") {
-            <div class="m-auto flex max-w-sm flex-col items-center gap-6 text-center">
-                <span
-                    class="flex size-16 items-center justify-center rounded-full bg-(--mat-sys-error-container) text-(--mat-sys-on-error-container)">
-                    <mat-icon class="size-8! text-[32px]!">lock</mat-icon>
-                </span>
-                <div class="flex flex-col gap-2">
-                    <h1 class="[font:var(--mat-sys-headline-small)]">No access</h1>
-                    <p class="text-(--mat-sys-on-surface-variant)">
-                        You don't have permission to view this organization (or it might not exist).
-                    </p>
-                </div>
-                <a matButton="filled" routerLink="/">Go to my organization</a>
-            </div>
+        @case ("error") {
+            <acc-full-page-error-view [error]="currentState.error" />
         }
         @case ("loaded") {
             @let organization = currentState.organization;

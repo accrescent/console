@@ -17,10 +17,15 @@ import type { GetMyOrganizationResponse } from "../../../domain/ports/console/ge
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
 import { CONSOLE_API } from "../../tokens";
-import { HomePage, HomePageState } from "../home-page/home-page";
+import { HomePage, type HomePageState } from "../home-page/home-page";
 import { HomeContainer } from "./home-container";
 
 const ORGANIZATION_ID = "org-123";
+
+const CONSOLE_UNAVAILABLE: HomePageState = {
+    kind: "error",
+    error: { kind: "unavailable", resource: { kind: "console" } },
+};
 
 describe("HomeContainer", () => {
     let consoleApi: FakeConsoleApi;
@@ -48,11 +53,11 @@ describe("HomeContainer", () => {
 
         await vi.advanceTimersByTimeAsync(DELAY_MS - 1);
         fixture.detectChanges();
-        expect(page.state()).toBe(HomePageState.Loading);
+        expect(page.state()).toEqual({ kind: "loading" });
 
         await vi.advanceTimersByTimeAsync(1);
         fixture.detectChanges();
-        expect(page.state()).toBe(HomePageState.LoadingFailed);
+        expect(page.state()).toEqual(CONSOLE_UNAVAILABLE);
     });
 
     it("should redirect to the organization dashboard when authenticated", async () => {
@@ -78,7 +83,7 @@ describe("HomeContainer", () => {
 
         fixture.detectChanges();
         const page = fixture.debugElement.query(By.directive(HomePage)).injector.get(HomePage);
-        expect(page.state()).toBe(HomePageState.LoadingFailed);
+        expect(page.state()).toEqual(CONSOLE_UNAVAILABLE);
     });
 });
 

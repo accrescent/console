@@ -3,18 +3,21 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { Component, input } from "@angular/core";
-import { MatButton } from "@angular/material/button";
-import { MatIcon } from "@angular/material/icon";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { RouterLink } from "@angular/router";
 import type { Organization } from "../../../domain/ports/console/organization";
+import {
+    type FullPageErrorPermissionDenied,
+    type FullPageErrorUnavailable,
+    FullPageErrorView,
+    type OrganizationResource,
+} from "../full-page-error-view/full-page-error-view";
 import { QuotaCard } from "../quota-card/quota-card";
 
 /**
  * The dashboard page for a given organization.
  */
 @Component({
-    imports: [MatButton, MatIcon, MatProgressSpinner, QuotaCard, RouterLink],
+    imports: [FullPageErrorView, MatProgressSpinner, QuotaCard],
     selector: "acc-org-dashboard-page",
     templateUrl: "./org-dashboard-page.html",
 })
@@ -30,8 +33,7 @@ export class OrgDashboardPage {
  */
 export type OrgDashboardPageState =
     | OrgDashboardPageLoading
-    | OrgDashboardPageLoadingFailed
-    | OrgDashboardPagePermissionDenied
+    | OrgDashboardPageError
     | OrgDashboardPageLoaded;
 
 /**
@@ -44,15 +46,13 @@ export interface OrgDashboardPageLoading {
 /**
  * Loading the organization failed.
  */
-export interface OrgDashboardPageLoadingFailed {
-    readonly kind: "loadingFailed";
-}
+export interface OrgDashboardPageError {
+    readonly kind: "error";
 
-/**
- * The user isn't allowed to view the organization.
- */
-export interface OrgDashboardPagePermissionDenied {
-    readonly kind: "permissionDenied";
+    /**
+     * The error that occurred.
+     */
+    readonly error: FullPageErrorUnavailable<OrganizationResource> | FullPageErrorPermissionDenied;
 }
 
 /**

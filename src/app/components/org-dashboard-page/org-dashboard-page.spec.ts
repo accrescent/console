@@ -44,20 +44,19 @@ describe("OrgDashboardPage", () => {
         let fixture: ComponentFixture<OrgDashboardPage>;
 
         beforeEach(async () => {
-            fixture = await render({ kind: "loadingFailed" });
+            fixture = await render({
+                kind: "error",
+                error: {
+                    kind: "unavailable",
+                    resource: { kind: "organization", id: ORGANIZATION.id },
+                },
+            });
         });
 
         it("should show an error", () => {
             const alert: HTMLElement = fixture.nativeElement.querySelector("[role=alert]");
             expect(alert.textContent).toContain("Something went wrong");
         });
-    });
-
-    it("should link to the user's own organization when permission is denied", async () => {
-        const fixture = await render({ kind: "permissionDenied" });
-
-        const link: HTMLAnchorElement = fixture.nativeElement.querySelector("a");
-        expect(link.getAttribute("href")).toBe("/");
     });
 
     describe("when loaded", () => {

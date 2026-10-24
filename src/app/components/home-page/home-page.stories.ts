@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Meta, StoryObj } from "@storybook/angular-vite";
-import { HomePage, HomePageState } from "./home-page";
+import { HomePage } from "./home-page";
 
 const meta: Meta<HomePage> = {
     component: HomePage,
@@ -18,12 +18,12 @@ type Story = StoryObj<HomePage>;
 
 export const Loading: Story = {
     args: {
-        state: HomePageState.Loading,
+        state: { kind: "loading" },
     },
 };
 
 export const LoadingFailed: Story = {
     args: {
-        state: HomePageState.LoadingFailed,
+        state: { kind: "error", error: { kind: "unavailable", resource: { kind: "console" } } },
     },
 };

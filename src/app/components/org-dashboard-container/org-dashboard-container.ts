@@ -9,6 +9,7 @@ import { withDelay } from "../../../domain/delay";
 import type { GetOrganizationError } from "../../../domain/ports/console/errors";
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import { CONSOLE_API } from "../../tokens";
+import type { OrganizationResource } from "../full-page-error-view/full-page-error-view";
 import {
     OrgDashboardPage,
     type OrgDashboardPageState,
@@ -38,11 +39,12 @@ export class OrgDashboardContainer {
             withDelay(this.consoleApi.getOrganization(params, abortSignal)),
     });
     protected readonly state = computed((): OrgDashboardPageState => {
+        const resource: OrganizationResource = { kind: "organization", id: this.orgId() };
         if (this.organization.status() === "error") {
-            return { kind: "loadingFailed" };
+            return { kind: "error", error: { kind: "unavailable", resource } };
         }
         return this.organization.hasValue()
-            ? toPageState(this.organization.value())
+            ? toPageState(this.organization.value(), resource)
             : { kind: "loading" };
     });
 
@@ -62,18 +64,21 @@ export class OrgDashboardContainer {
 
 function toPageState(
     result: Result<GetOrganizationResponse, GetOrganizationError>,
+    resource: OrganizationResource,
 ): OrgDashboardPageState {
     if (result.ok) {
         return { kind: "loaded", organization: result.value.organization };
     }
 
     switch (result.error.kind) {
-        case "permissionDenied":
-            return { kind: "permissionDenied" };
         // Keep showing progress while redirecting to the login page
         case "unauthenticated":
             return { kind: "loading" };
-        default:
-            return { kind: "loadingFailed" };
+        case "permissionDenied":
+            return { kind: "error", error: { kind: "permissionDenied", resource } };
+        case "internal":
+        case "serviceUnavailable":
+        case "unknown":
+            return { kind: "error", error: { kind: "unavailable", resource } };
     }
 }
