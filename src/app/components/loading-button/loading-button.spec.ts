@@ -15,6 +15,7 @@ import { LoadingButton, type LoadingButtonState } from "./loading-button";
             [state]="state()"
             loadingLabel="Saving"
             (press)="pressCount = pressCount + 1">
+            <span matButtonIcon class="icon"></span>
             <span class="label">Save</span>
         </acc-loading-button>
     `,
@@ -39,6 +40,13 @@ describe("LoadingButton", () => {
 
     it("should show the label in the button", () => {
         expect(button().textContent).toContain("Save");
+    });
+
+    it("should show the icon in the button as an icon rather than as part of the label", () => {
+        const icon: HTMLElement = button().querySelector(".icon")!;
+
+        expect(icon).not.toBeNull();
+        expect(icon.closest(".mdc-button__label")).toBeNull();
     });
 
     it("should apply the appearance to the button", async () => {

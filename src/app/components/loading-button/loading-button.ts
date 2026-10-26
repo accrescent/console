@@ -9,6 +9,8 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 /**
  * A Material button which shows progress once activated.
  *
+ * Content with the `matButtonIcon` attribute is shown in the button's icon slot
+ *
  * @example
  * ```html
  * <acc-loading-button

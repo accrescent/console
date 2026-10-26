@@ -16,6 +16,16 @@ The progress indicator only shows while the button is disabled, so color it like
     [showProgress]="loading()"
     [attr.aria-label]="loading() ? loadingLabel() : null"
     (click)="disabled() || press.emit()">
+    <!--
+    Reproject icons so that the button lays them out as icons instead of label content.
+
+    For reprojection to work properly, ngProjectAs has to exactly match one of the selectors listed
+    at
+    https://github.com/angular/components/blob/e28b22e2cc28e7e6bc0850e9a9e7f076e7c75428/src/material/button/button.html#L8.
+    -->
+    <ng-container ngProjectAs="[matButtonIcon]:not([iconPositionEnd])">
+        <ng-content select="[matButtonIcon]" />
+    </ng-container>
     <ng-content />
     <!--
     Set tabindex="" to make the progress spinner noninteractable. See

@@ -3,17 +3,16 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { Component, input, output } from "@angular/core";
-import { MatButton } from "@angular/material/button";
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
 
 import accrescentLogo from "../../../assets/accrescent-logo.svg";
 import githubInvertocat from "../../../assets/github-invertocat-white.svg";
+import { LoadingButton } from "../loading-button/loading-button";
 
 /**
  * The console login page.
  */
 @Component({
-    imports: [MatButton, MatProgressSpinner],
+    imports: [LoadingButton],
     selector: "acc-login-page",
     templateUrl: "./login-page.html",
 })
