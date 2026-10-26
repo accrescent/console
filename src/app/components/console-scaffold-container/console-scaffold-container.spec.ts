@@ -8,7 +8,7 @@ import { MATERIAL_ANIMATIONS } from "@angular/material/core";
 import { provideRouter, Router } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { err, ok, type Result } from "../../../core/result";
-import { DELAY_MS } from "../../../domain/delay";
+import { MIN_PROGRESS_MS, PROGRESS_DELAY_MS } from "../../../domain/delay";
 import type { AuthnApi } from "../../../domain/ports/authn/authn-api";
 import type { LogOutError } from "../../../domain/ports/authn/errors";
 import { AUTHN_API } from "../../tokens";
@@ -50,15 +50,24 @@ describe("ConsoleScaffoldContainer", () => {
         vi.useRealTimers();
     });
 
+    function logOutButton(): HTMLButtonElement {
+        return harness.fixture.nativeElement.querySelector("acc-loading-button button");
+    }
+
     function clickLogOut(): void {
-        harness.fixture.nativeElement.querySelector("acc-loading-button button").click();
+        logOutButton().click();
+    }
+
+    function progressShown(): boolean {
+        harness.detectChanges();
+        return logOutButton().querySelector("mat-progress-spinner") !== null;
     }
 
     /**
-     * Waits for logging out to finish, including the minimum progress indicator duration.
+     * Waits for logging out to finish, including any minimum progress indicator duration.
      */
     async function waitForLogOut(): Promise<void> {
-        await vi.advanceTimersByTimeAsync(DELAY_MS);
+        await vi.runAllTimersAsync();
         await harness.fixture.whenStable();
     }
 
@@ -87,18 +96,44 @@ describe("ConsoleScaffoldContainer", () => {
         expect(TestBed.inject(Router).url).toBe("/login");
     });
 
-    it("should show the progress indicator for the minimum duration even if logout fails quickly", async () => {
+    it("should disable the log out button immediately", () => {
+        authnApi.logOutDelayMs = PROGRESS_DELAY_MS + 1;
+
+        clickLogOut();
+        harness.detectChanges();
+
+        expect(logOutButton().getAttribute("aria-disabled")).toBe("true");
+    });
+
+    it("should not show the progress indicator if logout fails quickly", async () => {
         authnApi.logOutResult = err({ kind: "unknown" });
+        authnApi.logOutDelayMs = PROGRESS_DELAY_MS - 1;
+
+        clickLogOut();
+        expect(progressShown()).toBe(false);
+
+        await vi.advanceTimersByTimeAsync(PROGRESS_DELAY_MS - 1);
+        expect(progressShown()).toBe(false);
+        expect(logOutButton().getAttribute("aria-disabled")).toBeNull();
+    });
+
+    it("should show the progress indicator for the minimum duration once logout takes long enough", async () => {
+        authnApi.logOutResult = err({ kind: "unknown" });
+        authnApi.logOutDelayMs = PROGRESS_DELAY_MS + 1;
 
         clickLogOut();
 
-        await vi.advanceTimersByTimeAsync(DELAY_MS - 1);
-        harness.detectChanges();
-        expect(harness.fixture.nativeElement.querySelector("mat-progress-spinner")).not.toBeNull();
+        await vi.advanceTimersByTimeAsync(PROGRESS_DELAY_MS - 1);
+        expect(progressShown()).toBe(false);
 
         await vi.advanceTimersByTimeAsync(1);
-        harness.detectChanges();
-        expect(harness.fixture.nativeElement.querySelector("mat-progress-spinner")).toBeNull();
+        expect(progressShown()).toBe(true);
+
+        await vi.advanceTimersByTimeAsync(MIN_PROGRESS_MS - 1);
+        expect(progressShown()).toBe(true);
+
+        await vi.advanceTimersByTimeAsync(1);
+        expect(progressShown()).toBe(false);
     });
 
     describe("when logout fails", () => {
@@ -146,11 +181,13 @@ describe("ConsoleScaffoldContainer", () => {
 });
 
 /**
- * {@link AuthnApi} that records logout attempts and returns preconfigured results.
+ * {@link AuthnApi} that records logout attempts and returns preconfigured results after a
+ * preconfigured delay.
  */
 class FakeAuthnApi implements AuthnApi {
     logOutCount = 0;
     logOutResult: Result<void, LogOutError> = ok(undefined);
+    logOutDelayMs = 0;
 
     logInWithGitHub(): void {
         throw new Error("not used by ConsoleScaffoldContainer");
@@ -158,6 +195,7 @@ class FakeAuthnApi implements AuthnApi {
 
     async logOut(): Promise<Result<void, LogOutError>> {
         this.logOutCount++;
+        await new Promise((resolve) => setTimeout(resolve, this.logOutDelayMs));
         return this.logOutResult;
     }
 }

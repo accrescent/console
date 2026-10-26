@@ -7,7 +7,7 @@ import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { provideRouter, Router } from "@angular/router";
 import { err, ok, type Result } from "../../../core/result";
-import { DELAY_MS } from "../../../domain/delay";
+import { MIN_PROGRESS_MS, PROGRESS_DELAY_MS } from "../../../domain/delay";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
 import type {
     GetMyOrganizationError,
@@ -63,7 +63,7 @@ describe("OrgDashboardContainer", () => {
      */
     async function render(): Promise<ComponentFixture<OrgDashboardContainer>> {
         const fixture = create();
-        await vi.advanceTimersByTimeAsync(DELAY_MS);
+        await vi.runAllTimersAsync();
         await fixture.whenStable();
         return fixture;
     }
@@ -76,17 +76,30 @@ describe("OrgDashboardContainer", () => {
             .state();
     }
 
-    it("should show progress for the minimum duration even if loading finishes quickly", async () => {
+    it("should not show progress if loading finishes quickly", async () => {
+        consoleApi.delayMs = PROGRESS_DELAY_MS - 1;
+        const fixture = create();
+        expect(pageState(fixture)).toEqual({ kind: "pending" });
+
+        await vi.advanceTimersByTimeAsync(PROGRESS_DELAY_MS - 1);
+        expect(pageState(fixture)).toEqual({ kind: "loaded", organization: ORGANIZATION });
+    });
+
+    it("should show progress for the minimum duration once loading takes long enough", async () => {
+        consoleApi.delayMs = PROGRESS_DELAY_MS + 1;
         const fixture = create();
 
-        await vi.advanceTimersByTimeAsync(DELAY_MS - 1);
+        await vi.advanceTimersByTimeAsync(PROGRESS_DELAY_MS - 1);
+        expect(pageState(fixture)).toEqual({ kind: "pending" });
+
+        await vi.advanceTimersByTimeAsync(1);
+        expect(pageState(fixture)).toEqual({ kind: "loading" });
+
+        await vi.advanceTimersByTimeAsync(MIN_PROGRESS_MS - 1);
         expect(pageState(fixture)).toEqual({ kind: "loading" });
 
         await vi.advanceTimersByTimeAsync(1);
-        expect(pageState(fixture)).toEqual({
-            kind: "loaded",
-            organization: ORGANIZATION,
-        });
+        expect(pageState(fixture)).toEqual({ kind: "loaded", organization: ORGANIZATION });
     });
 
     it("should show permission denied when the user can't view the organization", async () => {
@@ -124,18 +137,20 @@ describe("OrgDashboardContainer", () => {
 });
 
 /**
- * {@link ConsoleApi} that returns preconfigured results.
+ * {@link ConsoleApi} that returns preconfigured results after a preconfigured delay.
  */
 class FakeConsoleApi implements ConsoleApi {
     organizationResult: Result<GetOrganizationResponse, GetOrganizationError> = ok({
         organization: ORGANIZATION,
     });
+    delayMs = 0;
 
     getSelf(): Promise<Result<GetSelfResponse, GetSelfError>> {
         throw new Error("not used by OrgDashboardContainer");
     }
 
     async getOrganization(): Promise<Result<GetOrganizationResponse, GetOrganizationError>> {
+        await new Promise((resolve) => setTimeout(resolve, this.delayMs));
         return this.organizationResult;
     }
 

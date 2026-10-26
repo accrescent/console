@@ -9,7 +9,7 @@ const meta: Meta<LoadingButton> = {
     component: LoadingButton,
     args: {
         appearance: "text",
-        loading: false,
+        state: "idle",
         loadingLabel: "Saving",
     },
     // Project the label, which the default render doesn't do
@@ -25,9 +25,15 @@ type Story = StoryObj<LoadingButton>;
 
 export const Idle: Story = {};
 
+export const Pending: Story = {
+    args: {
+        state: "pending",
+    },
+};
+
 export const Loading: Story = {
     args: {
-        loading: true,
+        state: "loading",
     },
 };
 
@@ -37,9 +43,16 @@ export const FilledIdle: Story = {
     },
 };
 
+export const FilledPending: Story = {
+    args: {
+        appearance: "filled",
+        state: "pending",
+    },
+};
+
 export const FilledLoading: Story = {
     args: {
         appearance: "filled",
-        loading: true,
+        state: "loading",
     },
 };

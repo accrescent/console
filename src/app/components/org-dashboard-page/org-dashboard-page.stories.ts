@@ -29,7 +29,7 @@ const meta: Meta<OrgDashboardPage> = {
         applicationConfig({ providers: [provideRouter([])] }),
         // Render inside the scaffold as the page is in the app
         moduleMetadata({ imports: [ConsoleScaffoldPage] }),
-        componentWrapperDecorator(ConsoleScaffoldPage, { handset: false, loggingOut: false }),
+        componentWrapperDecorator(ConsoleScaffoldPage, { handset: false, logoutState: "idle" }),
     ],
     render: (args) => ({
         props: args,
@@ -43,6 +43,12 @@ const meta: Meta<OrgDashboardPage> = {
 export default meta;
 
 type Story = StoryObj<OrgDashboardPage>;
+
+export const Pending: Story = {
+    args: {
+        state: { kind: "pending" },
+    },
+};
 
 export const Loading: Story = {
     args: {

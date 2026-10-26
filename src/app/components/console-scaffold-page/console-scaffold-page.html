@@ -22,7 +22,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
         <acc-loading-button
             class="ms-auto"
-            [loading]="loggingOut()"
+            [state]="logoutState()"
             loadingLabel="Logging out"
             (press)="logOut.emit()">
             Log out

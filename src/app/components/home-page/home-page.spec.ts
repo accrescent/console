@@ -24,6 +24,18 @@ describe("HomePage", () => {
         return fixture;
     }
 
+    describe("when pending", () => {
+        let fixture: ComponentFixture<HomePage>;
+
+        beforeEach(async () => {
+            fixture = await render({ kind: "pending" });
+        });
+
+        it("should not show a progress indicator", () => {
+            expect(fixture.nativeElement.querySelector("mat-progress-spinner")).toBeNull();
+        });
+    });
+
     describe("when loading", () => {
         let fixture: ComponentFixture<HomePage>;
 

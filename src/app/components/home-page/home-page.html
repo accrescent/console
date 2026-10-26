@@ -8,6 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only
     @let currentState = state();
     @let kind = currentState.kind;
     @switch (kind) {
+        @case ("pending") {}
         @case ("loading") {
             <mat-progress-spinner mode="indeterminate" aria-label="Loading" />
         }

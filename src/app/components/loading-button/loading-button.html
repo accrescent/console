@@ -11,11 +11,11 @@ The progress indicator only shows while the button is disabled, so color it like
     [matButton]="appearance()"
     class="[--mat-button-filled-progress-active-indicator-color:var(--mat-sys-on-surface)]"
     type="button"
-    [disabled]="loading()"
+    [disabled]="disabled()"
     disabledInteractive
     [showProgress]="loading()"
     [attr.aria-label]="loading() ? loadingLabel() : null"
-    (click)="loading() || press.emit()">
+    (click)="disabled() || press.emit()">
     <ng-content />
     <!--
     Set tabindex="" to make the progress spinner noninteractable. See

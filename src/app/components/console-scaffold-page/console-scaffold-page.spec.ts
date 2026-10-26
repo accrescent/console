@@ -7,11 +7,12 @@ import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatSidenav } from "@angular/material/sidenav";
 import { By } from "@angular/platform-browser";
 import { provideRouter } from "@angular/router";
+import type { LoadingButtonState } from "../loading-button/loading-button";
 import { ConsoleScaffoldPage } from "./console-scaffold-page";
 
 describe("ConsoleScaffoldPage", () => {
     let handset: WritableSignal<boolean>;
-    let loggingOut: WritableSignal<boolean>;
+    let logoutState: WritableSignal<LoadingButtonState>;
     let logOutCount: number;
 
     /**
@@ -27,12 +28,12 @@ describe("ConsoleScaffoldPage", () => {
         });
 
         handset = signal(isHandset);
-        loggingOut = signal(false);
+        logoutState = signal<LoadingButtonState>("idle");
         logOutCount = 0;
         const fixture = TestBed.createComponent(ConsoleScaffoldPage, {
             bindings: [
                 inputBinding("handset", handset),
-                inputBinding("loggingOut", loggingOut),
+                inputBinding("logoutState", logoutState),
                 outputBinding("logOut", () => logOutCount++),
             ],
         });
@@ -129,9 +130,26 @@ describe("ConsoleScaffoldPage", () => {
             expect(logOutCount).toBe(1);
         });
 
+        describe("when logout is pending", () => {
+            beforeEach(async () => {
+                logoutState.set("pending");
+                await fixture.whenStable();
+            });
+
+            it("should not show a progress indicator", () => {
+                expect(logOutButton(fixture).querySelector("mat-progress-spinner")).toBeNull();
+            });
+
+            it("should not emit logOut when clicked", () => {
+                logOutButton(fixture).click();
+
+                expect(logOutCount).toBe(0);
+            });
+        });
+
         describe("when logging out", () => {
             beforeEach(async () => {
-                loggingOut.set(true);
+                logoutState.set("loading");
                 await fixture.whenStable();
             });
 

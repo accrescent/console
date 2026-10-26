@@ -11,7 +11,7 @@ const meta: Meta<ConsoleScaffoldPage> = {
     decorators: [applicationConfig({ providers: [provideRouter([])] })],
     args: {
         handset: false,
-        loggingOut: false,
+        logoutState: "idle",
     },
     parameters: {
         layout: "fullscreen",
@@ -24,9 +24,15 @@ type Story = StoryObj<ConsoleScaffoldPage>;
 
 export const Idle: Story = {};
 
+export const LogoutPending: Story = {
+    args: {
+        logoutState: "pending",
+    },
+};
+
 export const LoggingOut: Story = {
     args: {
-        loggingOut: true,
+        logoutState: "loading",
     },
 };
 

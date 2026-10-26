@@ -5,14 +5,14 @@
 import { Component, signal } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import type { MatButtonAppearance } from "@angular/material/button";
-import { LoadingButton } from "./loading-button";
+import { LoadingButton, type LoadingButtonState } from "./loading-button";
 
 @Component({
     imports: [LoadingButton],
     template: `
         <acc-loading-button
             [appearance]="appearance()"
-            [loading]="loading()"
+            [state]="state()"
             loadingLabel="Saving"
             (press)="pressCount = pressCount + 1">
             <span class="label">Save</span>
@@ -21,7 +21,7 @@ import { LoadingButton } from "./loading-button";
 })
 class Host {
     readonly appearance = signal<MatButtonAppearance>("text");
-    readonly loading = signal(false);
+    readonly state = signal<LoadingButtonState>("idle");
     pressCount = 0;
 }
 
@@ -48,7 +48,7 @@ describe("LoadingButton", () => {
         expect(button().classList).toContain("mat-mdc-unelevated-button");
     });
 
-    describe("when not loading", () => {
+    describe("when idle", () => {
         it("should not show a progress indicator", () => {
             expect(button().querySelector("mat-progress-spinner")).toBeNull();
         });
@@ -69,9 +69,35 @@ describe("LoadingButton", () => {
         });
     });
 
+    describe("when pending", () => {
+        beforeEach(async () => {
+            fixture.componentInstance.state.set("pending");
+            await fixture.whenStable();
+        });
+
+        it("should not show a progress indicator", () => {
+            expect(button().querySelector("mat-progress-spinner")).toBeNull();
+        });
+
+        it("should disable the button but keep it focusable", () => {
+            expect(button().disabled).toBe(false);
+            expect(button().getAttribute("aria-disabled")).toBe("true");
+        });
+
+        it("should name the button by its label", () => {
+            expect(button().getAttribute("aria-label")).toBeNull();
+        });
+
+        it("should not emit press when clicked", () => {
+            button().click();
+
+            expect(fixture.componentInstance.pressCount).toBe(0);
+        });
+    });
+
     describe("when loading", () => {
         beforeEach(async () => {
-            fixture.componentInstance.loading.set(true);
+            fixture.componentInstance.state.set("loading");
             await fixture.whenStable();
         });
 
@@ -100,8 +126,8 @@ describe("LoadingButton", () => {
             expect(fixture.componentInstance.pressCount).toBe(0);
         });
 
-        it("should emit press again once loading finishes", async () => {
-            fixture.componentInstance.loading.set(false);
+        it("should emit press again once the action finishes", async () => {
+            fixture.componentInstance.state.set("idle");
             await fixture.whenStable();
 
             button().click();
