@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, input, output } from "@angular/core";
+import { Component, computed, input, output } from "@angular/core";
 import { MatButton, type MatButtonAppearance } from "@angular/material/button";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 
@@ -13,7 +13,7 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
  * ```html
  * <acc-loading-button
  *     appearance="filled"
- *     [loading]="loading"
+ *     [state]="state"
  *     loadingLabel="Loading"
  *     (press)="load.emit()">
  *     Load
@@ -33,9 +33,9 @@ export class LoadingButton {
     readonly appearance = input<MatButtonAppearance>("text");
 
     /**
-     * Whether the action the button starts is in progress.
+     * The state of the action the button starts.
      */
-    readonly loading = input.required<boolean>();
+    readonly state = input.required<LoadingButtonState>();
 
     /**
      * The accessible name of the button while loading, describing the action in progress.
@@ -43,7 +43,19 @@ export class LoadingButton {
     readonly loadingLabel = input.required<string>();
 
     /**
-     * Emits when the user clicks the button while not loading.
+     * Emits when the user clicks the button while the action isn't in progress.
      */
     readonly press = output<void>();
+
+    protected readonly disabled = computed(() => this.state() !== "idle");
+    protected readonly loading = computed(() => this.state() === "loading");
 }
+
+/**
+ * The state of the action a {@link LoadingButton} starts.
+ *
+ * - `idle`: the action hasn't been started.
+ * - `pending`: the action has started but isn't yet showing progress.
+ * - `loading`: the action has been started and is actively showing progress.
+ */
+export type LoadingButtonState = "idle" | "pending" | "loading";

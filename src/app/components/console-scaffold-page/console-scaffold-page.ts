@@ -11,7 +11,7 @@ import { MatToolbar } from "@angular/material/toolbar";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 
 import accrescentLogo from "../../../assets/accrescent-logo.svg";
-import { LoadingButton } from "../loading-button/loading-button";
+import { LoadingButton, type LoadingButtonState } from "../loading-button/loading-button";
 
 /**
  * The scaffold for console pages, containing a toolbar and navigation sidebar.
@@ -45,10 +45,10 @@ export class ConsoleScaffoldPage {
     readonly handset = input.required<boolean>();
 
     /**
-     * Whether logout is in progress. If true, the logout button shows a progress indicator and
+     * The state of logging out. While logout is in progress, the logout button is disabled and
      * doesn't emit {@link logOut} events.
      */
-    readonly loggingOut = input.required<boolean>();
+    readonly logoutState = input.required<LoadingButtonState>();
 
     /**
      * Emits when the user clicks the log out button.

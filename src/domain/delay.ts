@@ -3,23 +3,50 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * The minimum number of milliseconds for operations to take.
+ * The number of milliseconds an operation must take before showing progress for it.
  */
-export const DELAY_MS = 500;
+export const PROGRESS_DELAY_MS = 200;
 
 /**
- * Waits for a promise to settle, taking at least {@link DELAY_MS} milliseconds.
- *
- * This utility is useful for keeping progress indicators visible long enough for the user to see
- * them even when operations complete quickly, preventing animation flashes that cause poor UX.
- *
- * @param promise - the promise to wait for
- * @returns the value the promise resolves to
+ * The minimum number of milliseconds to show progress for once it's shown.
  */
-export async function withDelay<T>(promise: Promise<T>): Promise<T> {
-    const [result] = await Promise.all([
-        promise,
-        new Promise((resolve) => setTimeout(resolve, DELAY_MS)),
-    ]);
-    return result;
+export const MIN_PROGRESS_MS = 400;
+
+/**
+ * Shows progress for a promise in a user-friendly way.
+ *
+ * Progress is shown only if the promise takes more than {@link PROGRESS_DELAY_MS} to complete. If
+ * progress is shown, it is shown for at least {@link MIN_PROGRESS_MS}. These two behaviors combined
+ * make for a high-quality UX when used to display loading indicators in a UI because:
+ *
+ * - Fast operations result in fast loads without users needing to wait for a progress indicator to
+ *   animate
+ * - Progress indicators never appear for only a brief moment, causing an alarming or confusing
+ *   animation "flash"
+ *
+ * @param promise - the promise to wait for.
+ * @param showProgress - a callback invoked if the promise takes more than {@link PROGRESS_DELAY_MS}
+ * to complete.
+ * @returns the value the promise resolves to.
+ */
+export async function withDeferredProgress<T>(
+    promise: Promise<T>,
+    showProgress: () => void,
+): Promise<T> {
+    let minProgress: Promise<void> | undefined;
+    const timer = setTimeout(() => {
+        showProgress();
+        minProgress = sleep(MIN_PROGRESS_MS);
+    }, PROGRESS_DELAY_MS);
+
+    try {
+        return await promise;
+    } finally {
+        clearTimeout(timer);
+        await minProgress;
+    }
+}
+
+function sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }

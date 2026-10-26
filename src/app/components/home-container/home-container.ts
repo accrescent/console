@@ -4,7 +4,7 @@
 
 import { Component, inject, PendingTasks, signal } from "@angular/core";
 import { Router } from "@angular/router";
-import { withDelay } from "../../../domain/delay";
+import { withDeferredProgress } from "../../../domain/delay";
 import { CONSOLE_API } from "../../tokens";
 import { HomePage, type HomePageState } from "../home-page/home-page";
 
@@ -22,7 +22,7 @@ export class HomeContainer {
     private readonly router = inject(Router);
     private readonly pendingTasks = inject(PendingTasks);
 
-    protected readonly state = signal<HomePageState>({ kind: "loading" });
+    protected readonly state = signal<HomePageState>({ kind: "pending" });
 
     constructor() {
         // Run as a pending task so that the app isn't considered stable until we've redirected or
@@ -34,7 +34,9 @@ export class HomeContainer {
      * Determines where to send the user and redirects them there, displaying an error on failure.
      */
     private async redirect(): Promise<void> {
-        const result = await withDelay(this.consoleApi.getMyOrganization());
+        const result = await withDeferredProgress(this.consoleApi.getMyOrganization(), () =>
+            this.state.set({ kind: "loading" }),
+        );
 
         if (result.ok) {
             await this.router.navigate(["/orgs", result.value.organizationId, "dashboard"], {

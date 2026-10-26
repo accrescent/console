@@ -32,12 +32,20 @@ export class OrgDashboardPage {
  * The state of an {@link OrgDashboardPage}.
  */
 export type OrgDashboardPageState =
+    | OrgDashboardPagePending
     | OrgDashboardPageLoading
     | OrgDashboardPageError
     | OrgDashboardPageLoaded;
 
 /**
- * Loading the organization is in progress.
+ * Loading the organization is in progress but hasn't taken long enough to show progress.
+ */
+export interface OrgDashboardPagePending {
+    readonly kind: "pending";
+}
+
+/**
+ * Loading the organization is in progress and has taken long enough to show progress.
  */
 export interface OrgDashboardPageLoading {
     readonly kind: "loading";

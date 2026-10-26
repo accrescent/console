@@ -34,6 +34,12 @@ describe("OrgDashboardPage", () => {
         return fixture;
     }
 
+    it("should not show a progress indicator when pending", async () => {
+        const fixture = await render({ kind: "pending" });
+
+        expect(fixture.nativeElement.querySelector("mat-progress-spinner")).toBeNull();
+    });
+
     it("should show a progress indicator when loading", async () => {
         const fixture = await render({ kind: "loading" });
 

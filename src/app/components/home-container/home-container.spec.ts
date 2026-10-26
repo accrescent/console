@@ -6,7 +6,7 @@ import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { provideRouter, Router } from "@angular/router";
 import { err, ok, type Result } from "../../../core/result";
-import { DELAY_MS } from "../../../domain/delay";
+import { MIN_PROGRESS_MS, PROGRESS_DELAY_MS } from "../../../domain/delay";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
 import type {
     GetMyOrganizationError,
@@ -46,18 +46,37 @@ describe("HomeContainer", () => {
         vi.useRealTimers();
     });
 
-    it("should show progress for the minimum duration even if loading finishes quickly", async () => {
-        consoleApi.myOrganizationResult = err({ kind: "unknown" });
-        const fixture = TestBed.createComponent(HomeContainer);
-        const page = fixture.debugElement.query(By.directive(HomePage)).injector.get(HomePage);
-
-        await vi.advanceTimersByTimeAsync(DELAY_MS - 1);
+    function pageState(fixture: ComponentFixture<HomeContainer>): HomePageState {
         fixture.detectChanges();
-        expect(page.state()).toEqual({ kind: "loading" });
+        return fixture.debugElement.query(By.directive(HomePage)).injector.get(HomePage).state();
+    }
+
+    it("should not show progress if loading finishes quickly", async () => {
+        consoleApi.myOrganizationResult = err({ kind: "unknown" });
+        consoleApi.delayMs = PROGRESS_DELAY_MS - 1;
+        const fixture = TestBed.createComponent(HomeContainer);
+        expect(pageState(fixture)).toEqual({ kind: "pending" });
+
+        await vi.advanceTimersByTimeAsync(PROGRESS_DELAY_MS - 1);
+        expect(pageState(fixture)).toEqual(CONSOLE_UNAVAILABLE);
+    });
+
+    it("should show progress for the minimum duration once loading takes long enough", async () => {
+        consoleApi.myOrganizationResult = err({ kind: "unknown" });
+        consoleApi.delayMs = PROGRESS_DELAY_MS + 1;
+        const fixture = TestBed.createComponent(HomeContainer);
+
+        await vi.advanceTimersByTimeAsync(PROGRESS_DELAY_MS - 1);
+        expect(pageState(fixture)).toEqual({ kind: "pending" });
 
         await vi.advanceTimersByTimeAsync(1);
-        fixture.detectChanges();
-        expect(page.state()).toEqual(CONSOLE_UNAVAILABLE);
+        expect(pageState(fixture)).toEqual({ kind: "loading" });
+
+        await vi.advanceTimersByTimeAsync(MIN_PROGRESS_MS - 1);
+        expect(pageState(fixture)).toEqual({ kind: "loading" });
+
+        await vi.advanceTimersByTimeAsync(1);
+        expect(pageState(fixture)).toEqual(CONSOLE_UNAVAILABLE);
     });
 
     it("should redirect to the organization dashboard when authenticated", async () => {
@@ -81,9 +100,7 @@ describe("HomeContainer", () => {
 
         const fixture = await render();
 
-        fixture.detectChanges();
-        const page = fixture.debugElement.query(By.directive(HomePage)).injector.get(HomePage);
-        expect(page.state()).toEqual(CONSOLE_UNAVAILABLE);
+        expect(pageState(fixture)).toEqual(CONSOLE_UNAVAILABLE);
     });
 });
 
@@ -92,18 +109,19 @@ describe("HomeContainer", () => {
  */
 async function render(): Promise<ComponentFixture<HomeContainer>> {
     const fixture = TestBed.createComponent(HomeContainer);
-    await vi.advanceTimersByTimeAsync(DELAY_MS);
+    await vi.runAllTimersAsync();
     await fixture.whenStable();
     return fixture;
 }
 
 /**
- * {@link ConsoleApi} that returns preconfigured results.
+ * {@link ConsoleApi} that returns preconfigured results after a preconfigured delay.
  */
 class FakeConsoleApi implements ConsoleApi {
     myOrganizationResult: Result<GetMyOrganizationResponse, GetMyOrganizationError> = ok({
         organizationId: ORGANIZATION_ID,
     });
+    delayMs = 0;
 
     getSelf(): Promise<Result<GetSelfResponse, GetSelfError>> {
         throw new Error("not used by HomeContainer");
@@ -114,6 +132,7 @@ class FakeConsoleApi implements ConsoleApi {
     }
 
     async getMyOrganization(): Promise<Result<GetMyOrganizationResponse, GetMyOrganizationError>> {
+        await new Promise((resolve) => setTimeout(resolve, this.delayMs));
         return this.myOrganizationResult;
     }
 }

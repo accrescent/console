@@ -12,9 +12,10 @@ import {
 } from "@angular/material/snack-bar";
 import { Router, RouterOutlet } from "@angular/router";
 import { map } from "rxjs";
-import { withDelay } from "../../../domain/delay";
+import { withDeferredProgress } from "../../../domain/delay";
 import { AUTHN_API } from "../../tokens";
 import { ConsoleScaffoldPage } from "../console-scaffold-page/console-scaffold-page";
+import type { LoadingButtonState } from "../loading-button/loading-button";
 
 /**
  * Effectful container for the console scaffold which renders child routes inside the scaffold.
@@ -41,9 +42,9 @@ export class ConsoleScaffoldContainer {
     );
 
     /**
-     * Whether logout is in progress.
+     * The state of logging out.
      */
-    protected readonly loggingOut = signal(false);
+    protected readonly logoutState = signal<LoadingButtonState>("idle");
 
     /**
      * The snackbar showing the last logout error, if any.
@@ -55,14 +56,16 @@ export class ConsoleScaffoldContainer {
      */
     protected logOut(): void {
         this.logOutErrorRef?.dismiss();
-        this.loggingOut.set(true);
+        this.logoutState.set("pending");
         // Run as a pending task so that the app isn't considered stable until we've redirected or
         // displayed an error
         this.pendingTasks.run(() => this.tryLogOut());
     }
 
     private async tryLogOut(): Promise<void> {
-        const result = await withDelay(this.authnApi.logOut());
+        const result = await withDeferredProgress(this.authnApi.logOut(), () =>
+            this.logoutState.set("loading"),
+        );
 
         // Treat "unauthenticated" as success since the user is already logged out
         if (result.ok || result.error.kind === "unauthenticated") {
@@ -75,6 +78,6 @@ export class ConsoleScaffoldContainer {
         }
 
         // Reset even after navigation since it could have been cancelled
-        this.loggingOut.set(false);
+        this.logoutState.set("idle");
     }
 }

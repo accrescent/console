@@ -28,10 +28,17 @@ export class HomePage {
 /**
  * The state of the {@link HomePage}.
  */
-export type HomePageState = HomePageLoading | HomePageError;
+export type HomePageState = HomePagePending | HomePageLoading | HomePageError;
 
 /**
- * Determining where to send the user is in progress.
+ * Determining where to send the user is in progress but hasn't taken long enough to show progress.
+ */
+export interface HomePagePending {
+    readonly kind: "pending";
+}
+
+/**
+ * Determining where to send the user is in progress and has taken long enough to show progress.
  */
 export interface HomePageLoading {
     readonly kind: "loading";
