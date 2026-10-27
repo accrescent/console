@@ -13,7 +13,7 @@ import {
 } from "@storybook/angular-vite";
 import type { Organization } from "../../../domain/ports/console/organization";
 import { ConsoleScaffoldPage } from "../console-scaffold-page/console-scaffold-page";
-import { OrgDashboardPage } from "./org-dashboard-page";
+import { OrgDashboardPage, type OrgDashboardPageLoaded } from "./org-dashboard-page";
 
 const ORGANIZATION: Organization = {
     id: "org_21nsTL6hybsteGOPytcUzx",
@@ -21,6 +21,12 @@ const ORGANIZATION: Organization = {
     publishedAppCount: 3,
     activeAppDraftLimit: 3,
     activeAppDraftCount: 2,
+};
+
+const LOADED: OrgDashboardPageLoaded = {
+    kind: "loaded",
+    organization: ORGANIZATION,
+    createAppDraftState: "idle",
 };
 
 const meta: Meta<OrgDashboardPage> = {
@@ -79,14 +85,57 @@ export const PermissionDenied: Story = {
 
 export const Loaded: Story = {
     args: {
-        state: { kind: "loaded", organization: ORGANIZATION },
+        state: LOADED,
+    },
+};
+
+export const CreatingAppDraftPending: Story = {
+    args: {
+        state: { ...LOADED, createAppDraftState: "pending" },
+    },
+};
+
+export const CreatingAppDraftLoading: Story = {
+    args: {
+        state: { ...LOADED, createAppDraftState: "loading" },
+    },
+};
+
+export const CreatingAppDraftFailed: Story = {
+    args: {
+        state: {
+            ...LOADED,
+            createAppDraftError: { kind: "unavailable", failedAttempts: 1 },
+        },
+    },
+};
+
+export const CreatingAppDraftPermissionDenied: Story = {
+    args: {
+        state: {
+            ...LOADED,
+            createAppDraftError: { kind: "permissionDenied", failedAttempts: 1 },
+        },
+    },
+};
+
+export const CreatingAppDraftLimitReached: Story = {
+    args: {
+        state: {
+            ...LOADED,
+            organization: {
+                ...ORGANIZATION,
+                activeAppDraftCount: ORGANIZATION.activeAppDraftLimit,
+            },
+            createAppDraftError: { kind: "resourceLimitExceeded", failedAttempts: 1 },
+        },
     },
 };
 
 export const AtLimits: Story = {
     args: {
         state: {
-            kind: "loaded",
+            ...LOADED,
             organization: {
                 ...ORGANIZATION,
                 publishedAppCount: ORGANIZATION.publishedAppLimit,
@@ -99,7 +148,7 @@ export const AtLimits: Story = {
 export const Empty: Story = {
     args: {
         state: {
-            kind: "loaded",
+            ...LOADED,
             organization: { ...ORGANIZATION, publishedAppCount: 0, activeAppDraftCount: 0 },
         },
     },

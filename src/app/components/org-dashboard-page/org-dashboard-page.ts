@@ -2,22 +2,28 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, input } from "@angular/core";
+import { Component, input, output, viewChild } from "@angular/core";
+import { MatIcon } from "@angular/material/icon";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import type { Organization } from "../../../domain/ports/console/organization";
+import { quotaLevel } from "../../../domain/quota";
+import { ErrorAlert } from "../error-alert/error-alert";
 import {
     type FullPageErrorPermissionDenied,
     type FullPageErrorUnavailable,
     FullPageErrorView,
     type OrganizationResource,
 } from "../full-page-error-view/full-page-error-view";
+import { LoadingButton, type LoadingButtonState } from "../loading-button/loading-button";
 import { QuotaCard } from "../quota-card/quota-card";
+
+const APP_DRAFTS_FULL_ACTION = "Delete or publish an app draft to create another one.";
 
 /**
  * The dashboard page for a given organization.
  */
 @Component({
-    imports: [FullPageErrorView, MatProgressSpinner, QuotaCard],
+    imports: [ErrorAlert, FullPageErrorView, LoadingButton, MatIcon, MatProgressSpinner, QuotaCard],
     selector: "acc-org-dashboard-page",
     templateUrl: "./org-dashboard-page.html",
 })
@@ -26,6 +32,54 @@ export class OrgDashboardPage {
      * The UI state of the organization dashboard page.
      */
     readonly state = input.required<OrgDashboardPageState>();
+
+    /**
+     * Emits when the user clicks the new app button.
+     */
+    readonly createAppDraft = output<void>();
+
+    /**
+     * Emits when the user dismisses the error from creating an app draft.
+     */
+    readonly dismissCreateAppDraftError = output<void>();
+
+    private readonly newAppButton = viewChild.required(LoadingButton);
+
+    protected readonly appDraftsFullAction = APP_DRAFTS_FULL_ACTION;
+
+    /**
+     * The reason the user can't create an app draft in the given organization, if applicable.
+     */
+    protected newAppDisabledReason(organization: Organization): string | undefined {
+        const { activeAppDraftCount, activeAppDraftLimit } = organization;
+
+        return quotaLevel(activeAppDraftCount, activeAppDraftLimit) === "full"
+            ? `You've reached your limit of ${activeAppDraftLimit} app drafts. ${APP_DRAFTS_FULL_ACTION}`
+            : undefined;
+    }
+
+    protected createAppDraftErrorMessage(error: OrgDashboardCreateAppDraftError): string {
+        switch (error.kind) {
+            case "permissionDenied":
+                return "You don't have permission to create apps in this organization.";
+            case "resourceLimitExceeded":
+                return `You've reached your limit of app drafts. ${APP_DRAFTS_FULL_ACTION}`;
+            case "unavailable":
+                return (
+                    "We're experiencing an internal issue. " +
+                    "This isn't caused by anything you did. " +
+                    "Try again in a few minutes."
+                );
+        }
+    }
+
+    protected dismissError(): void {
+        // Focus the new app button when dismissing the error so that focus doesn't fall back to the
+        // document when the dismiss button is removed. This behavior is especially important for
+        // users with accessibility needs.
+        this.newAppButton().focus();
+        this.dismissCreateAppDraftError.emit();
+    }
 }
 
 /**
@@ -73,4 +127,30 @@ export interface OrgDashboardPageLoaded {
      * The organization to show.
      */
     readonly organization: Organization;
+
+    /**
+     * The state of creating an app draft.
+     */
+    readonly createAppDraftState: LoadingButtonState;
+
+    /**
+     * The error from the last attempt to create an app draft, if applicable.
+     */
+    readonly createAppDraftError?: OrgDashboardCreateAppDraftError;
+}
+
+/**
+ * An error which occurs when attempting to create an app draft from an {@link OrgDashboardPage}.
+ *
+ * - `permissionDenied`: the user isn't allowed to create apps in the organization.
+ * - `resourceLimitExceeded`: the organization has reached its app draft limit.
+ * - `unavailable`: creation failed for a reason outside of the user's control.
+ */
+export interface OrgDashboardCreateAppDraftError {
+    readonly kind: "permissionDenied" | "resourceLimitExceeded" | "unavailable";
+
+    /**
+     * The number of failed attempts in a row to create an app draft.
+     */
+    readonly failedAttempts: number;
 }

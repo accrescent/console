@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { AppDraftService } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/app_draft_service_pb.js";
 import { OrganizationService } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/organization_service_pb.js";
 import { UserService } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/user_service_pb.js";
 import { type Client, createClient } from "@connectrpc/connect";
@@ -9,7 +10,10 @@ import { createGrpcWebTransport } from "@connectrpc/connect-web";
 
 import { err, ok, type Result } from "../../../core/result";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
+import type { CreateAppDraftRequest } from "../../../domain/ports/console/create-app-draft-request";
+import type { CreateAppDraftResponse } from "../../../domain/ports/console/create-app-draft-response";
 import type {
+    CreateAppDraftError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
@@ -19,11 +23,13 @@ import type { GetOrganizationRequest } from "../../../domain/ports/console/get-o
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
 import {
+    toCreateAppDraftError,
     toGetMyOrganizationError,
     toGetOrganizationError,
     toGetSelfError,
 } from "./error-converters";
 import {
+    toCreateAppDraftResponse,
     toGetMyOrganizationResponse,
     toGetOrganizationResponse,
     toGetSelfResponse,
@@ -33,6 +39,7 @@ import {
  * A {@link ConsoleApi} implementation which accesses the console API over gRPC-Web.
  */
 export class GrpcWebConsoleApi implements ConsoleApi {
+    private readonly appDraftClient: Client<typeof AppDraftService>;
     private readonly organizationClient: Client<typeof OrganizationService>;
     private readonly userClient: Client<typeof UserService>;
 
@@ -43,8 +50,22 @@ export class GrpcWebConsoleApi implements ConsoleApi {
     constructor(baseUrl: string, defaultTimeoutMs: number) {
         const transport = createGrpcWebTransport({ baseUrl, defaultTimeoutMs });
 
+        this.appDraftClient = createClient(AppDraftService, transport);
         this.organizationClient = createClient(OrganizationService, transport);
         this.userClient = createClient(UserService, transport);
+    }
+
+    async createAppDraft(
+        request: CreateAppDraftRequest,
+    ): Promise<Result<CreateAppDraftResponse, CreateAppDraftError>> {
+        try {
+            const response = await this.appDraftClient.createAppDraft({
+                organizationId: request.organizationId,
+            });
+            return ok(toCreateAppDraftResponse(response));
+        } catch (e) {
+            return err(toCreateAppDraftError(e));
+        }
     }
 
     async getSelf(): Promise<Result<GetSelfResponse, GetSelfError>> {

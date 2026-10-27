@@ -20,7 +20,26 @@ SPDX-License-Identifier: AGPL-3.0-only
         @case ("loaded") {
             @let organization = currentState.organization;
             <div class="mx-auto flex w-full max-w-5xl flex-col gap-8">
-                <h1 class="[font:var(--mat-sys-headline-medium)]">Dashboard</h1>
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <h1 class="[font:var(--mat-sys-headline-medium)]">Dashboard</h1>
+                    <acc-loading-button
+                        appearance="filled"
+                        [state]="currentState.createAppDraftState"
+                        loadingLabel="Creating app"
+                        [disabledReason]="newAppDisabledReason(organization)"
+                        (press)="createAppDraft.emit()">
+                        <mat-icon>add</mat-icon>
+                        New app
+                    </acc-loading-button>
+                </div>
+
+                @if (currentState.createAppDraftError; as error) {
+                    <acc-error-alert
+                        heading="Couldn't create app"
+                        [message]="createAppDraftErrorMessage(error)"
+                        [failedAttempts]="error.failedAttempts"
+                        (dismiss)="dismissError()" />
+                }
 
                 <section class="flex flex-col gap-4">
                     <h2 class="[font:var(--mat-sys-title-large)]">App limits</h2>
@@ -39,7 +58,7 @@ SPDX-License-Identifier: AGPL-3.0-only
                             icon="draft"
                             [count]="organization.activeAppDraftCount"
                             [limit]="organization.activeAppDraftLimit"
-                            fullAction="Delete or publish an app draft to create another one." />
+                            [fullAction]="appDraftsFullAction" />
                     </div>
                 </section>
             </div>

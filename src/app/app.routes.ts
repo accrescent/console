@@ -31,6 +31,13 @@ export const routes: Routes = [
                         (m) => m.OrgDashboardContainer,
                     ),
             },
+            {
+                path: "appDrafts/:appDraftId",
+                loadComponent: () =>
+                    import("./components/app-draft-editor-page/app-draft-editor-page").then(
+                        (m) => m.AppDraftEditorPage,
+                    ),
+            },
         ],
     },
     {

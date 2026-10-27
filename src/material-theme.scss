@@ -4,9 +4,20 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+@use "@angular/cdk";
 @use "@angular/material" as mat;
 
 @use "theme-colors" as theme;
+
+// Per https://material.angular.dev/cdk/a11y/overview#hiding-elements-in-an-accessible-way, Angular
+// Material is supposed to include the .cdk-visually-hidden class automatically. However, it doesn't
+// do so when LiveAnnouncer is displayed without Angular Material components alongside it, causing
+// LiveAnnouncer's announcements to be displayed visually in environments without other Material
+// components present, e.g., some Storybook previews.
+//
+// To ensure LiveAnnouncer announcements are always properly visually hidden, manually emit the
+// .cdk-visually-hidden class as described by the Angular Material documentation.
+@include cdk.a11y-visually-hidden();
 
 html {
     // Use the theme matching the user's system preference

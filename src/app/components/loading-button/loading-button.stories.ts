@@ -56,3 +56,10 @@ export const FilledLoading: Story = {
         state: "loading",
     },
 };
+
+export const DisabledWithReason: Story = {
+    args: {
+        appearance: "filled",
+        disabledReason: "Nothing to save",
+    },
+};

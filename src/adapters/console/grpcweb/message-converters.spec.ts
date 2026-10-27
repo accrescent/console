@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { CreateAppDraftResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/create_app_draft_response_pb.js";
 import { GetMyOrganizationResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/get_my_organization_response_pb.js";
 import { GetOrganizationResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/get_organization_response_pb.js";
 import { GetSelfResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/get_self_response_pb.js";
@@ -11,10 +12,19 @@ import { UserRole as ProtoUserRole } from "@buf/accrescent_console-api.bufbuild_
 import { create } from "@bufbuild/protobuf";
 
 import {
+    toCreateAppDraftResponse,
     toGetMyOrganizationResponse,
     toGetOrganizationResponse,
     toGetSelfResponse,
 } from "./message-converters";
+
+describe("toCreateAppDraftResponse", () => {
+    it("correctly converts a message", () => {
+        const response = create(CreateAppDraftResponseSchema, { appDraftId: "draft-id" });
+
+        expect(toCreateAppDraftResponse(response)).toEqual({ appDraftId: "draft-id" });
+    });
+});
 
 describe("toGetMyOrganizationResponse", () => {
     it("correctly converts a message", () => {
