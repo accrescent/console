@@ -8,7 +8,9 @@ import { provideRouter, Router } from "@angular/router";
 import { err, ok, type Result } from "../../../core/result";
 import { MIN_PROGRESS_MS, PROGRESS_DELAY_MS } from "../../../domain/delay";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
+import type { CreateAppDraftResponse } from "../../../domain/ports/console/create-app-draft-response";
 import type {
+    CreateAppDraftError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
@@ -122,6 +124,10 @@ class FakeConsoleApi implements ConsoleApi {
         organizationId: ORGANIZATION_ID,
     });
     delayMs = 0;
+
+    createAppDraft(): Promise<Result<CreateAppDraftResponse, CreateAppDraftError>> {
+        throw new Error("not used by HomeContainer");
+    }
 
     getSelf(): Promise<Result<GetSelfResponse, GetSelfError>> {
         throw new Error("not used by HomeContainer");

@@ -1,0 +1,23 @@
+<!--
+SPDX-FileCopyrightText: © 2026 Logan Magee
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
+<div
+    class="flex items-start gap-3 rounded-(--mat-sys-corner-medium) bg-(--mat-sys-error-container) py-2 ps-4 pe-1 text-(--mat-sys-on-error-container)">
+    <mat-icon class="mt-2 shrink-0">error</mat-icon>
+    <div class="flex grow flex-col gap-1 py-2">
+        <p class="[font:var(--mat-sys-title-small)]">{{ heading() }}</p>
+        <p class="[font:var(--mat-sys-body-medium)]">{{ message() }}</p>
+        <p class="[font:var(--mat-sys-body-small)]">Failed attempts: {{ failedAttempts() }}</p>
+    </div>
+    <button
+        matIconButton
+        class="shrink-0 [--mat-icon-button-icon-color:var(--mat-sys-on-error-container)]"
+        type="button"
+        aria-label="Dismiss"
+        (click)="dismiss.emit()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>

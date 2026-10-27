@@ -6,6 +6,17 @@
 import type { ConsoleApi } from "./console-api";
 
 /**
+ * An error returned by {@link ConsoleApi.createAppDraft}.
+ */
+export type CreateAppDraftError =
+    | UnauthenticatedError
+    | PermissionDeniedError
+    | ResourceLimitExceededError
+    | InternalError
+    | ServiceUnavailableError
+    | UnknownError;
+
+/**
  * An error returned by {@link ConsoleApi.getSelf}.
  */
 export type GetSelfError =
@@ -45,6 +56,13 @@ export interface UnauthenticatedError {
  */
 export interface PermissionDeniedError {
     readonly kind: "permissionDenied";
+}
+
+/**
+ * An error indicating the operation would exceed a resource limit.
+ */
+export interface ResourceLimitExceededError {
+    readonly kind: "resourceLimitExceeded";
 }
 
 /**

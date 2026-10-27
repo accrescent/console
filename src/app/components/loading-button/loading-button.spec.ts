@@ -2,19 +2,25 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { Component, signal } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import type { MatButtonAppearance } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { MatTooltipHarness } from "@angular/material/tooltip/testing";
+import { By } from "@angular/platform-browser";
 import { LoadingButton, type LoadingButtonState } from "./loading-button";
 
 @Component({
-    imports: [LoadingButton],
+    imports: [LoadingButton, MatIcon],
     template: `
         <acc-loading-button
             [appearance]="appearance()"
             [state]="state()"
             loadingLabel="Saving"
+            [disabledReason]="disabledReason()"
             (press)="pressCount = pressCount + 1">
+            <mat-icon>save</mat-icon>
             <span matButtonIcon class="icon"></span>
             <span class="label">Save</span>
         </acc-loading-button>
@@ -23,6 +29,7 @@ import { LoadingButton, type LoadingButtonState } from "./loading-button";
 class Host {
     readonly appearance = signal<MatButtonAppearance>("text");
     readonly state = signal<LoadingButtonState>("idle");
+    readonly disabledReason = signal<string | undefined>(undefined);
     pressCount = 0;
 }
 
@@ -42,11 +49,23 @@ describe("LoadingButton", () => {
         expect(button().textContent).toContain("Save");
     });
 
-    it("should show the icon in the button as an icon rather than as part of the label", () => {
-        const icon: HTMLElement = button().querySelector(".icon")!;
+    it.each([
+        ["matButtonIcon content", ".icon"],
+        ["a mat-icon", "mat-icon"],
+    ])(
+        "should show %s in the button as an icon rather than as part of the label",
+        (_, selector) => {
+            const icon: HTMLElement = button().querySelector(selector)!;
 
-        expect(icon).not.toBeNull();
-        expect(icon.closest(".mdc-button__label")).toBeNull();
+            expect(icon).not.toBeNull();
+            expect(icon.closest(".mdc-button__label")).toBeNull();
+        },
+    );
+
+    it("should focus the button when focus() is called", () => {
+        fixture.debugElement.query(By.directive(LoadingButton)).componentInstance.focus();
+
+        expect(document.activeElement).toBe(button());
     });
 
     it("should apply the appearance to the button", async () => {
@@ -141,6 +160,32 @@ describe("LoadingButton", () => {
             button().click();
 
             expect(fixture.componentInstance.pressCount).toBe(1);
+        });
+    });
+
+    describe("when disabled with a reason", () => {
+        beforeEach(async () => {
+            fixture.componentInstance.disabledReason.set("Nothing to save");
+            await fixture.whenStable();
+        });
+
+        it("should disable the button but keep it focusable", () => {
+            expect(button().disabled).toBe(false);
+            expect(button().getAttribute("aria-disabled")).toBe("true");
+        });
+
+        it("should explain why the button is disabled", async () => {
+            const tooltip =
+                await TestbedHarnessEnvironment.loader(fixture).getHarness(MatTooltipHarness);
+            await tooltip.show();
+
+            expect(await tooltip.getTooltipText()).toBe("Nothing to save");
+        });
+
+        it("should not emit press when clicked", () => {
+            button().click();
+
+            expect(fixture.componentInstance.pressCount).toBe(0);
         });
     });
 });

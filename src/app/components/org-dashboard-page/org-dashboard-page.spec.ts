@@ -2,11 +2,25 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { inputBinding, signal } from "@angular/core";
+import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
+import {
+    inputBinding,
+    isSignal,
+    outputBinding,
+    type Signal,
+    signal,
+    type WritableSignal,
+} from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatTooltipHarness } from "@angular/material/tooltip/testing";
 import { provideRouter } from "@angular/router";
 import type { Organization } from "../../../domain/ports/console/organization";
-import { OrgDashboardPage, type OrgDashboardPageState } from "./org-dashboard-page";
+import {
+    type OrgDashboardCreateAppDraftError,
+    OrgDashboardPage,
+    type OrgDashboardPageLoaded,
+    type OrgDashboardPageState,
+} from "./org-dashboard-page";
 
 const ORGANIZATION: Organization = {
     id: "org-123",
@@ -17,21 +31,34 @@ const ORGANIZATION: Organization = {
 };
 
 describe("OrgDashboardPage", () => {
+    let createCount: number;
+    let dismissCount: number;
+
     beforeEach(() => {
         TestBed.configureTestingModule({ providers: [provideRouter([])] });
+        createCount = 0;
+        dismissCount = 0;
     });
 
     /**
      * Creates an {@link OrgDashboardPage} in the given state and waits for it to render.
      */
     async function render(
-        state: OrgDashboardPageState,
+        state: OrgDashboardPageState | Signal<OrgDashboardPageState>,
     ): Promise<ComponentFixture<OrgDashboardPage>> {
         const fixture = TestBed.createComponent(OrgDashboardPage, {
-            bindings: [inputBinding("state", signal(state))],
+            bindings: [
+                inputBinding("state", isSignal(state) ? state : signal(state)),
+                outputBinding("createAppDraft", () => createCount++),
+                outputBinding("dismissCreateAppDraftError", () => dismissCount++),
+            ],
         });
         await fixture.whenStable();
         return fixture;
+    }
+
+    function newAppButton(fixture: ComponentFixture<OrgDashboardPage>): HTMLButtonElement {
+        return fixture.nativeElement.querySelector("acc-loading-button button");
     }
 
     it("should not show a progress indicator when pending", async () => {
@@ -69,7 +96,11 @@ describe("OrgDashboardPage", () => {
         let fixture: ComponentFixture<OrgDashboardPage>;
 
         beforeEach(async () => {
-            fixture = await render({ kind: "loaded", organization: ORGANIZATION });
+            fixture = await render({
+                kind: "loaded",
+                organization: ORGANIZATION,
+                createAppDraftState: "idle",
+            });
         });
 
         it("should title the page", () => {
@@ -93,6 +124,117 @@ describe("OrgDashboardPage", () => {
             expect(card.textContent).toContain(
                 "Delete or publish an app draft to create another one.",
             );
+        });
+
+        it("should disable creating an app when app drafts are full", () => {
+            expect(newAppButton(fixture).getAttribute("aria-disabled")).toBe("true");
+        });
+
+        it("should explain why creating an app is disabled", async () => {
+            const tooltip =
+                await TestbedHarnessEnvironment.loader(fixture).getHarness(MatTooltipHarness);
+            await tooltip.show();
+
+            expect(await tooltip.getTooltipText()).toBe(
+                "You've reached your limit of 4 app drafts. Delete or publish an app draft to create another one.",
+            );
+        });
+    });
+
+    describe("when loaded below the app draft limit", () => {
+        const state: OrgDashboardPageLoaded = {
+            kind: "loaded",
+            organization: { ...ORGANIZATION, activeAppDraftCount: 0 },
+            createAppDraftState: "idle",
+        };
+
+        it("should emit createAppDraft when the new app button is clicked", async () => {
+            const fixture = await render(state);
+
+            newAppButton(fixture).click();
+
+            expect(createCount).toBe(1);
+        });
+
+        it("should show progress while creating an app draft", async () => {
+            const fixture = await render({ ...state, createAppDraftState: "loading" });
+
+            expect(newAppButton(fixture).getAttribute("aria-label")).toBe("Creating app");
+        });
+
+        it("should not show an error when creating an app draft hasn't failed", async () => {
+            const fixture = await render(state);
+
+            expect(fixture.nativeElement.querySelector("acc-error-alert")).toBeNull();
+        });
+
+        it.each([
+            ["permissionDenied", "You don't have permission to create apps in this organization."],
+            ["resourceLimitExceeded", "You've reached your limit of app drafts."],
+            ["unavailable", "This isn't caused by anything you did."],
+        ] as const)("should explain a %s error creating an app draft", async (kind, message) => {
+            const fixture = await render({
+                ...state,
+                createAppDraftError: { kind, failedAttempts: 1 },
+            });
+
+            const alert: HTMLElement = fixture.nativeElement.querySelector("acc-error-alert");
+            expect(alert.textContent).toContain("Couldn't create app");
+            expect(alert.textContent?.replace(/\s+/g, " ")).toContain(message);
+        });
+
+        describe("when an error creating an app draft is shown", () => {
+            const error: OrgDashboardCreateAppDraftError = {
+                kind: "unavailable",
+                failedAttempts: 1,
+            };
+            let pageState: WritableSignal<OrgDashboardPageState>;
+            let fixture: ComponentFixture<OrgDashboardPage>;
+            let alert: HTMLElement;
+
+            beforeEach(async () => {
+                pageState = signal({ ...state, createAppDraftError: error });
+                fixture = await render(pageState);
+                alert = fixture.nativeElement.querySelector("acc-error-alert");
+            });
+
+            it("should show how many attempts to create an app draft have failed", async () => {
+                pageState.set({ ...state, createAppDraftError: { ...error, failedAttempts: 2 } });
+                await fixture.whenStable();
+
+                expect(alert.textContent).toContain("Failed attempts: 2");
+            });
+
+            it("should keep showing the same error while creating an app draft again", async () => {
+                pageState.set({
+                    ...state,
+                    createAppDraftState: "pending",
+                    createAppDraftError: error,
+                });
+                await fixture.whenStable();
+
+                expect(fixture.nativeElement.querySelector("acc-error-alert")).toBe(alert);
+            });
+        });
+
+        describe("when the error creating an app draft is dismissed", () => {
+            let fixture: ComponentFixture<OrgDashboardPage>;
+
+            beforeEach(async () => {
+                fixture = await render({
+                    ...state,
+                    createAppDraftError: { kind: "unavailable", failedAttempts: 1 },
+                });
+                fixture.nativeElement.querySelector("button[aria-label=Dismiss]").click();
+            });
+
+            it("should emit dismissCreateAppDraftError", () => {
+                expect(dismissCount).toBe(1);
+            });
+
+            it("should move focus to the new app button", () => {
+                expect(document.activeElement).toBe(newAppButton(fixture));
+            });
         });
     });
 });

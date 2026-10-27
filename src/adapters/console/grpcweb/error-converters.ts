@@ -5,6 +5,7 @@
 import { Code, ConnectError } from "@connectrpc/connect";
 
 import type {
+    CreateAppDraftError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
@@ -13,6 +14,18 @@ import type {
     UnauthenticatedError,
     UnknownError,
 } from "../../../domain/ports/console/errors";
+
+export function toCreateAppDraftError(e: unknown): CreateAppDraftError {
+    const code = ConnectError.from(e).code;
+    switch (code) {
+        case Code.PermissionDenied:
+            return { kind: "permissionDenied" };
+        case Code.ResourceExhausted:
+            return { kind: "resourceLimitExceeded" };
+        default:
+            return toCommonError(code);
+    }
+}
 
 export function toGetMyOrganizationError(e: unknown): GetMyOrganizationError {
     return toCommonError(ConnectError.from(e).code);

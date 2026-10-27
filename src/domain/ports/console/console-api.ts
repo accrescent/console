@@ -3,7 +3,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Result } from "../../../core/result";
-import type { GetMyOrganizationError, GetOrganizationError, GetSelfError } from "./errors";
+import type { CreateAppDraftRequest } from "./create-app-draft-request";
+import type { CreateAppDraftResponse } from "./create-app-draft-response";
+import type {
+    CreateAppDraftError,
+    GetMyOrganizationError,
+    GetOrganizationError,
+    GetSelfError,
+} from "./errors";
 import type { GetMyOrganizationResponse } from "./get-my-organization-response";
 import type { GetOrganizationRequest } from "./get-organization-request";
 import type { GetOrganizationResponse } from "./get-organization-response";
@@ -13,6 +20,16 @@ import type { GetSelfResponse } from "./get-self-response";
  * The Accrescent console API.
  */
 export interface ConsoleApi {
+    /**
+     * Creates an app draft.
+     *
+     * @param request - the parameters for creating the app draft.
+     * @returns a response identifying the created app draft.
+     */
+    createAppDraft(
+        request: CreateAppDraftRequest,
+    ): Promise<Result<CreateAppDraftResponse, CreateAppDraftError>>;
+
     /**
      * Gets an organization.
      *

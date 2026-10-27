@@ -2,14 +2,16 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, computed, input, output } from "@angular/core";
+import { Component, computed, input, output, viewChild } from "@angular/core";
 import { MatButton, type MatButtonAppearance } from "@angular/material/button";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { MatTooltip } from "@angular/material/tooltip";
 
 /**
  * A Material button which shows progress once activated.
  *
- * Content with the `matButtonIcon` attribute is shown in the button's icon slot
+ * `mat-icon` elements and content with the `matButtonIcon` attribute are shown in the button's icon
+ * slot
  *
  * @example
  * ```html
@@ -23,7 +25,7 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
  * ```
  */
 @Component({
-    imports: [MatButton, MatProgressSpinner],
+    imports: [MatButton, MatProgressSpinner, MatTooltip],
     selector: "acc-loading-button",
     templateUrl: "./loading-button.html",
     host: { class: "inline-flex" },
@@ -45,12 +47,29 @@ export class LoadingButton {
     readonly loadingLabel = input.required<string>();
 
     /**
+     * The reason the button is disabled. When set, the button is disabled and displays the reason
+     * in a tooltip on hover.
+     */
+    readonly disabledReason = input<string>();
+
+    /**
      * Emits when the user clicks the button while the action isn't in progress.
      */
     readonly press = output<void>();
 
-    protected readonly disabled = computed(() => this.state() !== "idle");
+    private readonly button = viewChild.required(MatButton);
+
+    protected readonly disabled = computed(
+        () => this.state() !== "idle" || this.disabledReason() !== undefined,
+    );
     protected readonly loading = computed(() => this.state() === "loading");
+
+    /**
+     * Focuses the button.
+     */
+    focus(): void {
+        this.button().focus();
+    }
 }
 
 /**
