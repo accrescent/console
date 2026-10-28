@@ -47,14 +47,12 @@ export function toGetSelfResponse(response: ProtoGetSelfResponse): GetSelfRespon
 }
 
 function toOrganization(organization: ProtoOrganization): Organization {
-    // Counts and limits are practically far below Number.MAX_SAFE_INTEGER, so we don't really need
-    // to handle the case where they're out of the number range
     return {
         id: organization.id ?? "",
-        publishedAppLimit: Number(organization.publishedAppLimit ?? 0n),
-        publishedAppCount: Number(organization.publishedAppCount ?? 0n),
-        activeAppDraftLimit: Number(organization.activeAppDraftLimit ?? 0n),
-        activeAppDraftCount: Number(organization.activeAppDraftCount ?? 0n),
+        publishedAppLimit: organization.publishedAppLimit ?? 0,
+        publishedAppCount: organization.publishedAppCount ?? 0,
+        activeAppDraftLimit: organization.activeAppDraftLimit ?? 0,
+        activeAppDraftCount: organization.activeAppDraftCount ?? 0,
     };
 }
 

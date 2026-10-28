@@ -39,10 +39,10 @@ describe("toGetOrganizationResponse", () => {
         const response = create(GetOrganizationResponseSchema, {
             organization: create(OrganizationSchema, {
                 id: "org-id",
-                publishedAppLimit: 10n,
-                publishedAppCount: 3n,
-                activeAppDraftLimit: 5n,
-                activeAppDraftCount: 4n,
+                publishedAppLimit: 10,
+                publishedAppCount: 3,
+                activeAppDraftLimit: 5,
+                activeAppDraftCount: 4,
             }),
         });
 
