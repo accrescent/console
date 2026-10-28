@@ -45,23 +45,21 @@ describe("ErrorAlert", () => {
         expect(text()).toContain("Please try again in a few minutes.");
     });
 
-    it("should show how many attempts have failed", () => {
-        expect(text()).toContain("Failed attempts: 1");
+    it("should not show failed attempts when only one attempt has failed", () => {
+        expect(text()).not.toContain("Failed attempts");
     });
 
-    it("should show when another attempt fails", async () => {
+    it("should show how many attempts have failed when another attempt fails", async () => {
         failedAttempts.set(2);
         await fixture.whenStable();
 
         expect(text()).toContain("Failed attempts: 2");
     });
 
-    it("should announce the heading, message, and failed attempts", () => {
+    it("should announce the heading and message", () => {
         vi.runAllTimers();
 
-        expect(announcement()).toBe(
-            "Couldn't save. Please try again in a few minutes. Failed attempts: 1.",
-        );
+        expect(announcement()).toBe("Couldn't save. Please try again in a few minutes.");
     });
 
     it("should announce the alert again when another attempt fails", async () => {
@@ -79,9 +77,7 @@ describe("ErrorAlert", () => {
         await fixture.whenStable();
         vi.runAllTimers();
 
-        expect(announcement()).toBe(
-            "Couldn't delete. Please try again in a few minutes. Failed attempts: 1.",
-        );
+        expect(announcement()).toBe("Couldn't delete. Please try again in a few minutes.");
     });
 
     it("should emit dismiss when the dismiss button is clicked", () => {

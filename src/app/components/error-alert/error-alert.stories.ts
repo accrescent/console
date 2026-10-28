@@ -18,4 +18,8 @@ export default meta;
 
 type Story = StoryObj<ErrorAlert>;
 
-export const Default: Story = {};
+export const OneFailedAttempt: Story = {};
+
+export const MultipleFailedAttempts: Story = {
+    args: { failedAttempts: 3 },
+};
