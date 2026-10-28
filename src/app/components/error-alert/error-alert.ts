@@ -54,8 +54,10 @@ export class ErrorAlert {
 
     constructor() {
         effect(() => {
+            const failedAttempts = this.failedAttempts();
+            const attemptsSuffix = failedAttempts > 1 ? ` Failed attempts: ${failedAttempts}.` : "";
             this.liveAnnouncer.announce(
-                `${this.heading()}. ${this.message()} Failed attempts: ${this.failedAttempts()}.`,
+                `${this.heading()}. ${this.message()}${attemptsSuffix}`,
                 "assertive",
             );
         });

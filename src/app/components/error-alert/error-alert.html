@@ -10,7 +10,9 @@ SPDX-License-Identifier: AGPL-3.0-only
     <div class="flex grow flex-col gap-1 py-2">
         <p class="[font:var(--mat-sys-title-small)]">{{ heading() }}</p>
         <p class="[font:var(--mat-sys-body-medium)]">{{ message() }}</p>
-        <p class="[font:var(--mat-sys-body-small)]">Failed attempts: {{ failedAttempts() }}</p>
+        @if (failedAttempts() > 1) {
+            <p class="[font:var(--mat-sys-body-small)]">Failed attempts: {{ failedAttempts() }}</p>
+        }
     </div>
     <button
         matIconButton
