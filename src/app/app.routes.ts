@@ -34,8 +34,8 @@ export const routes: Routes = [
             {
                 path: "appDrafts/:appDraftId",
                 loadComponent: () =>
-                    import("./components/app-draft-editor-page/app-draft-editor-page").then(
-                        (m) => m.AppDraftEditorPage,
+                    import("./components/app-draft-editor-container/app-draft-editor-container").then(
+                        (m) => m.AppDraftEditorContainer,
                     ),
             },
         ],

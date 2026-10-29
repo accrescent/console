@@ -6,6 +6,7 @@ import { Code, ConnectError } from "@connectrpc/connect";
 
 import {
     toCreateAppDraftError,
+    toDeleteAppDraftError,
     toGetMyOrganizationError,
     toGetOrganizationError,
     toGetSelfError,
@@ -88,6 +89,27 @@ describe("toCreateAppDraftError", () => {
 
     it("converts other errors to unknown", () => {
         expect(toCreateAppDraftError(new Error())).toEqual({ kind: "unknown" });
+    });
+});
+
+describe("toDeleteAppDraftError", () => {
+    it("converts known codes", () => {
+        expect(toDeleteAppDraftError(new ConnectError("", Code.Unauthenticated))).toEqual({
+            kind: "unauthenticated",
+        });
+        expect(toDeleteAppDraftError(new ConnectError("", Code.PermissionDenied))).toEqual({
+            kind: "permissionDenied",
+        });
+        expect(toDeleteAppDraftError(new ConnectError("", Code.Internal))).toEqual({
+            kind: "internal",
+        });
+        expect(toDeleteAppDraftError(new ConnectError("", Code.Unavailable))).toEqual({
+            kind: "serviceUnavailable",
+        });
+    });
+
+    it("converts other errors to unknown", () => {
+        expect(toDeleteAppDraftError(new Error())).toEqual({ kind: "unknown" });
     });
 });
 

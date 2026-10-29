@@ -14,6 +14,7 @@ import type { CreateAppDraftRequest } from "../../../domain/ports/console/create
 import type { CreateAppDraftResponse } from "../../../domain/ports/console/create-app-draft-response";
 import type {
     CreateAppDraftError,
+    DeleteAppDraftError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
@@ -435,6 +436,10 @@ class FakeConsoleApi implements ConsoleApi {
     listAppDraftSummariesResult: Result<ListAppDraftSummariesResponse, ListAppDraftSummariesError> =
         ok({ appDraftSummaries: APP_DRAFTS });
     listAppDraftSummariesDelayMs = 0;
+
+    deleteAppDraft(): Promise<Result<void, DeleteAppDraftError>> {
+        throw new Error("not used by OrgDashboardContainer");
+    }
 
     getSelf(): Promise<Result<GetSelfResponse, GetSelfError>> {
         throw new Error("not used by OrgDashboardContainer");

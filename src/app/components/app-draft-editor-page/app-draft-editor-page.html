@@ -4,4 +4,60 @@ SPDX-FileCopyrightText: © 2026 Logan Magee
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
-<main class="flex min-h-full flex-col p-6"></main>
+<main class="flex min-h-full flex-col p-6">
+    <div class="mx-auto flex w-full max-w-5xl flex-col gap-8">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <h1 class="[font:var(--mat-sys-headline-medium)]">Get your app ready for review</h1>
+            <button
+                matButton="outlined"
+                class="[--mat-sys-primary:var(--mat-sys-tertiary)]"
+                type="button"
+                (click)="openDeleteDialog()">
+                <mat-icon>delete</mat-icon>
+                Delete draft
+            </button>
+        </div>
+    </div>
+</main>
+
+<ng-template #deleteDialog>
+    <h2 mat-dialog-title>Delete app draft?</h2>
+    <mat-dialog-content>
+        <div class="flex flex-col gap-4">
+            <p>This app draft and everything in it will be deleted permanently.</p>
+            @if (state().deleteAppDraftError; as error) {
+                <acc-error-alert
+                    heading="Couldn't delete app draft"
+                    [message]="deleteAppDraftErrorMessage(error)"
+                    [failedAttempts]="error.failedAttempts"
+                    [dismissible]="true"
+                    (dismiss)="dismissDeleteError()" />
+            }
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <!--
+        Space the buttons ourselves since Material only spaces adjacent buttons and the delete
+        is wrapped in an acc-loading-button
+        -->
+        @let deleteAppDraftState = state().deleteAppDraftState;
+        <div class="flex gap-2">
+            <acc-loading-button
+                class="[--mat-sys-primary:var(--mat-sys-tertiary)]"
+                [state]="deleteAppDraftState"
+                loadingLabel="Deleting app draft"
+                (press)="deleteAppDraft.emit()">
+                Delete
+            </acc-loading-button>
+            <button
+                matButton="filled"
+                type="button"
+                mat-dialog-close
+                cdkFocusInitial
+                [disabled]="deleteAppDraftState !== 'idle'"
+                disabledInteractive>
+                Cancel
+            </button>
+        </div>
+    </mat-dialog-actions>
+</ng-template>
