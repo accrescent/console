@@ -8,6 +8,7 @@ import { MatSidenav } from "@angular/material/sidenav";
 import { By } from "@angular/platform-browser";
 import { provideRouter } from "@angular/router";
 
+import { HANDSET } from "../../tokens";
 import type { LoadingButtonState } from "../loading-button/loading-button";
 import { ConsoleScaffoldPage } from "./console-scaffold-page";
 
@@ -20,20 +21,20 @@ describe("ConsoleScaffoldPage", () => {
      * Creates a {@link ConsoleScaffoldPage} and waits for it to render.
      */
     async function render(isHandset: boolean): Promise<ComponentFixture<ConsoleScaffoldPage>> {
+        handset = signal(isHandset);
         TestBed.configureTestingModule({
             imports: [ConsoleScaffoldPage],
             providers: [
                 // Accept any URL so that navigation items can be clicked
                 provideRouter([{ path: "**", children: [] }]),
+                { provide: HANDSET, useValue: handset },
             ],
         });
 
-        handset = signal(isHandset);
         logoutState = signal<LoadingButtonState>("idle");
         logOutCount = 0;
         const fixture = TestBed.createComponent(ConsoleScaffoldPage, {
             bindings: [
-                inputBinding("handset", handset),
                 inputBinding("logoutState", logoutState),
                 outputBinding("logOut", () => logOutCount++),
             ],
