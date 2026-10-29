@@ -11,7 +11,6 @@ const meta: Meta<ConsoleScaffoldPage> = {
     component: ConsoleScaffoldPage,
     decorators: [applicationConfig({ providers: [provideRouter([])] })],
     args: {
-        handset: false,
         logoutState: "idle",
     },
     parameters: {
@@ -34,14 +33,5 @@ export const LogoutPending: Story = {
 export const LoggingOut: Story = {
     args: {
         logoutState: "loading",
-    },
-};
-
-export const Handset: Story = {
-    args: {
-        handset: true,
-    },
-    globals: {
-        viewport: { value: "mobile2", isRotated: false },
     },
 };

@@ -59,7 +59,7 @@ const meta: Meta<OrgDashboardPage> = {
         applicationConfig({ providers: [provideRouter([])] }),
         // Render inside the scaffold as the page is in the app
         moduleMetadata({ imports: [ConsoleScaffoldPage] }),
-        componentWrapperDecorator(ConsoleScaffoldPage, { handset: false, logoutState: "idle" }),
+        componentWrapperDecorator(ConsoleScaffoldPage, { logoutState: "idle" }),
     ],
     render: (args) => ({
         props: args,

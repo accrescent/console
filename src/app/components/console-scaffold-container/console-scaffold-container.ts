@@ -2,16 +2,13 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { Component, inject, PendingTasks, signal } from "@angular/core";
-import { toSignal } from "@angular/core/rxjs-interop";
 import {
     MatSnackBar,
     type MatSnackBarRef,
     type TextOnlySnackBar,
 } from "@angular/material/snack-bar";
 import { Router, RouterOutlet } from "@angular/router";
-import { map } from "rxjs";
 
 import { withDeferredProgress } from "../../../domain/delay";
 import { AUTHN_API } from "../../tokens";
@@ -31,16 +28,6 @@ export class ConsoleScaffoldContainer {
     private readonly pendingTasks = inject(PendingTasks);
     private readonly router = inject(Router);
     private readonly snackBar = inject(MatSnackBar);
-
-    /**
-     * Whether the screen is handset-sized.
-     */
-    protected readonly handset = toSignal(
-        inject(BreakpointObserver)
-            .observe(Breakpoints.Handset)
-            .pipe(map((result) => result.matches)),
-        { initialValue: false },
-    );
 
     /**
      * The state of logging out.

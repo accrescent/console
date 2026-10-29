@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Component, input, output } from "@angular/core";
+import { Component, inject, input, output } from "@angular/core";
 import { MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from "@angular/material/list";
@@ -11,6 +11,7 @@ import { MatToolbar } from "@angular/material/toolbar";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 
 import accrescentLogo from "../../../assets/accrescent-logo.svg";
+import { HANDSET } from "../../tokens";
 import { LoadingButton, type LoadingButtonState } from "../loading-button/loading-button";
 
 /**
@@ -42,7 +43,7 @@ export class ConsoleScaffoldPage {
      * Whether the screen is handset-sized. If false, the sidebar will always be open. If true, the
      * sidebar will default to closed and have a toggle to open it.
      */
-    readonly handset = input.required<boolean>();
+    protected readonly handset = inject(HANDSET);
 
     /**
      * The state of logging out. While logout is in progress, the logout button is disabled and
