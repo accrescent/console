@@ -11,6 +11,7 @@ import type { ConsoleApi } from "../../../domain/ports/console/console-api";
 import type { CreateAppDraftResponse } from "../../../domain/ports/console/create-app-draft-response";
 import type {
     CreateAppDraftError,
+    DeleteAppDraftError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
@@ -128,6 +129,10 @@ class FakeConsoleApi implements ConsoleApi {
     delayMs = 0;
 
     createAppDraft(): Promise<Result<CreateAppDraftResponse, CreateAppDraftError>> {
+        throw new Error("not used by HomeContainer");
+    }
+
+    deleteAppDraft(): Promise<Result<void, DeleteAppDraftError>> {
         throw new Error("not used by HomeContainer");
     }
 

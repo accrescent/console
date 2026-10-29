@@ -12,8 +12,10 @@ import { err, ok, type Result } from "../../../core/result";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
 import type { CreateAppDraftRequest } from "../../../domain/ports/console/create-app-draft-request";
 import type { CreateAppDraftResponse } from "../../../domain/ports/console/create-app-draft-response";
+import type { DeleteAppDraftRequest } from "../../../domain/ports/console/delete-app-draft-request";
 import type {
     CreateAppDraftError,
+    DeleteAppDraftError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
@@ -27,6 +29,7 @@ import type { ListAppDraftSummariesRequest } from "../../../domain/ports/console
 import type { ListAppDraftSummariesResponse } from "../../../domain/ports/console/list-app-draft-summaries-response";
 import {
     toCreateAppDraftError,
+    toDeleteAppDraftError,
     toGetMyOrganizationError,
     toGetOrganizationError,
     toGetSelfError,
@@ -70,6 +73,17 @@ export class GrpcWebConsoleApi implements ConsoleApi {
             return ok(toCreateAppDraftResponse(response));
         } catch (e) {
             return err(toCreateAppDraftError(e));
+        }
+    }
+
+    async deleteAppDraft(
+        request: DeleteAppDraftRequest,
+    ): Promise<Result<void, DeleteAppDraftError>> {
+        try {
+            await this.appDraftClient.deleteAppDraft({ appDraftId: request.appDraftId });
+            return ok(undefined);
+        } catch (e) {
+            return err(toDeleteAppDraftError(e));
         }
     }
 

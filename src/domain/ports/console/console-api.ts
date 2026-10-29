@@ -5,8 +5,10 @@
 import type { Result } from "../../../core/result";
 import type { CreateAppDraftRequest } from "./create-app-draft-request";
 import type { CreateAppDraftResponse } from "./create-app-draft-response";
+import type { DeleteAppDraftRequest } from "./delete-app-draft-request";
 import type {
     CreateAppDraftError,
+    DeleteAppDraftError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
@@ -32,6 +34,13 @@ export interface ConsoleApi {
     createAppDraft(
         request: CreateAppDraftRequest,
     ): Promise<Result<CreateAppDraftResponse, CreateAppDraftError>>;
+
+    /**
+     * Deletes an app draft.
+     *
+     * @param request - the parameters for deleting the app draft.
+     */
+    deleteAppDraft(request: DeleteAppDraftRequest): Promise<Result<void, DeleteAppDraftError>>;
 
     /**
      * Gets an organization.

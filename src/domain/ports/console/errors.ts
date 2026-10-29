@@ -17,6 +17,16 @@ export type CreateAppDraftError =
     | UnknownError;
 
 /**
+ * An error returned by {@link ConsoleApi.deleteAppDraft}.
+ */
+export type DeleteAppDraftError =
+    | UnauthenticatedError
+    | PermissionDeniedError
+    | InternalError
+    | ServiceUnavailableError
+    | UnknownError;
+
+/**
  * An error returned by {@link ConsoleApi.getSelf}.
  */
 export type GetSelfError =

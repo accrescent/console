@@ -5,6 +5,7 @@
 import { Component, input, output, viewChild } from "@angular/core";
 import { MatIcon } from "@angular/material/icon";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { UNAVAILABLE_MESSAGE } from "../../../domain/error-messages";
 import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { Organization } from "../../../domain/ports/console/organization";
 import { quotaLevel } from "../../../domain/quota";
@@ -20,10 +21,6 @@ import { LoadingButton, type LoadingButtonState } from "../loading-button/loadin
 import { QuotaCard } from "../quota-card/quota-card";
 
 const APP_DRAFTS_FULL_ACTION = "Delete or publish an app draft to create another one.";
-const UNAVAILABLE_MESSAGE =
-    "We're experiencing an internal issue. " +
-    "This isn't caused by anything you did. " +
-    "Try again in a few minutes.";
 
 /**
  * The dashboard page for a given organization.

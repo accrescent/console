@@ -6,6 +6,7 @@ import { Code, ConnectError } from "@connectrpc/connect";
 
 import type {
     CreateAppDraftError,
+    DeleteAppDraftError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
@@ -26,6 +27,11 @@ export function toCreateAppDraftError(e: unknown): CreateAppDraftError {
         default:
             return toCommonError(code);
     }
+}
+
+export function toDeleteAppDraftError(e: unknown): DeleteAppDraftError {
+    const code = ConnectError.from(e).code;
+    return code === Code.PermissionDenied ? { kind: "permissionDenied" } : toCommonError(code);
 }
 
 export function toGetMyOrganizationError(e: unknown): GetMyOrganizationError {
