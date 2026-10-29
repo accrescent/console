@@ -11,6 +11,7 @@ import {
     moduleMetadata,
     type StoryObj,
 } from "@storybook/angular-vite";
+
 import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { Organization } from "../../../domain/ports/console/organization";
 import { fakeIconUrl } from "../../../storybook/fake-icon-url";

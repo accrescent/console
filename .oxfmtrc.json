@@ -21,6 +21,7 @@
             }
         }
     ],
+    "sortImports": true,
     "sortTailwindcss": true,
     "tabWidth": 4
 }

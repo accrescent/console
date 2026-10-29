@@ -5,6 +5,7 @@
 import { inputBinding, signal } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
+
 import { type FullPageError, FullPageErrorView } from "./full-page-error-view";
 
 describe("FullPageErrorView", () => {

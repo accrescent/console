@@ -13,6 +13,7 @@ import {
     signal,
 } from "@angular/core";
 import { Router } from "@angular/router";
+
 import type { Result } from "../../../core/result";
 import { withDeferredProgress } from "../../../domain/delay";
 import type {

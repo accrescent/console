@@ -4,6 +4,7 @@
 
 import { provideRouter } from "@angular/router";
 import { applicationConfig, type Meta, type StoryObj } from "@storybook/angular-vite";
+
 import { NotFoundPage } from "./not-found-page";
 
 const meta: Meta<NotFoundPage> = {

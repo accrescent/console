@@ -4,6 +4,7 @@
 
 import { Component, inject, PendingTasks, signal } from "@angular/core";
 import { Router } from "@angular/router";
+
 import { withDeferredProgress } from "../../../domain/delay";
 import { CONSOLE_API } from "../../tokens";
 import { HomePage, type HomePageState } from "../home-page/home-page";

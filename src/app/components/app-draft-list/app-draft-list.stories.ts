@@ -4,6 +4,7 @@
 
 import { provideRouter } from "@angular/router";
 import { applicationConfig, type Meta, type StoryObj } from "@storybook/angular-vite";
+
 import { fakeIconUrl } from "../../../storybook/fake-icon-url";
 import { AppDraftList } from "./app-draft-list";
 

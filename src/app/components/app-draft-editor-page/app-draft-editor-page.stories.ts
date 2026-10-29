@@ -11,6 +11,7 @@ import {
     moduleMetadata,
     type StoryObj,
 } from "@storybook/angular-vite";
+
 import { ConsoleScaffoldPage } from "../console-scaffold-page/console-scaffold-page";
 import { AppDraftEditorPage } from "./app-draft-editor-page";
 

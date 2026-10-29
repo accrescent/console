@@ -5,6 +5,7 @@
 import { inputBinding, signal } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
+
 import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import { AppDraftList } from "./app-draft-list";
 
