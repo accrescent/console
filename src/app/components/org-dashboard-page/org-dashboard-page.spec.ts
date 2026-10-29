@@ -14,6 +14,7 @@ import {
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatTooltipHarness } from "@angular/material/tooltip/testing";
 import { provideRouter } from "@angular/router";
+import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { Organization } from "../../../domain/ports/console/organization";
 import {
     type OrgDashboardCreateAppDraftError,
@@ -29,6 +30,8 @@ const ORGANIZATION: Organization = {
     activeAppDraftLimit: 4,
     activeAppDraftCount: 4,
 };
+
+const APP_DRAFTS: readonly AppDraftSummary[] = [{ id: "draft-1" }, { id: "draft-2" }];
 
 describe("OrgDashboardPage", () => {
     let createCount: number;
@@ -59,6 +62,14 @@ describe("OrgDashboardPage", () => {
 
     function newAppButton(fixture: ComponentFixture<OrgDashboardPage>): HTMLButtonElement {
         return fixture.nativeElement.querySelector("acc-loading-button button");
+    }
+
+    function appDraftItems(fixture: ComponentFixture<OrgDashboardPage>): HTMLAnchorElement[] {
+        return Array.from(fixture.nativeElement.querySelectorAll("li a"));
+    }
+
+    function text(element: Element): string {
+        return element.textContent?.replace(/\s+/g, " ") ?? "";
     }
 
     it("should not show a progress indicator when pending", async () => {
@@ -99,6 +110,7 @@ describe("OrgDashboardPage", () => {
             fixture = await render({
                 kind: "loaded",
                 organization: ORGANIZATION,
+                appDrafts: { kind: "loaded", summaries: APP_DRAFTS },
                 createAppDraftState: "idle",
             });
         });
@@ -110,13 +122,13 @@ describe("OrgDashboardPage", () => {
         it("should show published apps out of the limit", () => {
             const card: HTMLElement = fixture.nativeElement.querySelectorAll("acc-quota-card")[0];
             expect(card.textContent).toContain("Published apps");
-            expect(card.textContent?.replace(/\s+/g, " ")).toContain("3 of 10");
+            expect(text(card)).toContain("3 of 10");
         });
 
         it("should show active app drafts out of the limit", () => {
             const card: HTMLElement = fixture.nativeElement.querySelectorAll("acc-quota-card")[1];
             expect(card.textContent).toContain("App drafts");
-            expect(card.textContent?.replace(/\s+/g, " ")).toContain("4 of 4");
+            expect(text(card)).toContain("4 of 4");
         });
 
         it("should suggest deleting or publishing a draft when app drafts are full", () => {
@@ -139,14 +151,36 @@ describe("OrgDashboardPage", () => {
                 "You've reached your limit of 4 app drafts. Delete or publish an app draft to create another one.",
             );
         });
+
+        it("should list the organization's app drafts", () => {
+            expect(appDraftItems(fixture).map((item) => item.getAttribute("href"))).toEqual([
+                "/orgs/org-123/appDrafts/draft-1",
+                "/orgs/org-123/appDrafts/draft-2",
+            ]);
+        });
     });
 
     describe("when loaded below the app draft limit", () => {
         const state: OrgDashboardPageLoaded = {
             kind: "loaded",
             organization: { ...ORGANIZATION, activeAppDraftCount: 0 },
+            appDrafts: { kind: "loaded", summaries: [] },
             createAppDraftState: "idle",
         };
+
+        it.each([
+            ["permissionDenied", "You don't have permission to view app drafts"],
+            ["unavailable", "This isn't caused by anything you did."],
+        ] as const)("should explain a %s error listing app drafts", async (kind, message) => {
+            const fixture = await render({
+                ...state,
+                appDrafts: { kind: "error", error: { kind } },
+            });
+
+            const alert: HTMLElement = fixture.nativeElement.querySelector("acc-error-alert");
+            expect(alert.textContent).toContain("Couldn't load app drafts");
+            expect(text(alert)).toContain(message);
+        });
 
         it("should emit createAppDraft when the new app button is clicked", async () => {
             const fixture = await render(state);
@@ -180,7 +214,7 @@ describe("OrgDashboardPage", () => {
 
             const alert: HTMLElement = fixture.nativeElement.querySelector("acc-error-alert");
             expect(alert.textContent).toContain("Couldn't create app");
-            expect(alert.textContent?.replace(/\s+/g, " ")).toContain(message);
+            expect(text(alert)).toContain(message);
         });
 
         describe("when an error creating an app draft is shown", () => {

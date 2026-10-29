@@ -10,11 +10,14 @@ import type {
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
+    ListAppDraftSummariesError,
 } from "./errors";
 import type { GetMyOrganizationResponse } from "./get-my-organization-response";
 import type { GetOrganizationRequest } from "./get-organization-request";
 import type { GetOrganizationResponse } from "./get-organization-response";
 import type { GetSelfResponse } from "./get-self-response";
+import type { ListAppDraftSummariesRequest } from "./list-app-draft-summaries-request";
+import type { ListAppDraftSummariesResponse } from "./list-app-draft-summaries-response";
 
 /**
  * The Accrescent console API.
@@ -55,4 +58,16 @@ export interface ConsoleApi {
      * @returns a response containing the currently authenticated user.
      */
     getSelf(): Promise<Result<GetSelfResponse, GetSelfError>>;
+
+    /**
+     * Lists summaries of an organization's app drafts.
+     *
+     * @param request - the parameters for listing the app draft summaries.
+     * @param signal - a signal which cancels the request when aborted.
+     * @returns a response containing the organization's app draft summaries.
+     */
+    listAppDraftSummaries(
+        request: ListAppDraftSummariesRequest,
+        signal?: AbortSignal,
+    ): Promise<Result<ListAppDraftSummariesResponse, ListAppDraftSummariesError>>;
 }

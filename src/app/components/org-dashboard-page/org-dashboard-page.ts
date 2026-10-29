@@ -5,8 +5,10 @@
 import { Component, input, output, viewChild } from "@angular/core";
 import { MatIcon } from "@angular/material/icon";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { Organization } from "../../../domain/ports/console/organization";
 import { quotaLevel } from "../../../domain/quota";
+import { AppDraftList } from "../app-draft-list/app-draft-list";
 import { ErrorAlert } from "../error-alert/error-alert";
 import {
     type FullPageErrorPermissionDenied,
@@ -18,12 +20,24 @@ import { LoadingButton, type LoadingButtonState } from "../loading-button/loadin
 import { QuotaCard } from "../quota-card/quota-card";
 
 const APP_DRAFTS_FULL_ACTION = "Delete or publish an app draft to create another one.";
+const UNAVAILABLE_MESSAGE =
+    "We're experiencing an internal issue. " +
+    "This isn't caused by anything you did. " +
+    "Try again in a few minutes.";
 
 /**
  * The dashboard page for a given organization.
  */
 @Component({
-    imports: [ErrorAlert, FullPageErrorView, LoadingButton, MatIcon, MatProgressSpinner, QuotaCard],
+    imports: [
+        AppDraftList,
+        ErrorAlert,
+        FullPageErrorView,
+        LoadingButton,
+        MatIcon,
+        MatProgressSpinner,
+        QuotaCard,
+    ],
     selector: "acc-org-dashboard-page",
     templateUrl: "./org-dashboard-page.html",
 })
@@ -65,15 +79,20 @@ export class OrgDashboardPage {
             case "resourceLimitExceeded":
                 return `You've reached your limit of app drafts. ${APP_DRAFTS_FULL_ACTION}`;
             case "unavailable":
-                return (
-                    "We're experiencing an internal issue. " +
-                    "This isn't caused by anything you did. " +
-                    "Try again in a few minutes."
-                );
+                return UNAVAILABLE_MESSAGE;
         }
     }
 
-    protected dismissError(): void {
+    protected listAppDraftsErrorMessage(error: OrgDashboardListAppDraftsError): string {
+        switch (error.kind) {
+            case "permissionDenied":
+                return "You don't have permission to view app drafts in this organization.";
+            case "unavailable":
+                return UNAVAILABLE_MESSAGE;
+        }
+    }
+
+    protected dismissCreateError(): void {
         // Focus the new app button when dismissing the error so that focus doesn't fall back to the
         // document when the dismiss button is removed. This behavior is especially important for
         // users with accessibility needs.
@@ -129,6 +148,11 @@ export interface OrgDashboardPageLoaded {
     readonly organization: Organization;
 
     /**
+     * The organization's app drafts.
+     */
+    readonly appDrafts: OrgDashboardAppDrafts;
+
+    /**
      * The state of creating an app draft.
      */
     readonly createAppDraftState: LoadingButtonState;
@@ -153,4 +177,43 @@ export interface OrgDashboardCreateAppDraftError {
      * The number of failed attempts in a row to create an app draft.
      */
     readonly failedAttempts: number;
+}
+
+/**
+ * The state of the organization's app drafts on an {@link OrgDashboardPage}.
+ */
+export type OrgDashboardAppDrafts = OrgDashboardAppDraftsLoaded | OrgDashboardAppDraftsError;
+
+/**
+ * The organization's app drafts loaded successfully.
+ */
+export interface OrgDashboardAppDraftsLoaded {
+    readonly kind: "loaded";
+
+    /**
+     * Summaries of the app drafts to show.
+     */
+    readonly summaries: readonly AppDraftSummary[];
+}
+
+/**
+ * Listing the organization's app drafts failed.
+ */
+export interface OrgDashboardAppDraftsError {
+    readonly kind: "error";
+
+    /**
+     * The error that occurred.
+     */
+    readonly error: OrgDashboardListAppDraftsError;
+}
+
+/**
+ * An error which occurs when listing an organization's app drafts for an {@link OrgDashboardPage}.
+ *
+ * - `permissionDenied`: the user isn't allowed to view the organization's app drafts.
+ * - `unavailable`: listing failed for a reason outside of the user's control.
+ */
+export interface OrgDashboardListAppDraftsError {
+    readonly kind: "permissionDenied" | "unavailable";
 }

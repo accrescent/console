@@ -1,0 +1,61 @@
+<!--
+SPDX-FileCopyrightText: © 2026 Logan Magee
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
+@if (appDrafts().length === 0) {
+    <div
+        class="flex flex-col items-center gap-3 rounded-(--mat-sys-corner-large) border border-dashed border-(--mat-sys-outline-variant) px-6 py-10 text-center">
+        <span
+            class="flex size-12 items-center justify-center rounded-full bg-(--mat-sys-secondary-container) text-(--mat-sys-on-secondary-container)">
+            <mat-icon>draft</mat-icon>
+        </span>
+        <p class="[font:var(--mat-sys-title-medium)]">No app drafts</p>
+        <p class="max-w-sm text-(--mat-sys-on-surface-variant)">
+            Create a new app to start filling in its listings and package.
+        </p>
+    </div>
+} @else {
+    <ul
+        class="flex flex-col divide-y divide-(--mat-sys-outline-variant) overflow-hidden rounded-(--mat-sys-corner-large) border border-(--mat-sys-outline-variant)">
+        @for (appDraft of appDrafts(); track appDraft.id) {
+            <li>
+                <a
+                    matRipple
+                    class="flex items-center gap-4 px-4 py-3 text-(--mat-sys-on-surface) transition-[background-color] hover:bg-(--mat-sys-surface-container) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--mat-sys-primary)"
+                    [routerLink]="['/orgs', orgId(), 'appDrafts', appDraft.id]">
+                    @if (appDraft.iconUrl) {
+                        <img
+                            class="size-12 shrink-0 rounded-(--mat-sys-corner-medium) shadow-(--mat-sys-level1)"
+                            [src]="appDraft.iconUrl"
+                            alt=""
+                            width="48"
+                            height="48" />
+                    } @else {
+                        <span
+                            class="flex size-12 shrink-0 items-center justify-center rounded-(--mat-sys-corner-medium) bg-(--mat-sys-surface-container-highest) text-(--mat-sys-on-surface-variant) shadow-(--mat-sys-level1)">
+                            <mat-icon>android</mat-icon>
+                        </span>
+                    }
+                    <div class="flex min-w-0 flex-1 flex-col">
+                        <p class="truncate [font:var(--mat-sys-title-medium)]">
+                            {{ appDraft.name ?? "Untitled app" }}
+                        </p>
+                        <p class="truncate text-(--mat-sys-on-surface-variant)">
+                            @if (appDraft.package; as appPackage) {
+                                {{ appPackage.androidApplicationId }} ·
+                                {{ appPackage.versionName }}
+                            } @else {
+                                No package yet
+                            }
+                        </p>
+                    </div>
+                    <mat-icon class="shrink-0 text-(--mat-sys-on-surface-variant)">
+                        chevron_right
+                    </mat-icon>
+                </a>
+            </li>
+        }
+    </ul>
+}

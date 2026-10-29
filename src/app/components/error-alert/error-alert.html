@@ -14,12 +14,14 @@ SPDX-License-Identifier: AGPL-3.0-only
             <p class="[font:var(--mat-sys-body-small)]">Failed attempts: {{ failedAttempts() }}</p>
         }
     </div>
-    <button
-        matIconButton
-        class="shrink-0 [--mat-icon-button-icon-color:var(--mat-sys-on-error-container)]"
-        type="button"
-        aria-label="Dismiss"
-        (click)="dismiss.emit()">
-        <mat-icon>close</mat-icon>
-    </button>
+    @if (dismissible()) {
+        <button
+            matIconButton
+            class="shrink-0 [--mat-icon-button-icon-color:var(--mat-sys-on-error-container)]"
+            type="button"
+            aria-label="Dismiss"
+            (click)="dismiss.emit()">
+            <mat-icon>close</mat-icon>
+        </button>
+    }
 </div>

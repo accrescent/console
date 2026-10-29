@@ -9,6 +9,7 @@ import {
     toGetMyOrganizationError,
     toGetOrganizationError,
     toGetSelfError,
+    toListAppDraftSummariesError,
 } from "./error-converters";
 
 describe("toGetSelfError", () => {
@@ -87,5 +88,26 @@ describe("toCreateAppDraftError", () => {
 
     it("converts other errors to unknown", () => {
         expect(toCreateAppDraftError(new Error())).toEqual({ kind: "unknown" });
+    });
+});
+
+describe("toListAppDraftSummariesError", () => {
+    it("converts known codes", () => {
+        expect(toListAppDraftSummariesError(new ConnectError("", Code.Unauthenticated))).toEqual({
+            kind: "unauthenticated",
+        });
+        expect(toListAppDraftSummariesError(new ConnectError("", Code.PermissionDenied))).toEqual({
+            kind: "permissionDenied",
+        });
+        expect(toListAppDraftSummariesError(new ConnectError("", Code.Internal))).toEqual({
+            kind: "internal",
+        });
+        expect(toListAppDraftSummariesError(new ConnectError("", Code.Unavailable))).toEqual({
+            kind: "serviceUnavailable",
+        });
+    });
+
+    it("converts other errors to unknown", () => {
+        expect(toListAppDraftSummariesError(new Error())).toEqual({ kind: "unknown" });
     });
 });
