@@ -5,6 +5,7 @@
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 import { provideRouter, Router } from "@angular/router";
+
 import { err, ok, type Result } from "../../../core/result";
 import { MIN_PROGRESS_MS, PROGRESS_DELAY_MS } from "../../../domain/delay";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";

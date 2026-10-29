@@ -4,6 +4,7 @@
 
 import { provideRouter } from "@angular/router";
 import { applicationConfig, type Meta, type StoryObj } from "@storybook/angular-vite";
+
 import { ConsoleScaffoldPage } from "./console-scaffold-page";
 
 const meta: Meta<ConsoleScaffoldPage> = {

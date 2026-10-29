@@ -7,6 +7,7 @@ import { TestBed } from "@angular/core/testing";
 import { MATERIAL_ANIMATIONS } from "@angular/material/core";
 import { provideRouter, Router } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
+
 import { err, ok, type Result } from "../../../core/result";
 import { MIN_PROGRESS_MS, PROGRESS_DELAY_MS } from "../../../domain/delay";
 import type { AuthnApi } from "../../../domain/ports/authn/authn-api";

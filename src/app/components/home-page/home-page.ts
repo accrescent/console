@@ -4,6 +4,7 @@
 
 import { Component, input } from "@angular/core";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+
 import {
     type ConsoleResource,
     type FullPageErrorUnavailable,

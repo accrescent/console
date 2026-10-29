@@ -9,6 +9,7 @@ import type { MatButtonAppearance } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { MatTooltipHarness } from "@angular/material/tooltip/testing";
 import { By } from "@angular/platform-browser";
+
 import { LoadingButton, type LoadingButtonState } from "./loading-button";
 
 @Component({

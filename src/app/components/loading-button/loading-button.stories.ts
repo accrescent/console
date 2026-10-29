@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { argsToTemplate, type Meta, type StoryObj } from "@storybook/angular-vite";
+
 import { LoadingButton } from "./loading-button";
 
 const meta: Meta<LoadingButton> = {

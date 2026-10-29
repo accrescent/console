@@ -14,6 +14,7 @@ import {
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatTooltipHarness } from "@angular/material/tooltip/testing";
 import { provideRouter } from "@angular/router";
+
 import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { Organization } from "../../../domain/ports/console/organization";
 import {

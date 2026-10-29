@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Meta, StoryObj } from "@storybook/angular-vite";
+
 import { ErrorAlert } from "./error-alert";
 
 const meta: Meta<ErrorAlert> = {

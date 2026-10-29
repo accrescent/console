@@ -4,6 +4,7 @@
 
 import { provideRouter } from "@angular/router";
 import { applicationConfig, type Meta, type StoryObj } from "@storybook/angular-vite";
+
 import { FullPageErrorView } from "./full-page-error-view";
 
 const ORGANIZATION_ID = "org_21nsTL6hybsteGOPytcUzx";

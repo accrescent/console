@@ -12,6 +12,7 @@ import {
 } from "@angular/material/snack-bar";
 import { Router, RouterOutlet } from "@angular/router";
 import { map } from "rxjs";
+
 import { withDeferredProgress } from "../../../domain/delay";
 import { AUTHN_API } from "../../tokens";
 import { ConsoleScaffoldPage } from "../console-scaffold-page/console-scaffold-page";

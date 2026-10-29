@@ -4,6 +4,7 @@
 
 import { inputBinding, signal } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
+
 import { HomePage, type HomePageState } from "./home-page";
 
 describe("HomePage", () => {

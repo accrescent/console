@@ -4,6 +4,7 @@
 
 import { inputBinding, outputBinding, signal } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
+
 import { ErrorAlert } from "./error-alert";
 
 describe("ErrorAlert", () => {

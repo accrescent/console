@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { Component, inject, signal } from "@angular/core";
+
 import { AUTHN_API } from "../../tokens";
 import { LoginPage } from "../login-page/login-page";
 

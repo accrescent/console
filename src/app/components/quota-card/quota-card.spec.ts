@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { inputBinding, signal } from "@angular/core";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
+import { inputBinding, signal } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatProgressBarHarness } from "@angular/material/progress-bar/testing";
+
 import { QuotaCard } from "./quota-card";
 
 describe("QuotaCard", () => {

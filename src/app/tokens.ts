@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { InjectionToken } from "@angular/core";
+
 import type { AuthnApi } from "../domain/ports/authn/authn-api";
 import type { ConsoleApi } from "../domain/ports/console/console-api";
 
