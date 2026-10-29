@@ -11,6 +11,7 @@ const meta: Meta<ErrorAlert> = {
         heading: "Could not create the document",
         message: "You do not have sufficient permissions to create a document.",
         failedAttempts: 1,
+        dismissible: true,
     },
 };
 
@@ -22,4 +23,8 @@ export const OneFailedAttempt: Story = {};
 
 export const MultipleFailedAttempts: Story = {
     args: { failedAttempts: 3 },
+};
+
+export const NotDismissible: Story = {
+    args: { dismissible: false },
 };

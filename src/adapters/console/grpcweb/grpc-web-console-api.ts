@@ -17,22 +17,27 @@ import type {
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
+    ListAppDraftSummariesError,
 } from "../../../domain/ports/console/errors";
 import type { GetMyOrganizationResponse } from "../../../domain/ports/console/get-my-organization-response";
 import type { GetOrganizationRequest } from "../../../domain/ports/console/get-organization-request";
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
+import type { ListAppDraftSummariesRequest } from "../../../domain/ports/console/list-app-draft-summaries-request";
+import type { ListAppDraftSummariesResponse } from "../../../domain/ports/console/list-app-draft-summaries-response";
 import {
     toCreateAppDraftError,
     toGetMyOrganizationError,
     toGetOrganizationError,
     toGetSelfError,
+    toListAppDraftSummariesError,
 } from "./error-converters";
 import {
     toCreateAppDraftResponse,
     toGetMyOrganizationResponse,
     toGetOrganizationResponse,
     toGetSelfResponse,
+    toListAppDraftSummariesResponse,
 } from "./message-converters";
 
 /**
@@ -98,6 +103,21 @@ export class GrpcWebConsoleApi implements ConsoleApi {
             );
         } catch (e) {
             return err(toGetMyOrganizationError(e));
+        }
+    }
+
+    async listAppDraftSummaries(
+        request: ListAppDraftSummariesRequest,
+        signal?: AbortSignal,
+    ): Promise<Result<ListAppDraftSummariesResponse, ListAppDraftSummariesError>> {
+        try {
+            const response = await this.appDraftClient.listAppDraftSummaries(
+                { organizationId: request.organizationId },
+                { signal },
+            );
+            return ok(toListAppDraftSummariesResponse(response));
+        } catch (e) {
+            return err(toListAppDraftSummariesError(e));
         }
     }
 }

@@ -8,6 +8,7 @@ import { By } from "@angular/platform-browser";
 import { provideRouter, Router } from "@angular/router";
 import { err, ok, type Result } from "../../../core/result";
 import { MIN_PROGRESS_MS, PROGRESS_DELAY_MS } from "../../../domain/delay";
+import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
 import type { CreateAppDraftRequest } from "../../../domain/ports/console/create-app-draft-request";
 import type { CreateAppDraftResponse } from "../../../domain/ports/console/create-app-draft-response";
@@ -16,14 +17,18 @@ import type {
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
+    ListAppDraftSummariesError,
 } from "../../../domain/ports/console/errors";
 import type { GetMyOrganizationResponse } from "../../../domain/ports/console/get-my-organization-response";
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
+import type { ListAppDraftSummariesRequest } from "../../../domain/ports/console/list-app-draft-summaries-request";
+import type { ListAppDraftSummariesResponse } from "../../../domain/ports/console/list-app-draft-summaries-response";
 import type { Organization } from "../../../domain/ports/console/organization";
 import { CONSOLE_API } from "../../tokens";
 import type { LoadingButtonState } from "../loading-button/loading-button";
 import {
+    type OrgDashboardAppDrafts,
     type OrgDashboardCreateAppDraftError,
     OrgDashboardPage,
     type OrgDashboardPageState,
@@ -37,6 +42,15 @@ const ORGANIZATION: Organization = {
     activeAppDraftLimit: 4,
     activeAppDraftCount: 1,
 };
+
+const APP_DRAFTS: readonly AppDraftSummary[] = [
+    {
+        id: "draft-1",
+        name: "Weather",
+        package: { versionName: "1.2.0", androidApplicationId: "com.example.weather" },
+    },
+    { id: "draft-2" },
+];
 
 describe("OrgDashboardContainer", () => {
     let consoleApi: FakeConsoleApi;
@@ -106,6 +120,13 @@ describe("OrgDashboardContainer", () => {
         return state.kind === "loaded" ? state.createAppDraftError : undefined;
     }
 
+    function appDrafts(
+        fixture: ComponentFixture<OrgDashboardContainer>,
+    ): OrgDashboardAppDrafts | undefined {
+        const state = pageState(fixture);
+        return state.kind === "loaded" ? state.appDrafts : undefined;
+    }
+
     function clickDismiss(fixture: ComponentFixture<OrgDashboardContainer>): void {
         fixture.nativeElement
             .querySelector("acc-org-dashboard-page button[aria-label=Dismiss]")
@@ -121,6 +142,7 @@ describe("OrgDashboardContainer", () => {
         expect(pageState(fixture)).toEqual({
             kind: "loaded",
             organization: ORGANIZATION,
+            appDrafts: { kind: "loaded", summaries: APP_DRAFTS },
             createAppDraftState: "idle",
         });
     });
@@ -142,6 +164,7 @@ describe("OrgDashboardContainer", () => {
         expect(pageState(fixture)).toEqual({
             kind: "loaded",
             organization: ORGANIZATION,
+            appDrafts: { kind: "loaded", summaries: APP_DRAFTS },
             createAppDraftState: "idle",
         });
     });
@@ -176,6 +199,68 @@ describe("OrgDashboardContainer", () => {
         expect(pageState(fixture)).toEqual({
             kind: "error",
             error: { kind: "unavailable", resource: { kind: "organization", id: ORGANIZATION.id } },
+        });
+    });
+
+    it("should list the organization's app drafts", async () => {
+        await render();
+
+        expect(consoleApi.listAppDraftSummariesRequests).toEqual([
+            { organizationId: ORGANIZATION.id },
+        ]);
+    });
+
+    it("should show progress until app drafts load", async () => {
+        consoleApi.listAppDraftSummariesDelayMs = PROGRESS_DELAY_MS + 1;
+        const fixture = create();
+
+        await vi.advanceTimersByTimeAsync(PROGRESS_DELAY_MS);
+        expect(pageState(fixture)).toEqual({ kind: "loading" });
+
+        await settle(fixture);
+        expect(appDrafts(fixture)).toEqual({ kind: "loaded", summaries: APP_DRAFTS });
+    });
+
+    describe("when listing app drafts fails", () => {
+        it("should redirect to the login page when unauthenticated", async () => {
+            consoleApi.listAppDraftSummariesResult = err({ kind: "unauthenticated" });
+
+            await render();
+
+            expect(TestBed.inject(Router).url).toBe("/login");
+        });
+
+        it("should explain when the user can't view app drafts", async () => {
+            consoleApi.listAppDraftSummariesResult = err({ kind: "permissionDenied" });
+
+            const fixture = await render();
+
+            expect(appDrafts(fixture)).toEqual({
+                kind: "error",
+                error: { kind: "permissionDenied" },
+            });
+        });
+
+        describe("for any other reason", () => {
+            let fixture: ComponentFixture<OrgDashboardContainer>;
+
+            beforeEach(async () => {
+                consoleApi.listAppDraftSummariesResult = err({ kind: "unknown" });
+
+                fixture = await render();
+            });
+
+            it("should still show the organization", () => {
+                const state = pageState(fixture);
+                expect(state.kind === "loaded" && state.organization).toEqual(ORGANIZATION);
+            });
+
+            it("should show an error", () => {
+                expect(appDrafts(fixture)).toEqual({
+                    kind: "error",
+                    error: { kind: "unavailable" },
+                });
+            });
         });
     });
 
@@ -333,8 +418,8 @@ describe("OrgDashboardContainer", () => {
 });
 
 /**
- * {@link ConsoleApi} that records app draft creation attempts and returns preconfigured results
- * after preconfigured delays.
+ * {@link ConsoleApi} that records app draft creation and listing attempts and returns preconfigured
+ * results after preconfigured delays.
  */
 class FakeConsoleApi implements ConsoleApi {
     organizationResult: Result<GetOrganizationResponse, GetOrganizationError> = ok({
@@ -346,6 +431,10 @@ class FakeConsoleApi implements ConsoleApi {
         appDraftId: "draft-123",
     });
     createAppDraftDelayMs = 0;
+    listAppDraftSummariesRequests: ListAppDraftSummariesRequest[] = [];
+    listAppDraftSummariesResult: Result<ListAppDraftSummariesResponse, ListAppDraftSummariesError> =
+        ok({ appDraftSummaries: APP_DRAFTS });
+    listAppDraftSummariesDelayMs = 0;
 
     getSelf(): Promise<Result<GetSelfResponse, GetSelfError>> {
         throw new Error("not used by OrgDashboardContainer");
@@ -366,5 +455,13 @@ class FakeConsoleApi implements ConsoleApi {
         this.createAppDraftRequests.push(request);
         await new Promise((resolve) => setTimeout(resolve, this.createAppDraftDelayMs));
         return this.createAppDraftResult;
+    }
+
+    async listAppDraftSummaries(
+        request: ListAppDraftSummariesRequest,
+    ): Promise<Result<ListAppDraftSummariesResponse, ListAppDraftSummariesError>> {
+        this.listAppDraftSummariesRequests.push(request);
+        await new Promise((resolve) => setTimeout(resolve, this.listAppDraftSummariesDelayMs));
+        return this.listAppDraftSummariesResult;
     }
 }

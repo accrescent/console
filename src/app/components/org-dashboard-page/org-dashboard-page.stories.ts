@@ -11,7 +11,9 @@ import {
     moduleMetadata,
     type StoryObj,
 } from "@storybook/angular-vite";
+import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { Organization } from "../../../domain/ports/console/organization";
+import { fakeIconUrl } from "../../../storybook/fake-icon-url";
 import { ConsoleScaffoldPage } from "../console-scaffold-page/console-scaffold-page";
 import { OrgDashboardPage, type OrgDashboardPageLoaded } from "./org-dashboard-page";
 
@@ -23,9 +25,30 @@ const ORGANIZATION: Organization = {
     activeAppDraftCount: 2,
 };
 
+const APP_DRAFTS: readonly AppDraftSummary[] = [
+    {
+        id: "draft_5gKq2YbVxPz8RmT3nWc1Ha",
+        name: "Weather",
+        iconUrl: fakeIconUrl("#1e88e5", "#ffca28"),
+        package: { versionName: "1.2.0", androidApplicationId: "com.example.weather" },
+    },
+    { id: "draft_7hLr3ZcWyQa9SnU4oXd2Ib" },
+];
+
+const APP_DRAFTS_AT_LIMIT: readonly AppDraftSummary[] = [
+    ...APP_DRAFTS,
+    {
+        id: "draft_9jNt5BeYaSc1UpW6qZf4Kd",
+        name: "Notes",
+        iconUrl: fakeIconUrl("#43a047", "#fafafa"),
+        package: { versionName: "3.0.1", androidApplicationId: "com.example.notes" },
+    },
+];
+
 const LOADED: OrgDashboardPageLoaded = {
     kind: "loaded",
     organization: ORGANIZATION,
+    appDrafts: { kind: "loaded", summaries: APP_DRAFTS },
     createAppDraftState: "idle",
 };
 
@@ -89,6 +112,24 @@ export const Loaded: Story = {
     },
 };
 
+export const ListingAppDraftsFailed: Story = {
+    args: {
+        state: {
+            ...LOADED,
+            appDrafts: { kind: "error", error: { kind: "unavailable" } },
+        },
+    },
+};
+
+export const ListingAppDraftsPermissionDenied: Story = {
+    args: {
+        state: {
+            ...LOADED,
+            appDrafts: { kind: "error", error: { kind: "permissionDenied" } },
+        },
+    },
+};
+
 export const CreatingAppDraftPending: Story = {
     args: {
         state: { ...LOADED, createAppDraftState: "pending" },
@@ -127,6 +168,7 @@ export const CreatingAppDraftLimitReached: Story = {
                 ...ORGANIZATION,
                 activeAppDraftCount: ORGANIZATION.activeAppDraftLimit,
             },
+            appDrafts: { kind: "loaded", summaries: APP_DRAFTS_AT_LIMIT },
             createAppDraftError: { kind: "resourceLimitExceeded", failedAttempts: 1 },
         },
     },
@@ -141,6 +183,7 @@ export const AtLimits: Story = {
                 publishedAppCount: ORGANIZATION.publishedAppLimit,
                 activeAppDraftCount: ORGANIZATION.activeAppDraftLimit,
             },
+            appDrafts: { kind: "loaded", summaries: APP_DRAFTS_AT_LIMIT },
         },
     },
 };
@@ -150,6 +193,7 @@ export const Empty: Story = {
         state: {
             ...LOADED,
             organization: { ...ORGANIZATION, publishedAppCount: 0, activeAppDraftCount: 0 },
+            appDrafts: { kind: "loaded", summaries: [] },
         },
     },
 };

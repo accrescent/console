@@ -45,6 +45,16 @@ export type GetOrganizationError =
     | UnknownError;
 
 /**
+ * An error returned by {@link ConsoleApi.listAppDraftSummaries}.
+ */
+export type ListAppDraftSummariesError =
+    | UnauthenticatedError
+    | PermissionDeniedError
+    | InternalError
+    | ServiceUnavailableError
+    | UnknownError;
+
+/**
  * An error indicating the user isn't authenticated.
  */
 export interface UnauthenticatedError {

@@ -9,6 +9,7 @@ import { ErrorAlert } from "./error-alert";
 describe("ErrorAlert", () => {
     const heading = signal("Couldn't save");
     const failedAttempts = signal(1);
+    const dismissible = signal(true);
     let dismissCount: number;
     let fixture: ComponentFixture<ErrorAlert>;
 
@@ -16,12 +17,14 @@ describe("ErrorAlert", () => {
         vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
         heading.set("Couldn't save");
         failedAttempts.set(1);
+        dismissible.set(true);
         dismissCount = 0;
         fixture = TestBed.createComponent(ErrorAlert, {
             bindings: [
                 inputBinding("heading", heading),
                 inputBinding("message", () => "Please try again in a few minutes."),
                 inputBinding("failedAttempts", failedAttempts),
+                inputBinding("dismissible", dismissible),
                 outputBinding("dismiss", () => dismissCount++),
             ],
         });
@@ -84,5 +87,12 @@ describe("ErrorAlert", () => {
         fixture.nativeElement.querySelector("button[aria-label=Dismiss]").click();
 
         expect(dismissCount).toBe(1);
+    });
+
+    it("should hide the dismiss button when not dismissible", async () => {
+        dismissible.set(false);
+        await fixture.whenStable();
+
+        expect(fixture.nativeElement.querySelector("button")).toBeNull();
     });
 });

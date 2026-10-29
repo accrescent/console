@@ -2,10 +2,12 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import type { AppDraftSummary as ProtoAppDraftSummary } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/app_draft_summary_pb.js";
 import type { CreateAppDraftResponse as ProtoCreateAppDraftResponse } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/create_app_draft_response_pb.js";
 import type { GetMyOrganizationResponse as ProtoGetMyOrganizationResponse } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/get_my_organization_response_pb.js";
 import type { GetOrganizationResponse as ProtoGetOrganizationResponse } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/get_organization_response_pb.js";
 import type { GetSelfResponse as ProtoGetSelfResponse } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/get_self_response_pb.js";
+import type { ListAppDraftSummariesResponse as ProtoListAppDraftSummariesResponse } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/list_app_draft_summaries_response_pb.js";
 import {
     type Organization as ProtoOrganization,
     OrganizationSchema,
@@ -17,10 +19,12 @@ import {
 import { UserRole as ProtoUserRole } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/user_role_pb.js";
 import { create } from "@bufbuild/protobuf";
 
+import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { CreateAppDraftResponse } from "../../../domain/ports/console/create-app-draft-response";
 import type { GetMyOrganizationResponse } from "../../../domain/ports/console/get-my-organization-response";
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
+import type { ListAppDraftSummariesResponse } from "../../../domain/ports/console/list-app-draft-summaries-response";
 import type { Organization } from "../../../domain/ports/console/organization";
 import type { User, UserRole } from "../../../domain/ports/console/user";
 
@@ -44,6 +48,27 @@ export function toGetOrganizationResponse(
 
 export function toGetSelfResponse(response: ProtoGetSelfResponse): GetSelfResponse {
     return { user: toUser(response.user ?? create(UserSchema)) };
+}
+
+export function toListAppDraftSummariesResponse(
+    response: ProtoListAppDraftSummariesResponse,
+): ListAppDraftSummariesResponse {
+    return { appDraftSummaries: response.appDraftSummaries.map(toAppDraftSummary) };
+}
+
+function toAppDraftSummary(summary: ProtoAppDraftSummary): AppDraftSummary {
+    const { versionName, androidApplicationId } = summary;
+    return {
+        id: summary.id ?? "",
+        name: summary.name,
+        iconUrl: summary.iconUri,
+        // versionName and androidApplicationId are either both present or both not present, so
+        // coerce to one of the two valid states if necessary
+        package:
+            versionName !== undefined && androidApplicationId !== undefined
+                ? { versionName, androidApplicationId }
+                : undefined,
+    };
 }
 
 function toOrganization(organization: ProtoOrganization): Organization {

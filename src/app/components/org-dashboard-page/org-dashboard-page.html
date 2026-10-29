@@ -38,8 +38,31 @@ SPDX-License-Identifier: AGPL-3.0-only
                         heading="Couldn't create app"
                         [message]="createAppDraftErrorMessage(error)"
                         [failedAttempts]="error.failedAttempts"
-                        (dismiss)="dismissError()" />
+                        [dismissible]="true"
+                        (dismiss)="dismissCreateError()" />
                 }
+
+                <section class="flex flex-col gap-4">
+                    <h2 class="[font:var(--mat-sys-title-large)]">App drafts</h2>
+
+                    @let appDrafts = currentState.appDrafts;
+                    @let appDraftsKind = appDrafts.kind;
+                    @switch (appDraftsKind) {
+                        @case ("loaded") {
+                            <acc-app-draft-list
+                                [orgId]="organization.id"
+                                [appDrafts]="appDrafts.summaries" />
+                        }
+                        @case ("error") {
+                            <acc-error-alert
+                                heading="Couldn't load app drafts"
+                                [message]="listAppDraftsErrorMessage(appDrafts.error)"
+                                [failedAttempts]="1"
+                                [dismissible]="false" />
+                        }
+                        @default never;
+                    }
+                </section>
 
                 <section class="flex flex-col gap-4">
                     <h2 class="[font:var(--mat-sys-title-large)]">App limits</h2>

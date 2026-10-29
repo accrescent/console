@@ -10,6 +10,7 @@ import type {
     GetOrganizationError,
     GetSelfError,
     InternalError,
+    ListAppDraftSummariesError,
     ServiceUnavailableError,
     UnauthenticatedError,
     UnknownError,
@@ -38,6 +39,11 @@ export function toGetOrganizationError(e: unknown): GetOrganizationError {
 
 export function toGetSelfError(e: unknown): GetSelfError {
     return toCommonError(ConnectError.from(e).code);
+}
+
+export function toListAppDraftSummariesError(e: unknown): ListAppDraftSummariesError {
+    const code = ConnectError.from(e).code;
+    return code === Code.PermissionDenied ? { kind: "permissionDenied" } : toCommonError(code);
 }
 
 function toCommonError(

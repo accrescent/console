@@ -18,12 +18,15 @@ import { withDeferredProgress } from "../../../domain/delay";
 import type {
     CreateAppDraftError,
     GetOrganizationError,
+    ListAppDraftSummariesError,
 } from "../../../domain/ports/console/errors";
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
+import type { ListAppDraftSummariesResponse } from "../../../domain/ports/console/list-app-draft-summaries-response";
 import { CONSOLE_API } from "../../tokens";
 import type { OrganizationResource } from "../full-page-error-view/full-page-error-view";
 import type { LoadingButtonState } from "../loading-button/loading-button";
 import {
+    type OrgDashboardAppDrafts,
     type OrgDashboardCreateAppDraftError,
     OrgDashboardPage,
     type OrgDashboardPageLoaded,
@@ -33,7 +36,7 @@ import {
 } from "../org-dashboard-page/org-dashboard-page";
 
 /**
- * Effectful container for the organization dashboard page which loads the organization to show and
+ * Effectful container for the organization dashboard page which loads the dashboard's info and
  * creates app drafts.
  */
 @Component({
@@ -53,17 +56,19 @@ export class OrgDashboardContainer {
     readonly orgId = input.required<string>();
 
     /**
-     * Whether loading the organization has taken long enough to show progress.
+     * Whether loading the dashboard has taken long enough to show progress.
      */
     private readonly showProgress = signal(false);
 
-    private readonly organization = resource({
+    private readonly dashboard = resource({
         params: () => ({ organizationId: this.orgId() }),
         loader: ({ params, abortSignal }) => {
             this.showProgress.set(false);
-            return withDeferredProgress(this.consoleApi.getOrganization(params, abortSignal), () =>
-                this.showProgress.set(true),
-            );
+            const results = Promise.all([
+                this.consoleApi.getOrganization(params, abortSignal),
+                this.consoleApi.listAppDraftSummaries(params, abortSignal),
+            ]);
+            return withDeferredProgress(results, () => this.showProgress.set(true));
         },
     });
     protected readonly state = computed((): OrgDashboardPageState => {
@@ -71,15 +76,15 @@ export class OrgDashboardContainer {
         const progress: ProgressState = this.showProgress()
             ? { kind: "loading" }
             : { kind: "pending" };
-        if (this.organization.status() === "error") {
+        if (this.dashboard.status() === "error") {
             return { kind: "error", error: { kind: "unavailable", resource } };
         }
         const createAppDraft = {
             createAppDraftState: this.createAppDraftState(),
             createAppDraftError: this.createAppDraftError(),
         };
-        return this.organization.hasValue()
-            ? toPageState(this.organization.value(), createAppDraft, resource, progress)
+        return this.dashboard.hasValue()
+            ? toPageState(this.dashboard.value(), createAppDraft, resource, progress)
             : progress;
     });
 
@@ -98,11 +103,7 @@ export class OrgDashboardContainer {
     constructor() {
         // Redirect the user to the login page if authentication fails
         effect(() => {
-            if (!this.organization.hasValue()) {
-                return;
-            }
-            const result = this.organization.value();
-            if (!result.ok && result.error.kind === "unauthenticated") {
+            if (this.dashboard.hasValue() && this.dashboard.value().some(isUnauthenticated)) {
                 this.router.navigate(["/login"], { replaceUrl: true });
             }
         });
@@ -162,25 +163,63 @@ function toPageError(
 
 type ProgressState = OrgDashboardPagePending | OrgDashboardPageLoading;
 
+type DashboardResults = readonly [
+    Result<GetOrganizationResponse, GetOrganizationError>,
+    Result<ListAppDraftSummariesResponse, ListAppDraftSummariesError>,
+];
+
+function isUnauthenticated(result: DashboardResults[number]): boolean {
+    return !result.ok && result.error.kind === "unauthenticated";
+}
+
 function toPageState(
-    result: Result<GetOrganizationResponse, GetOrganizationError>,
+    results: DashboardResults,
     createAppDraft: Pick<OrgDashboardPageLoaded, "createAppDraftState" | "createAppDraftError">,
     resource: OrganizationResource,
     progress: ProgressState,
 ): OrgDashboardPageState {
-    if (result.ok) {
-        return { kind: "loaded", organization: result.value.organization, ...createAppDraft };
+    // Keep showing the same progress state while redirecting to the login page
+    if (results.some(isUnauthenticated)) {
+        return progress;
     }
 
-    switch (result.error.kind) {
-        // Keep showing the same progress state while redirecting to the login page
-        case "unauthenticated":
-            return progress;
+    const [organizationResult, appDraftsResult] = results;
+    if (organizationResult.ok) {
+        return {
+            kind: "loaded",
+            organization: organizationResult.value.organization,
+            appDrafts: toAppDrafts(appDraftsResult),
+            ...createAppDraft,
+        };
+    }
+
+    switch (organizationResult.error.kind) {
         case "permissionDenied":
             return { kind: "error", error: { kind: "permissionDenied", resource } };
+        // Never shown for unauthenticated since we show progress while redirecting to the login page
+        case "unauthenticated":
         case "internal":
         case "serviceUnavailable":
         case "unknown":
             return { kind: "error", error: { kind: "unavailable", resource } };
+    }
+}
+
+function toAppDrafts(
+    result: Result<ListAppDraftSummariesResponse, ListAppDraftSummariesError>,
+): OrgDashboardAppDrafts {
+    if (result.ok) {
+        return { kind: "loaded", summaries: result.value.appDraftSummaries };
+    }
+
+    switch (result.error.kind) {
+        case "permissionDenied":
+            return { kind: "error", error: { kind: "permissionDenied" } };
+        // Never shown since toPageState shows progress while redirecting to the login page
+        case "unauthenticated":
+        case "internal":
+        case "serviceUnavailable":
+        case "unknown":
+            return { kind: "error", error: { kind: "unavailable" } };
     }
 }

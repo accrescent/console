@@ -20,6 +20,7 @@ import { MatIcon } from "@angular/material/icon";
  *     heading="Could not create the document"
  *     message="You do not have sufficient permissions to create a document."
  *     [failedAttempts]="failedAttempts"
+ *     [dismissible]="true"
  *     (dismiss)="dismissError.emit()" />
  * ```
  */
@@ -46,6 +47,11 @@ export class ErrorAlert {
      * The number of failed attempts in a row to perform the operation.
      */
     readonly failedAttempts = input.required<number>();
+
+    /**
+     * Whether to show a button which lets the user dismiss the alert.
+     */
+    readonly dismissible = input.required<boolean>();
 
     /**
      * Emits when the user clicks the dismiss button.

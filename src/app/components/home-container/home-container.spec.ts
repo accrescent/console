@@ -14,10 +14,12 @@ import type {
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
+    ListAppDraftSummariesError,
 } from "../../../domain/ports/console/errors";
 import type { GetMyOrganizationResponse } from "../../../domain/ports/console/get-my-organization-response";
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
+import type { ListAppDraftSummariesResponse } from "../../../domain/ports/console/list-app-draft-summaries-response";
 import { CONSOLE_API } from "../../tokens";
 import { HomePage, type HomePageState } from "../home-page/home-page";
 import { HomeContainer } from "./home-container";
@@ -140,5 +142,11 @@ class FakeConsoleApi implements ConsoleApi {
     async getMyOrganization(): Promise<Result<GetMyOrganizationResponse, GetMyOrganizationError>> {
         await new Promise((resolve) => setTimeout(resolve, this.delayMs));
         return this.myOrganizationResult;
+    }
+
+    listAppDraftSummaries(): Promise<
+        Result<ListAppDraftSummariesResponse, ListAppDraftSummariesError>
+    > {
+        throw new Error("not used by HomeContainer");
     }
 }
