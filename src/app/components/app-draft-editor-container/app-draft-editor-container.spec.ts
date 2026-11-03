@@ -41,6 +41,11 @@ describe("AppDraftEditorContainer", () => {
 
     beforeEach(async () => {
         consoleApi = new FakeConsoleApi();
+        // jsdom performs no layout, so fake element geometry so that the CDK considers the dialog's
+        // buttons visible and focusable
+        vi.spyOn(Element.prototype, "getClientRects").mockReturnValue([
+            new DOMRect(),
+        ] as unknown as DOMRectList);
         TestBed.configureTestingModule({
             providers: [
                 // Accept any URL so that tests can check where the container navigated to
@@ -62,6 +67,7 @@ describe("AppDraftEditorContainer", () => {
     });
 
     afterEach(() => {
+        vi.restoreAllMocks();
         vi.useRealTimers();
     });
 

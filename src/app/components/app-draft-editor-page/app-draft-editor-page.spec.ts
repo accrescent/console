@@ -27,6 +27,11 @@ describe("AppDraftEditorPage", () => {
     let fixture: ComponentFixture<AppDraftEditorPage>;
 
     beforeEach(async () => {
+        // jsdom performs no layout, so fake element geometry so that the CDK considers the dialog's
+        // buttons visible and focusable
+        vi.spyOn(Element.prototype, "getClientRects").mockReturnValue([
+            new DOMRect(),
+        ] as unknown as DOMRectList);
         // Open and close the dialog immediately instead of waiting for animations
         TestBed.configureTestingModule({
             providers: [{ provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } }],
@@ -42,6 +47,10 @@ describe("AppDraftEditorPage", () => {
             ],
         });
         await fixture.whenStable();
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
     });
 
     async function setState(state: AppDraftEditorPageState): Promise<void> {
@@ -92,6 +101,10 @@ describe("AppDraftEditorPage", () => {
     describe("when the delete dialog is open", () => {
         beforeEach(async () => {
             await openDeleteDialog();
+        });
+
+        it("should initially focus the cancel button", () => {
+            expect(document.activeElement).toBe(dialogButton("Cancel"));
         });
 
         it("should emit deleteAppDraft when the delete button is clicked", () => {
