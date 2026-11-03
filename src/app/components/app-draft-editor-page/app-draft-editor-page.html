@@ -31,7 +31,13 @@ SPDX-License-Identifier: AGPL-3.0-only
                     [message]="deleteAppDraftErrorMessage(error)"
                     [failedAttempts]="error.failedAttempts"
                     [dismissible]="true"
-                    (dismiss)="dismissDeleteError()" />
+                    (dismiss)="dismissDeleteError()">
+                    @if (error.kind === "unauthenticated") {
+                        <a matButton="filled" class="mt-1 self-start" routerLink="/login">
+                            Log in
+                        </a>
+                    }
+                </acc-error-alert>
             }
         </div>
     </mat-dialog-content>

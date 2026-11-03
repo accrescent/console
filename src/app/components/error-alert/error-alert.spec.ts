@@ -2,10 +2,24 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { inputBinding, outputBinding, signal } from "@angular/core";
+import { Component, inputBinding, outputBinding, signal } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ErrorAlert } from "./error-alert";
+
+@Component({
+    imports: [ErrorAlert],
+    template: `
+        <acc-error-alert
+            heading="Heading"
+            message="Message"
+            [failedAttempts]="1"
+            [dismissible]="false">
+            <a href="/action">Action</a>
+        </acc-error-alert>
+    `,
+})
+class ErrorAlertWithAction {}
 
 describe("ErrorAlert", () => {
     const heading = signal("Couldn't save");
@@ -95,5 +109,13 @@ describe("ErrorAlert", () => {
         await fixture.whenStable();
 
         expect(fixture.nativeElement.querySelector("button")).toBeNull();
+    });
+
+    it("should show projected content", async () => {
+        const hostFixture = TestBed.createComponent(ErrorAlertWithAction);
+        await hostFixture.whenStable();
+
+        const action = hostFixture.nativeElement.querySelector("acc-error-alert a");
+        expect(action.textContent).toBe("Action");
     });
 });

@@ -289,10 +289,13 @@ describe("OrgDashboardContainer", () => {
             expect(TestBed.inject(Router).url).toBe(`/orgs/${ORGANIZATION.id}/appDrafts/draft-123`);
         });
 
-        it("should redirect to the login page when unauthenticated", async () => {
+        it("should open the login page when the error's log in link is clicked", async () => {
             consoleApi.createAppDraftResult = err({ kind: "unauthenticated" });
-
             newAppButton(fixture).click();
+            await settle(fixture);
+            fixture.detectChanges();
+
+            fixture.nativeElement.querySelector("acc-error-alert a").click();
             await settle(fixture);
 
             expect(TestBed.inject(Router).url).toBe("/login");
@@ -323,6 +326,18 @@ describe("OrgDashboardContainer", () => {
 
             await vi.advanceTimersByTimeAsync(1);
             expect(createAppDraftState(fixture)).toBe("idle");
+        });
+
+        it("should explain when unauthenticated", async () => {
+            consoleApi.createAppDraftResult = err({ kind: "unauthenticated" });
+
+            newAppButton(fixture).click();
+            await settle(fixture);
+
+            expect(createAppDraftError(fixture)).toEqual({
+                kind: "unauthenticated",
+                failedAttempts: 1,
+            });
         });
 
         it("should explain when the user can't create app drafts", async () => {

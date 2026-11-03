@@ -126,10 +126,25 @@ describe("AppDraftEditorContainer", () => {
             expect(TestBed.inject(Router).url).toBe(`/orgs/${ORGANIZATION_ID}/dashboard`);
         });
 
-        it("should redirect to the login page when unauthenticated", async () => {
+        it("should explain when unauthenticated", async () => {
             consoleApi.deleteAppDraftResult = err({ kind: "unauthenticated" });
 
             dialogButton("Delete").click();
+            await settle();
+
+            expect(pageState().deleteAppDraftError).toEqual({
+                kind: "unauthenticated",
+                failedAttempts: 1,
+            });
+        });
+
+        it("should open the login page when the error's log in link is clicked", async () => {
+            consoleApi.deleteAppDraftResult = err({ kind: "unauthenticated" });
+            dialogButton("Delete").click();
+            await settle();
+            fixture.detectChanges();
+
+            document.querySelector<HTMLElement>("mat-dialog-container acc-error-alert a")!.click();
             await settle();
 
             expect(TestBed.inject(Router).url).toBe("/login");

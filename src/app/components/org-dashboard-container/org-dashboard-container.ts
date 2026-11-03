@@ -102,7 +102,7 @@ export class OrgDashboardContainer {
     );
 
     constructor() {
-        // Redirect the user to the login page if authentication fails
+        // Redirect the user to the login page if authentication fails on load
         effect(() => {
             if (this.dashboard.hasValue() && this.dashboard.value().some(isUnauthenticated)) {
                 this.router.navigate(["/login"], { replaceUrl: true });
@@ -130,9 +130,6 @@ export class OrgDashboardContainer {
         if (result.ok) {
             this.createAppDraftError.set(undefined);
             await this.router.navigate(["/orgs", orgId, "appDrafts", result.value.appDraftId]);
-        } else if (result.error.kind === "unauthenticated") {
-            this.createAppDraftError.set(undefined);
-            await this.router.navigate(["/login"], { replaceUrl: true });
         } else {
             const failedAttempts = (this.createAppDraftError()?.failedAttempts ?? 0) + 1;
             this.createAppDraftError.set(toPageError(result.error, failedAttempts));
@@ -148,10 +145,11 @@ export class OrgDashboardContainer {
 }
 
 function toPageError(
-    error: Exclude<CreateAppDraftError, { kind: "unauthenticated" }>,
+    error: CreateAppDraftError,
     failedAttempts: number,
 ): OrgDashboardCreateAppDraftError {
     switch (error.kind) {
+        case "unauthenticated":
         case "permissionDenied":
         case "resourceLimitExceeded":
             return { kind: error.kind, failedAttempts };

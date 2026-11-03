@@ -14,6 +14,8 @@ import { MatIcon } from "@angular/material/icon";
  * is retried and results in the same error (and `failedAttempts` is incremented by the parent
  * component), accessibility services can distinguish subsequent errors from the original.
  *
+ * Projected content (e.g., a button which helps resolve the error) is shown below the message.
+ *
  * @example
  * ```html
  * <acc-error-alert
@@ -21,7 +23,9 @@ import { MatIcon } from "@angular/material/icon";
  *     message="You do not have sufficient permissions to create a document."
  *     [failedAttempts]="failedAttempts"
  *     [dismissible]="true"
- *     (dismiss)="dismissError.emit()" />
+ *     (dismiss)="dismissError.emit()">
+ *     <a routerLink="/">Go home</a>
+ * </acc-error-alert>
  * ```
  */
 @Component({

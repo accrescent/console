@@ -13,6 +13,7 @@ SPDX-License-Identifier: AGPL-3.0-only
         @if (failedAttempts() > 1) {
             <p class="[font:var(--mat-sys-body-small)]">Failed attempts: {{ failedAttempts() }}</p>
         }
+        <ng-content />
     </div>
     @if (dismissible()) {
         <button
