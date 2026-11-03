@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import type { Meta, StoryObj } from "@storybook/angular-vite";
+import { MatButton } from "@angular/material/button";
+import { argsToTemplate, type Meta, moduleMetadata, type StoryObj } from "@storybook/angular-vite";
 
 import { ErrorAlert } from "./error-alert";
 
@@ -28,4 +29,21 @@ export const MultipleFailedAttempts: Story = {
 
 export const NotDismissible: Story = {
     args: { dismissible: false },
+};
+
+export const WithAction: Story = {
+    decorators: [moduleMetadata({ imports: [MatButton] })],
+    render: (args) => ({
+        props: args,
+        template: `
+            <acc-error-alert ${argsToTemplate(args)}>
+                <button matButton="filled" class="mt-1 self-start" type="button">Fix it</button>
+            </acc-error-alert>
+        `,
+    }),
+};
+
+export const WithActionAndMultipleFailedAttempts: Story = {
+    ...WithAction,
+    args: { failedAttempts: 3 },
 };

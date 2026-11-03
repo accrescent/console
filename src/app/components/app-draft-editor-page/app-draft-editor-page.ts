@@ -21,8 +21,9 @@ import {
     MatDialogTitle,
 } from "@angular/material/dialog";
 import { MatIcon } from "@angular/material/icon";
+import { RouterLink } from "@angular/router";
 
-import { UNAVAILABLE_MESSAGE } from "../../../domain/error-messages";
+import { UNAUTHENTICATED_MESSAGE, UNAVAILABLE_MESSAGE } from "../../../domain/error-messages";
 import { ErrorAlert } from "../error-alert/error-alert";
 import { LoadingButton, type LoadingButtonState } from "../loading-button/loading-button";
 
@@ -39,6 +40,7 @@ import { LoadingButton, type LoadingButtonState } from "../loading-button/loadin
         MatDialogContent,
         MatDialogTitle,
         MatIcon,
+        RouterLink,
     ],
     selector: "acc-app-draft-editor-page",
     templateUrl: "./app-draft-editor-page.html",
@@ -93,6 +95,8 @@ export class AppDraftEditorPage {
 
     protected deleteAppDraftErrorMessage(error: AppDraftEditorDeleteAppDraftError): string {
         switch (error.kind) {
+            case "unauthenticated":
+                return UNAUTHENTICATED_MESSAGE;
             case "permissionDenied":
                 return "You don't have permission to delete this app draft.";
             case "unavailable":
@@ -127,11 +131,12 @@ export interface AppDraftEditorPageState {
 /**
  * An error which occurs when attempting to delete an app draft from an {@link AppDraftEditorPage}.
  *
+ * - `unauthenticated`: the user isn't logged in.
  * - `permissionDenied`: the user isn't allowed to delete the app draft.
  * - `unavailable`: deletion failed for a reason outside of the user's control.
  */
 export interface AppDraftEditorDeleteAppDraftError {
-    readonly kind: "permissionDenied" | "unavailable";
+    readonly kind: "unauthenticated" | "permissionDenied" | "unavailable";
 
     /**
      * The number of failed attempts in a row to delete the app draft.

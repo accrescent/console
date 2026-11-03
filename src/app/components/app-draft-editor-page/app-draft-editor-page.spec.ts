@@ -11,6 +11,7 @@ import {
 } from "@angular/core";
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 import { MATERIAL_ANIMATIONS } from "@angular/material/core";
+import { provideRouter } from "@angular/router";
 
 import {
     type AppDraftEditorDeleteAppDraftError,
@@ -34,7 +35,10 @@ describe("AppDraftEditorPage", () => {
         ] as unknown as DOMRectList);
         // Open and close the dialog immediately instead of waiting for animations
         TestBed.configureTestingModule({
-            providers: [{ provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } }],
+            providers: [
+                provideRouter([]),
+                { provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } },
+            ],
         });
         pageState = signal(IDLE);
         deleteCount = 0;
@@ -140,6 +144,7 @@ describe("AppDraftEditorPage", () => {
         });
 
         it.each([
+            ["unauthenticated", "You're logged out."],
             ["permissionDenied", "You don't have permission to delete this app draft."],
             ["unavailable", "This isn't caused by anything you did."],
         ] as const)("should explain a %s error deleting the app draft", async (kind, message) => {
@@ -148,6 +153,17 @@ describe("AppDraftEditorPage", () => {
             const alert: HTMLElement = dialog()!.querySelector("acc-error-alert")!;
             expect(alert.textContent).toContain("Couldn't delete app draft");
             expect(text(alert)).toContain(message);
+        });
+
+        it("should link to the login page after an unauthenticated error deleting the app draft", async () => {
+            await setState({
+                ...IDLE,
+                deleteAppDraftError: { kind: "unauthenticated", failedAttempts: 1 },
+            });
+
+            const link = dialog()!.querySelector<HTMLAnchorElement>("acc-error-alert a")!;
+            expect(link.textContent).toContain("Log in");
+            expect(link.getAttribute("href")).toBe("/login");
         });
 
         describe("while deleting", () => {

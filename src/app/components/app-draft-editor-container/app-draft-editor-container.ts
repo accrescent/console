@@ -76,9 +76,6 @@ export class AppDraftEditorContainer {
             this.deleteAppDraftError.set(undefined);
             // Replace the URL since the app draft no longer exists to go back to
             await this.router.navigate(["/orgs", this.orgId(), "dashboard"], { replaceUrl: true });
-        } else if (result.error.kind === "unauthenticated") {
-            this.deleteAppDraftError.set(undefined);
-            await this.router.navigate(["/login"], { replaceUrl: true });
         } else {
             const failedAttempts = (this.deleteAppDraftError()?.failedAttempts ?? 0) + 1;
             this.deleteAppDraftError.set(toPageError(result.error, failedAttempts));
@@ -94,10 +91,11 @@ export class AppDraftEditorContainer {
 }
 
 function toPageError(
-    error: Exclude<DeleteAppDraftError, { kind: "unauthenticated" }>,
+    error: DeleteAppDraftError,
     failedAttempts: number,
 ): AppDraftEditorDeleteAppDraftError {
     switch (error.kind) {
+        case "unauthenticated":
         case "permissionDenied":
             return { kind: error.kind, failedAttempts };
         case "internal":

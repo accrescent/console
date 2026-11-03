@@ -3,10 +3,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { Component, input, output, viewChild } from "@angular/core";
+import { MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { RouterLink } from "@angular/router";
 
-import { UNAVAILABLE_MESSAGE } from "../../../domain/error-messages";
+import { UNAUTHENTICATED_MESSAGE, UNAVAILABLE_MESSAGE } from "../../../domain/error-messages";
 import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { Organization } from "../../../domain/ports/console/organization";
 import { quotaLevel } from "../../../domain/quota";
@@ -32,9 +34,11 @@ const APP_DRAFTS_FULL_ACTION = "Delete or publish an app draft to create another
         ErrorAlert,
         FullPageErrorView,
         LoadingButton,
+        MatButton,
         MatIcon,
         MatProgressSpinner,
         QuotaCard,
+        RouterLink,
     ],
     selector: "acc-org-dashboard-page",
     templateUrl: "./org-dashboard-page.html",
@@ -72,6 +76,8 @@ export class OrgDashboardPage {
 
     protected createAppDraftErrorMessage(error: OrgDashboardCreateAppDraftError): string {
         switch (error.kind) {
+            case "unauthenticated":
+                return UNAUTHENTICATED_MESSAGE;
             case "permissionDenied":
                 return "You don't have permission to create apps in this organization.";
             case "resourceLimitExceeded":
@@ -164,12 +170,13 @@ export interface OrgDashboardPageLoaded {
 /**
  * An error which occurs when attempting to create an app draft from an {@link OrgDashboardPage}.
  *
+ * - `unauthenticated`: the user isn't logged in.
  * - `permissionDenied`: the user isn't allowed to create apps in the organization.
  * - `resourceLimitExceeded`: the organization has reached its app draft limit.
  * - `unavailable`: creation failed for a reason outside of the user's control.
  */
 export interface OrgDashboardCreateAppDraftError {
-    readonly kind: "permissionDenied" | "resourceLimitExceeded" | "unavailable";
+    readonly kind: "unauthenticated" | "permissionDenied" | "resourceLimitExceeded" | "unavailable";
 
     /**
      * The number of failed attempts in a row to create an app draft.

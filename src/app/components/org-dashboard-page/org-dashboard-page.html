@@ -39,7 +39,13 @@ SPDX-License-Identifier: AGPL-3.0-only
                         [message]="createAppDraftErrorMessage(error)"
                         [failedAttempts]="error.failedAttempts"
                         [dismissible]="true"
-                        (dismiss)="dismissCreateError()" />
+                        (dismiss)="dismissCreateError()">
+                        @if (error.kind === "unauthenticated") {
+                            <a matButton="filled" class="mt-1 self-start" routerLink="/login">
+                                Log in
+                            </a>
+                        }
+                    </acc-error-alert>
                 }
 
                 <section class="flex flex-col gap-4">

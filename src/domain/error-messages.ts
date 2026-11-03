@@ -3,6 +3,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
+ * The message to show when a user-initiated operation fails because the user isn't logged in.
+ */
+export const UNAUTHENTICATED_MESSAGE = "You're logged out. Log back in to try again.";
+
+/**
  * The message to show when an operation fails for a reason outside of the user's control.
  */
 export const UNAVAILABLE_MESSAGE =

@@ -152,6 +152,15 @@ export const CreatingAppDraftFailed: Story = {
     },
 };
 
+export const CreatingAppDraftUnauthenticated: Story = {
+    args: {
+        state: {
+            ...LOADED,
+            createAppDraftError: { kind: "unauthenticated", failedAttempts: 1 },
+        },
+    },
+};
+
 export const CreatingAppDraftPermissionDenied: Story = {
     args: {
         state: {

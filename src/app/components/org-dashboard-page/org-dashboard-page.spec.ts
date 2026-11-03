@@ -204,6 +204,7 @@ describe("OrgDashboardPage", () => {
         });
 
         it.each([
+            ["unauthenticated", "You're logged out."],
             ["permissionDenied", "You don't have permission to create apps in this organization."],
             ["resourceLimitExceeded", "You've reached your limit of app drafts."],
             ["unavailable", "This isn't caused by anything you did."],
@@ -216,6 +217,18 @@ describe("OrgDashboardPage", () => {
             const alert: HTMLElement = fixture.nativeElement.querySelector("acc-error-alert");
             expect(alert.textContent).toContain("Couldn't create app");
             expect(text(alert)).toContain(message);
+        });
+
+        it("should link to the login page after an unauthenticated error creating an app draft", async () => {
+            const fixture = await render({
+                ...state,
+                createAppDraftError: { kind: "unauthenticated", failedAttempts: 1 },
+            });
+
+            const link: HTMLAnchorElement =
+                fixture.nativeElement.querySelector("acc-error-alert a");
+            expect(link.textContent).toContain("Log in");
+            expect(link.getAttribute("href")).toBe("/login");
         });
 
         describe("when an error creating an app draft is shown", () => {

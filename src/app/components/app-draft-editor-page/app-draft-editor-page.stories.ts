@@ -77,6 +77,16 @@ export const DeletionFailed: Story = {
     play: openDeleteDialog,
 };
 
+export const DeletionUnauthenticated: Story = {
+    args: {
+        state: {
+            deleteAppDraftState: "idle",
+            deleteAppDraftError: { kind: "unauthenticated", failedAttempts: 1 },
+        },
+    },
+    play: openDeleteDialog,
+};
+
 export const DeletionPermissionDenied: Story = {
     args: {
         state: {
