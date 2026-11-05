@@ -25,14 +25,15 @@ import type { GetOrganizationResponse } from "../../../domain/ports/console/get-
 import type { ListAppDraftSummariesResponse } from "../../../domain/ports/console/list-app-draft-summaries-response";
 import { CONSOLE_API } from "../../tokens";
 import type { OrganizationResource } from "../full-page-error-view/full-page-error-view";
+import type { PageLoading, PagePending } from "../loadable-page/loadable-page";
 import type { LoadingButtonState } from "../loading-button/loading-button";
+import type {
+    OrgDashboardAppDrafts,
+    OrgDashboardContentState,
+    OrgDashboardCreateAppDraftError,
+} from "../org-dashboard-content/org-dashboard-content";
 import {
-    type OrgDashboardAppDrafts,
-    type OrgDashboardCreateAppDraftError,
     OrgDashboardPage,
-    type OrgDashboardPageLoaded,
-    type OrgDashboardPageLoading,
-    type OrgDashboardPagePending,
     type OrgDashboardPageState,
 } from "../org-dashboard-page/org-dashboard-page";
 
@@ -43,7 +44,6 @@ import {
 @Component({
     imports: [OrgDashboardPage],
     selector: "acc-org-dashboard-container",
-    host: { class: "block h-full" },
     templateUrl: "./org-dashboard-container.html",
 })
 export class OrgDashboardContainer {
@@ -160,7 +160,7 @@ function toPageError(
     }
 }
 
-type ProgressState = OrgDashboardPagePending | OrgDashboardPageLoading;
+type ProgressState = PagePending | PageLoading;
 
 type DashboardResults = readonly [
     Result<GetOrganizationResponse, GetOrganizationError>,
@@ -173,7 +173,7 @@ function isUnauthenticated(result: DashboardResults[number]): boolean {
 
 function toPageState(
     results: DashboardResults,
-    createAppDraft: Pick<OrgDashboardPageLoaded, "createAppDraftState" | "createAppDraftError">,
+    createAppDraft: Pick<OrgDashboardContentState, "createAppDraftState" | "createAppDraftError">,
     resource: OrganizationResource,
     progress: ProgressState,
 ): OrgDashboardPageState {
@@ -186,9 +186,11 @@ function toPageState(
     if (organizationResult.ok) {
         return {
             kind: "loaded",
-            organization: organizationResult.value.organization,
-            appDrafts: toAppDrafts(appDraftsResult),
-            ...createAppDraft,
+            value: {
+                organization: organizationResult.value.organization,
+                appDrafts: toAppDrafts(appDraftsResult),
+                ...createAppDraft,
+            },
         };
     }
 

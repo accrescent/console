@@ -1,0 +1,76 @@
+<!--
+SPDX-FileCopyrightText: © 2026 Logan Magee
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
+@let currentState = state();
+@let organization = currentState.organization;
+<div class="mx-auto flex w-full max-w-5xl flex-col gap-8">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+        <h1 class="[font:var(--mat-sys-headline-medium)]">Dashboard</h1>
+        <acc-loading-button
+            appearance="filled"
+            [state]="currentState.createAppDraftState"
+            loadingLabel="Creating app"
+            [disabledReason]="newAppDisabledReason(organization)"
+            (press)="createAppDraft.emit()">
+            <mat-icon>add</mat-icon>
+            New app
+        </acc-loading-button>
+    </div>
+
+    @if (currentState.createAppDraftError; as error) {
+        <acc-error-alert
+            heading="Couldn't create app"
+            [message]="createAppDraftErrorMessage(error)"
+            [failedAttempts]="error.failedAttempts"
+            [dismissible]="true"
+            (dismiss)="dismissCreateError()">
+            @if (error.kind === "unauthenticated") {
+                <a matButton="filled" class="mt-1 self-start" routerLink="/login"> Log in </a>
+            }
+        </acc-error-alert>
+    }
+
+    <section class="flex flex-col gap-4">
+        <h2 class="[font:var(--mat-sys-title-large)]">App drafts</h2>
+
+        @let appDrafts = currentState.appDrafts;
+        @let appDraftsKind = appDrafts.kind;
+        @switch (appDraftsKind) {
+            @case ("loaded") {
+                <acc-app-draft-list [orgId]="organization.id" [appDrafts]="appDrafts.summaries" />
+            }
+            @case ("error") {
+                <acc-error-alert
+                    heading="Couldn't load app drafts"
+                    [message]="listAppDraftsErrorMessage(appDrafts.error)"
+                    [failedAttempts]="1"
+                    [dismissible]="false" />
+            }
+            @default never;
+        }
+    </section>
+
+    <section class="flex flex-col gap-4">
+        <h2 class="[font:var(--mat-sys-title-large)]">App limits</h2>
+
+        <div class="grid gap-6 sm:grid-cols-2">
+            <acc-quota-card
+                label="Published apps"
+                description="Apps available in the store"
+                icon="storefront"
+                [count]="organization.publishedAppCount"
+                [limit]="organization.publishedAppLimit"
+                fullAction="Check back later for a way to increase this limit." />
+            <acc-quota-card
+                label="App drafts"
+                description="New apps that aren't published yet"
+                icon="draft"
+                [count]="organization.activeAppDraftCount"
+                [limit]="organization.activeAppDraftLimit"
+                [fullAction]="appDraftsFullAction" />
+        </div>
+    </section>
+</div>

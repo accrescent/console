@@ -35,9 +35,9 @@ import type { ListAppDraftSummariesResponse } from "../../../domain/ports/consol
 import type { UpdateAppDraftListingTextRequest } from "../../../domain/ports/console/update-app-draft-listing-text-request";
 import type { UpdateAppDraftListingTextResponse } from "../../../domain/ports/console/update-app-draft-listing-text-response";
 import { CONSOLE_API } from "../../tokens";
+import type { AppDraftEditorContentState } from "../app-draft-editor-content/app-draft-editor-content";
 import {
     AppDraftEditorPage,
-    type AppDraftEditorPageLoaded,
     type AppDraftEditorPageState,
 } from "../app-draft-editor-page/app-draft-editor-page";
 import { AppDraftEditorContainer } from "./app-draft-editor-container";
@@ -102,12 +102,12 @@ describe("AppDraftEditorContainer", () => {
             .state();
     }
 
-    function pageState(): AppDraftEditorPageLoaded {
+    function pageState(): AppDraftEditorContentState {
         const state = anyPageState();
         if (state.kind !== "loaded") {
             throw new Error(`expected the page to be loaded, but it was ${state.kind}`);
         }
-        return state;
+        return state.value;
     }
 
     function dialogButton(label: string): HTMLButtonElement {

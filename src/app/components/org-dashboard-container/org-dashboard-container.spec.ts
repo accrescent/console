@@ -34,10 +34,8 @@ import type { ListAppDraftSummariesResponse } from "../../../domain/ports/consol
 import type { Organization } from "../../../domain/ports/console/organization";
 import type { UpdateAppDraftListingTextResponse } from "../../../domain/ports/console/update-app-draft-listing-text-response";
 import { CONSOLE_API } from "../../tokens";
-import type { LoadingButtonState } from "../loading-button/loading-button";
+import type { OrgDashboardContentState } from "../org-dashboard-content/org-dashboard-content";
 import {
-    type OrgDashboardAppDrafts,
-    type OrgDashboardCreateAppDraftError,
     OrgDashboardPage,
     type OrgDashboardPageState,
 } from "../org-dashboard-page/org-dashboard-page";
@@ -114,25 +112,11 @@ describe("OrgDashboardContainer", () => {
         );
     }
 
-    function createAppDraftState(
+    function loadedValue(
         fixture: ComponentFixture<OrgDashboardContainer>,
-    ): LoadingButtonState | undefined {
+    ): OrgDashboardContentState | undefined {
         const state = pageState(fixture);
-        return state.kind === "loaded" ? state.createAppDraftState : undefined;
-    }
-
-    function createAppDraftError(
-        fixture: ComponentFixture<OrgDashboardContainer>,
-    ): OrgDashboardCreateAppDraftError | undefined {
-        const state = pageState(fixture);
-        return state.kind === "loaded" ? state.createAppDraftError : undefined;
-    }
-
-    function appDrafts(
-        fixture: ComponentFixture<OrgDashboardContainer>,
-    ): OrgDashboardAppDrafts | undefined {
-        const state = pageState(fixture);
-        return state.kind === "loaded" ? state.appDrafts : undefined;
+        return state.kind === "loaded" ? state.value : undefined;
     }
 
     function clickDismiss(fixture: ComponentFixture<OrgDashboardContainer>): void {
@@ -149,9 +133,11 @@ describe("OrgDashboardContainer", () => {
         await vi.advanceTimersByTimeAsync(PROGRESS_DELAY_MS - 1);
         expect(pageState(fixture)).toEqual({
             kind: "loaded",
-            organization: ORGANIZATION,
-            appDrafts: { kind: "loaded", summaries: APP_DRAFTS },
-            createAppDraftState: "idle",
+            value: {
+                organization: ORGANIZATION,
+                appDrafts: { kind: "loaded", summaries: APP_DRAFTS },
+                createAppDraftState: "idle",
+            },
         });
     });
 
@@ -171,9 +157,11 @@ describe("OrgDashboardContainer", () => {
         await vi.advanceTimersByTimeAsync(1);
         expect(pageState(fixture)).toEqual({
             kind: "loaded",
-            organization: ORGANIZATION,
-            appDrafts: { kind: "loaded", summaries: APP_DRAFTS },
-            createAppDraftState: "idle",
+            value: {
+                organization: ORGANIZATION,
+                appDrafts: { kind: "loaded", summaries: APP_DRAFTS },
+                createAppDraftState: "idle",
+            },
         });
     });
 
@@ -226,7 +214,7 @@ describe("OrgDashboardContainer", () => {
         expect(pageState(fixture)).toEqual({ kind: "loading" });
 
         await settle(fixture);
-        expect(appDrafts(fixture)).toEqual({ kind: "loaded", summaries: APP_DRAFTS });
+        expect(loadedValue(fixture)?.appDrafts).toEqual({ kind: "loaded", summaries: APP_DRAFTS });
     });
 
     describe("when listing app drafts fails", () => {
@@ -243,7 +231,7 @@ describe("OrgDashboardContainer", () => {
 
             const fixture = await render();
 
-            expect(appDrafts(fixture)).toEqual({
+            expect(loadedValue(fixture)?.appDrafts).toEqual({
                 kind: "error",
                 error: { kind: "permissionDenied" },
             });
@@ -259,12 +247,11 @@ describe("OrgDashboardContainer", () => {
             });
 
             it("should still show the organization", () => {
-                const state = pageState(fixture);
-                expect(state.kind === "loaded" && state.organization).toEqual(ORGANIZATION);
+                expect(loadedValue(fixture)?.organization).toEqual(ORGANIZATION);
             });
 
             it("should show an error", () => {
-                expect(appDrafts(fixture)).toEqual({
+                expect(loadedValue(fixture)?.appDrafts).toEqual({
                     kind: "error",
                     error: { kind: "unavailable" },
                 });
@@ -312,7 +299,7 @@ describe("OrgDashboardContainer", () => {
 
             newAppButton(fixture).click();
 
-            expect(createAppDraftState(fixture)).toBe("pending");
+            expect(loadedValue(fixture)?.createAppDraftState).toBe("pending");
         });
 
         it("should show progress for the minimum duration once creation takes long enough", async () => {
@@ -322,16 +309,16 @@ describe("OrgDashboardContainer", () => {
             newAppButton(fixture).click();
 
             await vi.advanceTimersByTimeAsync(PROGRESS_DELAY_MS - 1);
-            expect(createAppDraftState(fixture)).toBe("pending");
+            expect(loadedValue(fixture)?.createAppDraftState).toBe("pending");
 
             await vi.advanceTimersByTimeAsync(1);
-            expect(createAppDraftState(fixture)).toBe("loading");
+            expect(loadedValue(fixture)?.createAppDraftState).toBe("loading");
 
             await vi.advanceTimersByTimeAsync(MIN_PROGRESS_MS - 1);
-            expect(createAppDraftState(fixture)).toBe("loading");
+            expect(loadedValue(fixture)?.createAppDraftState).toBe("loading");
 
             await vi.advanceTimersByTimeAsync(1);
-            expect(createAppDraftState(fixture)).toBe("idle");
+            expect(loadedValue(fixture)?.createAppDraftState).toBe("idle");
         });
 
         it("should explain when unauthenticated", async () => {
@@ -340,7 +327,7 @@ describe("OrgDashboardContainer", () => {
             newAppButton(fixture).click();
             await settle(fixture);
 
-            expect(createAppDraftError(fixture)).toEqual({
+            expect(loadedValue(fixture)?.createAppDraftError).toEqual({
                 kind: "unauthenticated",
                 failedAttempts: 1,
             });
@@ -352,7 +339,7 @@ describe("OrgDashboardContainer", () => {
             newAppButton(fixture).click();
             await settle(fixture);
 
-            expect(createAppDraftError(fixture)).toEqual({
+            expect(loadedValue(fixture)?.createAppDraftError).toEqual({
                 kind: "permissionDenied",
                 failedAttempts: 1,
             });
@@ -364,7 +351,7 @@ describe("OrgDashboardContainer", () => {
             newAppButton(fixture).click();
             await settle(fixture);
 
-            expect(createAppDraftError(fixture)).toEqual({
+            expect(loadedValue(fixture)?.createAppDraftError).toEqual({
                 kind: "resourceLimitExceeded",
                 failedAttempts: 1,
             });
@@ -379,20 +366,20 @@ describe("OrgDashboardContainer", () => {
             });
 
             it("should show an error", () => {
-                expect(createAppDraftError(fixture)).toEqual({
+                expect(loadedValue(fixture)?.createAppDraftError).toEqual({
                     kind: "unavailable",
                     failedAttempts: 1,
                 });
             });
 
             it("should enable the new app button again", () => {
-                expect(createAppDraftState(fixture)).toBe("idle");
+                expect(loadedValue(fixture)?.createAppDraftState).toBe("idle");
             });
 
             it("should hide the error when dismissed", () => {
                 clickDismiss(fixture);
 
-                expect(createAppDraftError(fixture)).toBeUndefined();
+                expect(loadedValue(fixture)?.createAppDraftError).toBeUndefined();
             });
 
             it("should keep showing the error while creating again", () => {
@@ -400,7 +387,7 @@ describe("OrgDashboardContainer", () => {
 
                 newAppButton(fixture).click();
 
-                expect(createAppDraftError(fixture)).toEqual({
+                expect(loadedValue(fixture)?.createAppDraftError).toEqual({
                     kind: "unavailable",
                     failedAttempts: 1,
                 });
@@ -410,7 +397,7 @@ describe("OrgDashboardContainer", () => {
                 newAppButton(fixture).click();
                 await settle(fixture);
 
-                expect(createAppDraftError(fixture)).toEqual({
+                expect(loadedValue(fixture)?.createAppDraftError).toEqual({
                     kind: "unavailable",
                     failedAttempts: 2,
                 });
@@ -422,7 +409,7 @@ describe("OrgDashboardContainer", () => {
                 newAppButton(fixture).click();
                 await settle(fixture);
 
-                expect(createAppDraftError(fixture)).toEqual({
+                expect(loadedValue(fixture)?.createAppDraftError).toEqual({
                     kind: "unavailable",
                     failedAttempts: 1,
                 });
@@ -434,7 +421,7 @@ describe("OrgDashboardContainer", () => {
                 newAppButton(fixture).click();
                 await settle(fixture);
 
-                expect(createAppDraftError(fixture)).toBeUndefined();
+                expect(loadedValue(fixture)?.createAppDraftError).toBeUndefined();
             });
         });
     });

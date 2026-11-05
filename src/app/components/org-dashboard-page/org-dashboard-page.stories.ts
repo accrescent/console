@@ -16,7 +16,8 @@ import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-su
 import type { Organization } from "../../../domain/ports/console/organization";
 import { fakeIconUrl } from "../../../storybook/fake-icon-url";
 import { ConsoleScaffoldLayout } from "../console-scaffold-layout/console-scaffold-layout";
-import { OrgDashboardPage, type OrgDashboardPageLoaded } from "./org-dashboard-page";
+import type { OrgDashboardContentState } from "../org-dashboard-content/org-dashboard-content";
+import { OrgDashboardPage, type OrgDashboardPageState } from "./org-dashboard-page";
 
 const ORGANIZATION: Organization = {
     id: "org_21nsTL6hybsteGOPytcUzx",
@@ -46,12 +47,15 @@ const APP_DRAFTS_AT_LIMIT: readonly AppDraftSummary[] = [
     },
 ];
 
-const LOADED: OrgDashboardPageLoaded = {
-    kind: "loaded",
+const LOADED: OrgDashboardContentState = {
     organization: ORGANIZATION,
     appDrafts: { kind: "loaded", summaries: APP_DRAFTS },
     createAppDraftState: "idle",
 };
+
+function loaded(value: OrgDashboardContentState): OrgDashboardPageState {
+    return { kind: "loaded", value };
+}
 
 const meta: Meta<OrgDashboardPage> = {
     component: OrgDashboardPage,
@@ -63,7 +67,7 @@ const meta: Meta<OrgDashboardPage> = {
     ],
     render: (args) => ({
         props: args,
-        template: `<acc-org-dashboard-page class="block h-full" ${argsToTemplate(args)} />`,
+        template: `<acc-org-dashboard-page ${argsToTemplate(args)} />`,
     }),
     parameters: {
         layout: "fullscreen",
@@ -73,18 +77,6 @@ const meta: Meta<OrgDashboardPage> = {
 export default meta;
 
 type Story = StoryObj<OrgDashboardPage>;
-
-export const Pending: Story = {
-    args: {
-        state: { kind: "pending" },
-    },
-};
-
-export const Loading: Story = {
-    args: {
-        state: { kind: "loading" },
-    },
-};
 
 export const LoadingFailed: Story = {
     args: {
@@ -109,70 +101,70 @@ export const PermissionDenied: Story = {
 
 export const Loaded: Story = {
     args: {
-        state: LOADED,
+        state: loaded(LOADED),
     },
 };
 
 export const ListingAppDraftsFailed: Story = {
     args: {
-        state: {
+        state: loaded({
             ...LOADED,
             appDrafts: { kind: "error", error: { kind: "unavailable" } },
-        },
+        }),
     },
 };
 
 export const ListingAppDraftsPermissionDenied: Story = {
     args: {
-        state: {
+        state: loaded({
             ...LOADED,
             appDrafts: { kind: "error", error: { kind: "permissionDenied" } },
-        },
+        }),
     },
 };
 
 export const CreatingAppDraftPending: Story = {
     args: {
-        state: { ...LOADED, createAppDraftState: "pending" },
+        state: loaded({ ...LOADED, createAppDraftState: "pending" }),
     },
 };
 
 export const CreatingAppDraftLoading: Story = {
     args: {
-        state: { ...LOADED, createAppDraftState: "loading" },
+        state: loaded({ ...LOADED, createAppDraftState: "loading" }),
     },
 };
 
 export const CreatingAppDraftFailed: Story = {
     args: {
-        state: {
+        state: loaded({
             ...LOADED,
             createAppDraftError: { kind: "unavailable", failedAttempts: 1 },
-        },
+        }),
     },
 };
 
 export const CreatingAppDraftUnauthenticated: Story = {
     args: {
-        state: {
+        state: loaded({
             ...LOADED,
             createAppDraftError: { kind: "unauthenticated", failedAttempts: 1 },
-        },
+        }),
     },
 };
 
 export const CreatingAppDraftPermissionDenied: Story = {
     args: {
-        state: {
+        state: loaded({
             ...LOADED,
             createAppDraftError: { kind: "permissionDenied", failedAttempts: 1 },
-        },
+        }),
     },
 };
 
 export const CreatingAppDraftLimitReached: Story = {
     args: {
-        state: {
+        state: loaded({
             ...LOADED,
             organization: {
                 ...ORGANIZATION,
@@ -180,13 +172,13 @@ export const CreatingAppDraftLimitReached: Story = {
             },
             appDrafts: { kind: "loaded", summaries: APP_DRAFTS_AT_LIMIT },
             createAppDraftError: { kind: "resourceLimitExceeded", failedAttempts: 1 },
-        },
+        }),
     },
 };
 
 export const AtLimits: Story = {
     args: {
-        state: {
+        state: loaded({
             ...LOADED,
             organization: {
                 ...ORGANIZATION,
@@ -194,16 +186,16 @@ export const AtLimits: Story = {
                 activeAppDraftCount: ORGANIZATION.activeAppDraftLimit,
             },
             appDrafts: { kind: "loaded", summaries: APP_DRAFTS_AT_LIMIT },
-        },
+        }),
     },
 };
 
 export const Empty: Story = {
     args: {
-        state: {
+        state: loaded({
             ...LOADED,
             organization: { ...ORGANIZATION, publishedAppCount: 0, activeAppDraftCount: 0 },
             appDrafts: { kind: "loaded", summaries: [] },
-        },
+        }),
     },
 };

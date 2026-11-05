@@ -25,8 +25,8 @@ import type {
     UpdateAppDraftListingTextError,
 } from "../../../domain/ports/console/errors";
 import { CONSOLE_API } from "../../tokens";
+import type { AppDraftEditorDeleteAppDraftError } from "../app-draft-editor-content/app-draft-editor-content";
 import {
-    type AppDraftEditorDeleteAppDraftError,
     AppDraftEditorPage,
     type AppDraftEditorPageState,
 } from "../app-draft-editor-page/app-draft-editor-page";
@@ -41,7 +41,6 @@ import type { LoadingButtonState } from "../loading-button/loading-button";
 @Component({
     imports: [AppDraftEditorPage],
     selector: "acc-app-draft-editor-container",
-    host: { class: "block h-full" },
     templateUrl: "./app-draft-editor-container.html",
 })
 export class AppDraftEditorContainer {
@@ -130,12 +129,14 @@ export class AppDraftEditorContainer {
         if (result.ok) {
             return {
                 kind: "loaded",
-                listing: result.value.listingText,
-                saveListingState: this.saveListingState(),
-                saveListingError: this.saveListingError(),
-                reloadListingState: this.reloadListingState(),
-                deleteAppDraftState: this.deleteAppDraftState(),
-                deleteAppDraftError: this.deleteAppDraftError(),
+                value: {
+                    listing: result.value.listingText,
+                    saveListingState: this.saveListingState(),
+                    saveListingError: this.saveListingError(),
+                    reloadListingState: this.reloadListingState(),
+                    deleteAppDraftState: this.deleteAppDraftState(),
+                    deleteAppDraftError: this.deleteAppDraftError(),
+                },
             };
         }
 
