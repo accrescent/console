@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: © 2026 Logan Magee
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
-<main class="flex min-h-full flex-col p-6">
+<acc-page>
     @let currentState = state();
     @let kind = currentState.kind;
     @switch (kind) {
@@ -94,4 +94,4 @@ SPDX-License-Identifier: AGPL-3.0-only
         }
         @default never;
     }
-</main>
+</acc-page>

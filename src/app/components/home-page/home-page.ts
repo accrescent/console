@@ -10,12 +10,13 @@ import {
     type FullPageErrorUnavailable,
     FullPageErrorView,
 } from "../full-page-error-view/full-page-error-view";
+import { Page } from "../page/page";
 
 /**
  * The page shown while determining where to send the user on entering the console.
  */
 @Component({
-    imports: [FullPageErrorView, MatProgressSpinner],
+    imports: [FullPageErrorView, MatProgressSpinner, Page],
     selector: "acc-home-page",
     templateUrl: "./home-page.html",
 })

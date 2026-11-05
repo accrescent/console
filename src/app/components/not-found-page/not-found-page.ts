@@ -7,12 +7,13 @@ import { MatButton } from "@angular/material/button";
 import { RouterLink } from "@angular/router";
 
 import accrescentLogo from "../../../assets/accrescent-logo.svg";
+import { Page } from "../page/page";
 
 /**
  * The fallback "not found" page.
  */
 @Component({
-    imports: [MatButton, RouterLink],
+    imports: [MatButton, Page, RouterLink],
     selector: "acc-not-found-page",
     templateUrl: "./not-found-page.html",
 })

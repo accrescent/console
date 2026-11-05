@@ -21,6 +21,7 @@ import {
     type OrganizationResource,
 } from "../full-page-error-view/full-page-error-view";
 import { LoadingButton, type LoadingButtonState } from "../loading-button/loading-button";
+import { Page } from "../page/page";
 import { QuotaCard } from "../quota-card/quota-card";
 
 const APP_DRAFTS_FULL_ACTION = "Delete or publish an app draft to create another one.";
@@ -37,6 +38,7 @@ const APP_DRAFTS_FULL_ACTION = "Delete or publish an app draft to create another
         MatButton,
         MatIcon,
         MatProgressSpinner,
+        Page,
         QuotaCard,
         RouterLink,
     ],
