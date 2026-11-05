@@ -18,11 +18,10 @@ import { provideRouter } from "@angular/router";
 import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { Organization } from "../../../domain/ports/console/organization";
 import {
+    OrgDashboardContent,
+    type OrgDashboardContentState,
     type OrgDashboardCreateAppDraftError,
-    OrgDashboardPage,
-    type OrgDashboardPageLoaded,
-    type OrgDashboardPageState,
-} from "./org-dashboard-page";
+} from "./org-dashboard-content";
 
 const ORGANIZATION: Organization = {
     id: "org-123",
@@ -34,7 +33,7 @@ const ORGANIZATION: Organization = {
 
 const APP_DRAFTS: readonly AppDraftSummary[] = [{ id: "draft-1" }, { id: "draft-2" }];
 
-describe("OrgDashboardPage", () => {
+describe("OrgDashboardContent", () => {
     let createCount: number;
     let dismissCount: number;
 
@@ -45,12 +44,12 @@ describe("OrgDashboardPage", () => {
     });
 
     /**
-     * Creates an {@link OrgDashboardPage} in the given state and waits for it to render.
+     * Creates an {@link OrgDashboardContent} in the given state and waits for it to render.
      */
     async function render(
-        state: OrgDashboardPageState | Signal<OrgDashboardPageState>,
-    ): Promise<ComponentFixture<OrgDashboardPage>> {
-        const fixture = TestBed.createComponent(OrgDashboardPage, {
+        state: OrgDashboardContentState | Signal<OrgDashboardContentState>,
+    ): Promise<ComponentFixture<OrgDashboardContent>> {
+        const fixture = TestBed.createComponent(OrgDashboardContent, {
             bindings: [
                 inputBinding("state", isSignal(state) ? state : signal(state)),
                 outputBinding("createAppDraft", () => createCount++),
@@ -61,11 +60,11 @@ describe("OrgDashboardPage", () => {
         return fixture;
     }
 
-    function newAppButton(fixture: ComponentFixture<OrgDashboardPage>): HTMLButtonElement {
+    function newAppButton(fixture: ComponentFixture<OrgDashboardContent>): HTMLButtonElement {
         return fixture.nativeElement.querySelector("acc-loading-button button");
     }
 
-    function appDraftItems(fixture: ComponentFixture<OrgDashboardPage>): HTMLAnchorElement[] {
+    function appDraftItems(fixture: ComponentFixture<OrgDashboardContent>): HTMLAnchorElement[] {
         return Array.from(fixture.nativeElement.querySelectorAll("li a"));
     }
 
@@ -73,43 +72,11 @@ describe("OrgDashboardPage", () => {
         return element.textContent?.replace(/\s+/g, " ") ?? "";
     }
 
-    it("should not show a progress indicator when pending", async () => {
-        const fixture = await render({ kind: "pending" });
-
-        expect(fixture.nativeElement.querySelector("mat-progress-spinner")).toBeNull();
-    });
-
-    it("should show a progress indicator when loading", async () => {
-        const fixture = await render({ kind: "loading" });
-
-        expect(fixture.nativeElement.querySelector("mat-progress-spinner")).not.toBeNull();
-    });
-
-    describe("when loading failed", () => {
-        let fixture: ComponentFixture<OrgDashboardPage>;
+    describe("with app drafts", () => {
+        let fixture: ComponentFixture<OrgDashboardContent>;
 
         beforeEach(async () => {
             fixture = await render({
-                kind: "error",
-                error: {
-                    kind: "unavailable",
-                    resource: { kind: "organization", id: ORGANIZATION.id },
-                },
-            });
-        });
-
-        it("should show an error", () => {
-            const alert: HTMLElement = fixture.nativeElement.querySelector("[role=alert]");
-            expect(alert.textContent).toContain("Something went wrong");
-        });
-    });
-
-    describe("when loaded", () => {
-        let fixture: ComponentFixture<OrgDashboardPage>;
-
-        beforeEach(async () => {
-            fixture = await render({
-                kind: "loaded",
                 organization: ORGANIZATION,
                 appDrafts: { kind: "loaded", summaries: APP_DRAFTS },
                 createAppDraftState: "idle",
@@ -161,9 +128,8 @@ describe("OrgDashboardPage", () => {
         });
     });
 
-    describe("when loaded below the app draft limit", () => {
-        const state: OrgDashboardPageLoaded = {
-            kind: "loaded",
+    describe("below the app draft limit", () => {
+        const state: OrgDashboardContentState = {
             organization: { ...ORGANIZATION, activeAppDraftCount: 0 },
             appDrafts: { kind: "loaded", summaries: [] },
             createAppDraftState: "idle",
@@ -236,8 +202,8 @@ describe("OrgDashboardPage", () => {
                 kind: "unavailable",
                 failedAttempts: 1,
             };
-            let pageState: WritableSignal<OrgDashboardPageState>;
-            let fixture: ComponentFixture<OrgDashboardPage>;
+            let pageState: WritableSignal<OrgDashboardContentState>;
+            let fixture: ComponentFixture<OrgDashboardContent>;
             let alert: HTMLElement;
 
             beforeEach(async () => {
@@ -266,7 +232,7 @@ describe("OrgDashboardPage", () => {
         });
 
         describe("when the error creating an app draft is dismissed", () => {
-            let fixture: ComponentFixture<OrgDashboardPage>;
+            let fixture: ComponentFixture<OrgDashboardContent>;
 
             beforeEach(async () => {
                 fixture = await render({

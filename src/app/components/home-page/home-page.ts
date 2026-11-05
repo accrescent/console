@@ -3,20 +3,18 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { Component, input } from "@angular/core";
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
 
-import {
-    type ConsoleResource,
-    type FullPageErrorUnavailable,
-    FullPageErrorView,
+import type {
+    ConsoleResource,
+    FullPageErrorUnavailable,
 } from "../full-page-error-view/full-page-error-view";
-import { Page } from "../page/page";
+import { LoadablePage, type PageState } from "../loadable-page/loadable-page";
 
 /**
  * The page shown while determining where to send the user on entering the console.
  */
 @Component({
-    imports: [FullPageErrorView, MatProgressSpinner, Page],
+    imports: [LoadablePage],
     selector: "acc-home-page",
     templateUrl: "./home-page.html",
 })
@@ -30,30 +28,4 @@ export class HomePage {
 /**
  * The state of the {@link HomePage}.
  */
-export type HomePageState = HomePagePending | HomePageLoading | HomePageError;
-
-/**
- * Determining where to send the user is in progress but hasn't taken long enough to show progress.
- */
-export interface HomePagePending {
-    readonly kind: "pending";
-}
-
-/**
- * Determining where to send the user is in progress and has taken long enough to show progress.
- */
-export interface HomePageLoading {
-    readonly kind: "loading";
-}
-
-/**
- * Determining where to send the user failed.
- */
-export interface HomePageError {
-    readonly kind: "error";
-
-    /**
-     * The error that occurred.
-     */
-    readonly error: FullPageErrorUnavailable<ConsoleResource>;
-}
+export type HomePageState = PageState<never, FullPageErrorUnavailable<ConsoleResource>>;

@@ -16,29 +16,26 @@ import { MatTooltipHarness } from "@angular/material/tooltip/testing";
 import { provideRouter } from "@angular/router";
 
 import type { AppListingText } from "../../../domain/app-listing";
-import type { LoadingButtonState } from "../loading-button/loading-button";
 import {
+    AppDraftEditorContent,
+    type AppDraftEditorContentState,
     type AppDraftEditorDeleteAppDraftError,
-    AppDraftEditorPage,
-    type AppDraftEditorPageLoaded,
-    type AppDraftEditorPageState,
-} from "./app-draft-editor-page";
+} from "./app-draft-editor-content";
 
-const IDLE: AppDraftEditorPageLoaded = {
-    kind: "loaded",
+const IDLE: AppDraftEditorContentState = {
     saveListingState: "idle",
     reloadListingState: "idle",
     deleteAppDraftState: "idle",
 };
 
-describe("AppDraftEditorPage", () => {
-    let pageState: WritableSignal<AppDraftEditorPageState>;
+describe("AppDraftEditorContent", () => {
+    let pageState: WritableSignal<AppDraftEditorContentState>;
     let deleteCount: number;
     let dismissCount: number;
     let savedListings: AppListingText[];
     let dismissSaveErrorCount: number;
     let reloadListingCount: number;
-    let fixture: ComponentFixture<AppDraftEditorPage>;
+    let fixture: ComponentFixture<AppDraftEditorContent>;
 
     beforeEach(async () => {
         // jsdom performs no layout, so fake element geometry so that the CDK considers the dialog's
@@ -59,7 +56,7 @@ describe("AppDraftEditorPage", () => {
         savedListings = [];
         dismissSaveErrorCount = 0;
         reloadListingCount = 0;
-        fixture = TestBed.createComponent(AppDraftEditorPage, {
+        fixture = TestBed.createComponent(AppDraftEditorContent, {
             bindings: [
                 inputBinding("state", pageState),
                 outputBinding("deleteAppDraft", () => deleteCount++),
@@ -78,13 +75,13 @@ describe("AppDraftEditorPage", () => {
         vi.restoreAllMocks();
     });
 
-    async function setState(state: AppDraftEditorPageState): Promise<void> {
+    async function setState(state: AppDraftEditorContentState): Promise<void> {
         pageState.set(state);
         await fixture.whenStable();
     }
 
     async function openDeleteDialog(): Promise<void> {
-        fixture.nativeElement.querySelector("main button").click();
+        fixture.nativeElement.querySelector("button").click();
         await fixture.whenStable();
     }
 
@@ -116,28 +113,6 @@ describe("AppDraftEditorPage", () => {
     function text(element: Element): string {
         return element.textContent?.replace(/\s+/g, " ") ?? "";
     }
-
-    describe("while loading", () => {
-        function spinner(): HTMLElement | null {
-            return fixture.nativeElement.querySelector("mat-progress-spinner");
-        }
-
-        it("should show progress when loading takes long enough", async () => {
-            await setState({ kind: "loading" });
-
-            expect(spinner()).not.toBeNull();
-        });
-    });
-
-    it("should show an error when loading fails", async () => {
-        await setState({
-            kind: "error",
-            error: { kind: "unavailable", resource: { kind: "appDraft", id: "draft-123" } },
-        });
-
-        expect(fixture.nativeElement.textContent).toContain("draft-123");
-        expect(fixture.nativeElement.querySelector("mat-stepper")).toBeNull();
-    });
 
     describe("progress", () => {
         it("should show that no steps are complete without a listing", () => {
@@ -240,7 +215,7 @@ describe("AppDraftEditorPage", () => {
     describe("submit button", () => {
         it("should be disabled but focusable", () => {
             const buttons: HTMLButtonElement[] = Array.from(
-                fixture.nativeElement.querySelectorAll("main button"),
+                fixture.nativeElement.querySelectorAll("button"),
             );
             const submit = buttons.find((button) =>
                 button.textContent?.includes("Submit for review"),
@@ -293,21 +268,6 @@ describe("AppDraftEditorPage", () => {
 
             expect(dialog()).toBeNull();
         });
-
-        it.each<LoadingButtonState>(["idle", "pending", "loading"])(
-            "should close the dialog when the page stops being loaded with deletion %s",
-            async (deleteAppDraftState) => {
-                await setState({ ...IDLE, deleteAppDraftState });
-
-                await setState({
-                    kind: "error",
-                    error: { kind: "unavailable", resource: { kind: "appDraft", id: "draft-123" } },
-                });
-
-                expect(dialog()).toBeNull();
-                expect(document.querySelector(".cdk-overlay-backdrop")).toBeNull();
-            },
-        );
 
         it("should emit dismissDeleteAppDraftError when the dialog closes", async () => {
             dialogButton("Cancel").click();

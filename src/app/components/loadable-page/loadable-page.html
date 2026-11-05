@@ -1,0 +1,27 @@
+<!--
+SPDX-FileCopyrightText: © 2026 Logan Magee
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
+<acc-page>
+    @let current = state();
+    @let kind = current.kind;
+    @switch (kind) {
+        @case ("pending") {}
+        @case ("loading") {
+            <div class="m-auto">
+                <mat-progress-spinner mode="indeterminate" aria-label="Loading" />
+            </div>
+        }
+        @case ("error") {
+            <acc-full-page-error-view [error]="current.error" />
+        }
+        @case ("loaded") {
+            <ng-container
+                [ngTemplateOutlet]="loadedTemplate()"
+                [ngTemplateOutletContext]="{ $implicit: current.value }" />
+        }
+        @default never;
+    }
+</acc-page>

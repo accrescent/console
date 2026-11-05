@@ -17,18 +17,6 @@ export default meta;
 
 type Story = StoryObj<HomePage>;
 
-export const Pending: Story = {
-    args: {
-        state: { kind: "pending" },
-    },
-};
-
-export const Loading: Story = {
-    args: {
-        state: { kind: "loading" },
-    },
-};
-
 export const LoadingFailed: Story = {
     args: {
         state: { kind: "error", error: { kind: "unavailable", resource: { kind: "console" } } },
