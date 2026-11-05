@@ -15,7 +15,7 @@ import {
 import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { Organization } from "../../../domain/ports/console/organization";
 import { fakeIconUrl } from "../../../storybook/fake-icon-url";
-import { ConsoleScaffoldPage } from "../console-scaffold-page/console-scaffold-page";
+import { ConsoleScaffoldLayout } from "../console-scaffold-layout/console-scaffold-layout";
 import { OrgDashboardPage, type OrgDashboardPageLoaded } from "./org-dashboard-page";
 
 const ORGANIZATION: Organization = {
@@ -58,8 +58,8 @@ const meta: Meta<OrgDashboardPage> = {
     decorators: [
         applicationConfig({ providers: [provideRouter([])] }),
         // Render inside the scaffold as the page is in the app
-        moduleMetadata({ imports: [ConsoleScaffoldPage] }),
-        componentWrapperDecorator(ConsoleScaffoldPage, { logoutState: "idle" }),
+        moduleMetadata({ imports: [ConsoleScaffoldLayout] }),
+        componentWrapperDecorator(ConsoleScaffoldLayout, { logoutState: "idle" }),
     ],
     render: (args) => ({
         props: args,
