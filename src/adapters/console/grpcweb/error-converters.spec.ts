@@ -6,11 +6,14 @@ import { Code, ConnectError } from "@connectrpc/connect";
 
 import {
     toCreateAppDraftError,
+    toCreateAppDraftListingTextError,
     toDeleteAppDraftError,
+    toGetAppDraftDetailsError,
     toGetMyOrganizationError,
     toGetOrganizationError,
     toGetSelfError,
     toListAppDraftSummariesError,
+    toUpdateAppDraftListingTextError,
 } from "./error-converters";
 
 describe("toGetSelfError", () => {
@@ -92,6 +95,55 @@ describe("toCreateAppDraftError", () => {
     });
 });
 
+describe("toCreateAppDraftListingTextError", () => {
+    it("converts known codes", () => {
+        expect(
+            toCreateAppDraftListingTextError(new ConnectError("", Code.Unauthenticated)),
+        ).toEqual({
+            kind: "unauthenticated",
+        });
+        expect(
+            toCreateAppDraftListingTextError(new ConnectError("", Code.PermissionDenied)),
+        ).toEqual({
+            kind: "permissionDenied",
+        });
+        expect(toCreateAppDraftListingTextError(new ConnectError("", Code.AlreadyExists))).toEqual({
+            kind: "alreadyExists",
+        });
+        expect(toCreateAppDraftListingTextError(new ConnectError("", Code.Internal))).toEqual({
+            kind: "internal",
+        });
+        expect(toCreateAppDraftListingTextError(new ConnectError("", Code.Unavailable))).toEqual({
+            kind: "serviceUnavailable",
+        });
+    });
+
+    it("converts other errors to unknown", () => {
+        expect(toCreateAppDraftListingTextError(new Error())).toEqual({ kind: "unknown" });
+    });
+});
+
+describe("toGetAppDraftDetailsError", () => {
+    it("converts known codes", () => {
+        expect(toGetAppDraftDetailsError(new ConnectError("", Code.Unauthenticated))).toEqual({
+            kind: "unauthenticated",
+        });
+        expect(toGetAppDraftDetailsError(new ConnectError("", Code.PermissionDenied))).toEqual({
+            kind: "permissionDenied",
+        });
+        expect(toGetAppDraftDetailsError(new ConnectError("", Code.Internal))).toEqual({
+            kind: "internal",
+        });
+        expect(toGetAppDraftDetailsError(new ConnectError("", Code.Unavailable))).toEqual({
+            kind: "serviceUnavailable",
+        });
+    });
+
+    it("converts other errors to unknown", () => {
+        expect(toGetAppDraftDetailsError(new Error())).toEqual({ kind: "unknown" });
+    });
+});
+
 describe("toDeleteAppDraftError", () => {
     it("converts known codes", () => {
         expect(toDeleteAppDraftError(new ConnectError("", Code.Unauthenticated))).toEqual({
@@ -131,5 +183,33 @@ describe("toListAppDraftSummariesError", () => {
 
     it("converts other errors to unknown", () => {
         expect(toListAppDraftSummariesError(new Error())).toEqual({ kind: "unknown" });
+    });
+});
+
+describe("toUpdateAppDraftListingTextError", () => {
+    it("converts known codes", () => {
+        expect(
+            toUpdateAppDraftListingTextError(new ConnectError("", Code.Unauthenticated)),
+        ).toEqual({
+            kind: "unauthenticated",
+        });
+        expect(
+            toUpdateAppDraftListingTextError(new ConnectError("", Code.PermissionDenied)),
+        ).toEqual({
+            kind: "permissionDenied",
+        });
+        expect(toUpdateAppDraftListingTextError(new ConnectError("", Code.Aborted))).toEqual({
+            kind: "etagMismatch",
+        });
+        expect(toUpdateAppDraftListingTextError(new ConnectError("", Code.Internal))).toEqual({
+            kind: "internal",
+        });
+        expect(toUpdateAppDraftListingTextError(new ConnectError("", Code.Unavailable))).toEqual({
+            kind: "serviceUnavailable",
+        });
+    });
+
+    it("converts other errors to unknown", () => {
+        expect(toUpdateAppDraftListingTextError(new Error())).toEqual({ kind: "unknown" });
     });
 });

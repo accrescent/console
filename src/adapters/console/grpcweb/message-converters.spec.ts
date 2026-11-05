@@ -2,23 +2,30 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { AppDraftListingTextSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/app_draft_listing_text_pb.js";
 import { AppDraftSummarySchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/app_draft_summary_pb.js";
+import { CreateAppDraftListingTextResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/create_app_draft_listing_text_response_pb.js";
 import { CreateAppDraftResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/create_app_draft_response_pb.js";
+import { GetAppDraftDetailsResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/get_app_draft_details_response_pb.js";
 import { GetMyOrganizationResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/get_my_organization_response_pb.js";
 import { GetOrganizationResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/get_organization_response_pb.js";
 import { GetSelfResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/get_self_response_pb.js";
 import { ListAppDraftSummariesResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/list_app_draft_summaries_response_pb.js";
 import { OrganizationSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/organization_pb.js";
+import { UpdateAppDraftListingTextResponseSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/update_app_draft_listing_text_response_pb.js";
 import { UserSchema } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/user_pb.js";
 import { UserRole as ProtoUserRole } from "@buf/accrescent_console-api.bufbuild_es/accrescent/console/v1/user_role_pb.js";
 import { create } from "@bufbuild/protobuf";
 
 import {
+    toCreateAppDraftListingTextResponse,
     toCreateAppDraftResponse,
+    toGetAppDraftDetailsResponse,
     toGetMyOrganizationResponse,
     toGetOrganizationResponse,
     toGetSelfResponse,
     toListAppDraftSummariesResponse,
+    toUpdateAppDraftListingTextResponse,
 } from "./message-converters";
 
 describe("toCreateAppDraftResponse", () => {
@@ -26,6 +33,36 @@ describe("toCreateAppDraftResponse", () => {
         const response = create(CreateAppDraftResponseSchema, { appDraftId: "draft-id" });
 
         expect(toCreateAppDraftResponse(response)).toEqual({ appDraftId: "draft-id" });
+    });
+});
+
+describe("toCreateAppDraftListingTextResponse", () => {
+    it("correctly converts a message", () => {
+        const response = create(CreateAppDraftListingTextResponseSchema, { etag: "etag-1" });
+
+        expect(toCreateAppDraftListingTextResponse(response)).toEqual({ etag: "etag-1" });
+    });
+});
+
+describe("toGetAppDraftDetailsResponse", () => {
+    it("correctly converts a message with listing text", () => {
+        const response = create(GetAppDraftDetailsResponseSchema, {
+            listingText: create(AppDraftListingTextSchema, {
+                name: "Weather",
+                shortDescription: "The weather",
+                etag: "etag-1",
+            }),
+        });
+
+        expect(toGetAppDraftDetailsResponse(response)).toEqual({
+            listingText: { name: "Weather", shortDescription: "The weather", etag: "etag-1" },
+        });
+    });
+
+    it("correctly converts a message without listing text", () => {
+        const response = create(GetAppDraftDetailsResponseSchema);
+
+        expect(toGetAppDraftDetailsResponse(response).listingText).toBeUndefined();
     });
 });
 
@@ -102,5 +139,13 @@ describe("toListAppDraftSummariesResponse", () => {
                 { id: "draft-2" },
             ],
         });
+    });
+});
+
+describe("toUpdateAppDraftListingTextResponse", () => {
+    it("correctly converts a message", () => {
+        const response = create(UpdateAppDraftListingTextResponseSchema, { etag: "etag-2" });
+
+        expect(toUpdateAppDraftListingTextResponse(response)).toEqual({ etag: "etag-2" });
     });
 });

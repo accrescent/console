@@ -18,6 +18,15 @@ export default meta;
 
 type Story = StoryObj<FullPageErrorView>;
 
+export const AppDraftUnavailable: Story = {
+    args: {
+        error: {
+            kind: "unavailable",
+            resource: { kind: "appDraft", id: "draft_5gKq2YbVxPz8RmT3nWc1Ha" },
+        },
+    },
+};
+
 export const ConsoleUnavailable: Story = {
     args: {
         error: { kind: "unavailable", resource: { kind: "console" } },
@@ -27,6 +36,15 @@ export const ConsoleUnavailable: Story = {
 export const OrganizationUnavailable: Story = {
     args: {
         error: { kind: "unavailable", resource: { kind: "organization", id: ORGANIZATION_ID } },
+    },
+};
+
+export const AppDraftPermissionDenied: Story = {
+    args: {
+        error: {
+            kind: "permissionDenied",
+            resource: { kind: "appDraft", id: "draft_5gKq2YbVxPz8RmT3nWc1Ha" },
+        },
     },
 };
 

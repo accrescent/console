@@ -10,13 +10,13 @@ The progress indicator only shows while the button is disabled, so color it like
 <button
     [matButton]="appearance()"
     class="[--mat-button-filled-progress-active-indicator-color:var(--mat-sys-on-surface)]"
-    type="button"
+    [type]="type()"
     [disabled]="disabled()"
     disabledInteractive
     [showProgress]="loading()"
     [attr.aria-label]="loading() ? loadingLabel() : null"
     [matTooltip]="disabledReason() ?? ''"
-    (click)="disabled() || press.emit()">
+    (click)="onClick($event)">
     <!--
     Reproject icons so that the button lays them out as icons instead of label content.
 

@@ -9,19 +9,25 @@ import { provideRouter, Router } from "@angular/router";
 import { err, ok, type Result } from "../../../core/result";
 import { MIN_PROGRESS_MS, PROGRESS_DELAY_MS } from "../../../domain/delay";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
+import type { CreateAppDraftListingTextResponse } from "../../../domain/ports/console/create-app-draft-listing-text-response";
 import type { CreateAppDraftResponse } from "../../../domain/ports/console/create-app-draft-response";
 import type {
     CreateAppDraftError,
+    CreateAppDraftListingTextError,
     DeleteAppDraftError,
+    GetAppDraftDetailsError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
     ListAppDraftSummariesError,
+    UpdateAppDraftListingTextError,
 } from "../../../domain/ports/console/errors";
+import type { GetAppDraftDetailsResponse } from "../../../domain/ports/console/get-app-draft-details-response";
 import type { GetMyOrganizationResponse } from "../../../domain/ports/console/get-my-organization-response";
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
 import type { ListAppDraftSummariesResponse } from "../../../domain/ports/console/list-app-draft-summaries-response";
+import type { UpdateAppDraftListingTextResponse } from "../../../domain/ports/console/update-app-draft-listing-text-response";
 import { CONSOLE_API } from "../../tokens";
 import { HomePage, type HomePageState } from "../home-page/home-page";
 import { HomeContainer } from "./home-container";
@@ -133,7 +139,17 @@ class FakeConsoleApi implements ConsoleApi {
         throw new Error("not used by HomeContainer");
     }
 
+    createAppDraftListingText(): Promise<
+        Result<CreateAppDraftListingTextResponse, CreateAppDraftListingTextError>
+    > {
+        throw new Error("not used by HomeContainer");
+    }
+
     deleteAppDraft(): Promise<Result<void, DeleteAppDraftError>> {
+        throw new Error("not used by HomeContainer");
+    }
+
+    getAppDraftDetails(): Promise<Result<GetAppDraftDetailsResponse, GetAppDraftDetailsError>> {
         throw new Error("not used by HomeContainer");
     }
 
@@ -152,6 +168,12 @@ class FakeConsoleApi implements ConsoleApi {
 
     listAppDraftSummaries(): Promise<
         Result<ListAppDraftSummariesResponse, ListAppDraftSummariesError>
+    > {
+        throw new Error("not used by HomeContainer");
+    }
+
+    updateAppDraftListingText(): Promise<
+        Result<UpdateAppDraftListingTextResponse, UpdateAppDraftListingTextError>
     > {
         throw new Error("not used by HomeContainer");
     }

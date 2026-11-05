@@ -54,21 +54,37 @@ export interface FullPageErrorUnavailable<R extends FullPageErrorResource = Full
 }
 
 /**
- * The user isn't allowed to view an organization.
+ * The user isn't allowed to view a resource.
+ *
+ * @typeParam R - the kind of resource the user isn't allowed to view.
  */
-export interface FullPageErrorPermissionDenied {
+export interface FullPageErrorPermissionDenied<
+    R extends AppDraftResource | OrganizationResource = AppDraftResource | OrganizationResource,
+> {
     readonly kind: "permissionDenied";
 
     /**
-     * The organization the user isn't allowed to view.
+     * The resource the user isn't allowed to view.
      */
-    readonly resource: OrganizationResource;
+    readonly resource: R;
 }
 
 /**
  * A resource that a {@link FullPageError} prevented from being shown.
  */
-export type FullPageErrorResource = ConsoleResource | OrganizationResource;
+export type FullPageErrorResource = AppDraftResource | ConsoleResource | OrganizationResource;
+
+/**
+ * An app draft.
+ */
+export interface AppDraftResource {
+    readonly kind: "appDraft";
+
+    /**
+     * The ID of the app draft.
+     */
+    readonly id: string;
+}
 
 /**
  * The console as a whole.

@@ -1,0 +1,80 @@
+<!--
+SPDX-FileCopyrightText: © 2026 Logan Magee
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
+<p class="mb-4">Describe your app the way you want it to appear in the store.</p>
+<form class="flex flex-col gap-1" [formRoot]="listingForm">
+    <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Listing language</mat-label>
+        <mat-hint>The language this listing's contents are written in</mat-hint>
+        <mat-select [formField]="listingForm.language">
+            @for (language of languages; track language) {
+                <mat-option [value]="language">{{ languageName(language) }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    @let nameField = listingForm.name();
+    <mat-form-field subscriptSizing="dynamic">
+        <mat-label>App name</mat-label>
+        <mat-hint>
+            The app's name, optionally with brief descriptive text (e.g., "SecureChat - Secure
+            Texting")
+        </mat-hint>
+        <input matInput [formField]="listingForm.name" />
+        <mat-hint align="end" class="whitespace-nowrap">
+            {{ codePointLength(nameField.value()) }} / {{ nameMaxLength }}
+        </mat-hint>
+        <mat-error>{{ nameField.errors()[0]?.message }}</mat-error>
+    </mat-form-field>
+
+    @let shortDescriptionField = listingForm.shortDescription();
+    <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Short description</mat-label>
+        <mat-hint>A short summary of the app's features or functionality</mat-hint>
+        <input matInput [formField]="listingForm.shortDescription" />
+        <mat-hint align="end" class="whitespace-nowrap">
+            {{ codePointLength(shortDescriptionField.value()) }} / {{ shortDescriptionMaxLength }}
+        </mat-hint>
+        <mat-error>{{ shortDescriptionField.errors()[0]?.message }}</mat-error>
+    </mat-form-field>
+
+    @if (saveError(); as error) {
+        <acc-error-alert
+            class="mt-2"
+            heading="Couldn't save listing"
+            [message]="saveErrorMessage(error.kind)"
+            [failedAttempts]="error.failedAttempts"
+            [dismissible]="true"
+            (dismiss)="closeSaveError()">
+            @if (error.kind === "unauthenticated") {
+                <a matButton="filled" class="mt-1 self-start" routerLink="/login">Log in</a>
+            }
+            @if (error.kind === "conflict") {
+                <acc-loading-button
+                    appearance="filled"
+                    class="mt-1 self-start"
+                    [state]="reloadState()"
+                    loadingLabel="Reloading listing"
+                    [disabledReason]="saveState() === 'idle' ? undefined : 'Saving listing'"
+                    (press)="reloadListing()">
+                    Reload listing
+                </acc-loading-button>
+            }
+        </acc-error-alert>
+    }
+
+    <div class="mt-2">
+        <acc-loading-button
+            #saveButton
+            appearance="filled"
+            type="submit"
+            [state]="saveState()"
+            loadingLabel="Saving listing"
+            [disabledReason]="saveDisabledReason()">
+            {{ listing() ? "Save changes" : "Save listing" }}
+        </acc-loading-button>
+    </div>
+</form>

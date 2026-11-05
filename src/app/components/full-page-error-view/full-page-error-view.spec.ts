@@ -53,6 +53,15 @@ describe("FullPageErrorView", () => {
         });
     });
 
+    it("should identify the app draft when it's unavailable", async () => {
+        const fixture = await render({
+            kind: "unavailable",
+            resource: { kind: "appDraft", id: "draft-123" },
+        });
+
+        expect(text(fixture)).toContain("We couldn't load app draft draft-123.");
+    });
+
     it("should identify the organization when it's unavailable", async () => {
         const fixture = await render({
             kind: "unavailable",
@@ -60,6 +69,15 @@ describe("FullPageErrorView", () => {
         });
 
         expect(text(fixture)).toContain("We couldn't load organization org-123.");
+    });
+
+    it("should identify the app draft when permission is denied", async () => {
+        const fixture = await render({
+            kind: "permissionDenied",
+            resource: { kind: "appDraft", id: "draft-123" },
+        });
+
+        expect(text(fixture)).toContain("permission to view app draft draft-123");
     });
 
     describe("when permission is denied", () => {
