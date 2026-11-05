@@ -10,37 +10,52 @@ import { createGrpcWebTransport } from "@connectrpc/connect-web";
 
 import { err, ok, type Result } from "../../../core/result";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
+import type { CreateAppDraftListingTextRequest } from "../../../domain/ports/console/create-app-draft-listing-text-request";
+import type { CreateAppDraftListingTextResponse } from "../../../domain/ports/console/create-app-draft-listing-text-response";
 import type { CreateAppDraftRequest } from "../../../domain/ports/console/create-app-draft-request";
 import type { CreateAppDraftResponse } from "../../../domain/ports/console/create-app-draft-response";
 import type { DeleteAppDraftRequest } from "../../../domain/ports/console/delete-app-draft-request";
 import type {
     CreateAppDraftError,
+    CreateAppDraftListingTextError,
     DeleteAppDraftError,
+    GetAppDraftDetailsError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
     ListAppDraftSummariesError,
+    UpdateAppDraftListingTextError,
 } from "../../../domain/ports/console/errors";
+import type { GetAppDraftDetailsRequest } from "../../../domain/ports/console/get-app-draft-details-request";
+import type { GetAppDraftDetailsResponse } from "../../../domain/ports/console/get-app-draft-details-response";
 import type { GetMyOrganizationResponse } from "../../../domain/ports/console/get-my-organization-response";
 import type { GetOrganizationRequest } from "../../../domain/ports/console/get-organization-request";
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
 import type { ListAppDraftSummariesRequest } from "../../../domain/ports/console/list-app-draft-summaries-request";
 import type { ListAppDraftSummariesResponse } from "../../../domain/ports/console/list-app-draft-summaries-response";
+import type { UpdateAppDraftListingTextRequest } from "../../../domain/ports/console/update-app-draft-listing-text-request";
+import type { UpdateAppDraftListingTextResponse } from "../../../domain/ports/console/update-app-draft-listing-text-response";
 import {
     toCreateAppDraftError,
+    toCreateAppDraftListingTextError,
     toDeleteAppDraftError,
+    toGetAppDraftDetailsError,
     toGetMyOrganizationError,
     toGetOrganizationError,
     toGetSelfError,
     toListAppDraftSummariesError,
+    toUpdateAppDraftListingTextError,
 } from "./error-converters";
 import {
+    toCreateAppDraftListingTextResponse,
     toCreateAppDraftResponse,
+    toGetAppDraftDetailsResponse,
     toGetMyOrganizationResponse,
     toGetOrganizationResponse,
     toGetSelfResponse,
     toListAppDraftSummariesResponse,
+    toUpdateAppDraftListingTextResponse,
 } from "./message-converters";
 
 /**
@@ -76,6 +91,21 @@ export class GrpcWebConsoleApi implements ConsoleApi {
         }
     }
 
+    async createAppDraftListingText(
+        request: CreateAppDraftListingTextRequest,
+    ): Promise<Result<CreateAppDraftListingTextResponse, CreateAppDraftListingTextError>> {
+        try {
+            const response = await this.appDraftClient.createAppDraftListingText({
+                appDraftId: request.appDraftId,
+                name: request.name,
+                shortDescription: request.shortDescription,
+            });
+            return ok(toCreateAppDraftListingTextResponse(response));
+        } catch (e) {
+            return err(toCreateAppDraftListingTextError(e));
+        }
+    }
+
     async deleteAppDraft(
         request: DeleteAppDraftRequest,
     ): Promise<Result<void, DeleteAppDraftError>> {
@@ -84,6 +114,21 @@ export class GrpcWebConsoleApi implements ConsoleApi {
             return ok(undefined);
         } catch (e) {
             return err(toDeleteAppDraftError(e));
+        }
+    }
+
+    async getAppDraftDetails(
+        request: GetAppDraftDetailsRequest,
+        signal?: AbortSignal,
+    ): Promise<Result<GetAppDraftDetailsResponse, GetAppDraftDetailsError>> {
+        try {
+            const response = await this.appDraftClient.getAppDraftDetails(
+                { appDraftId: request.appDraftId },
+                { signal },
+            );
+            return ok(toGetAppDraftDetailsResponse(response));
+        } catch (e) {
+            return err(toGetAppDraftDetailsError(e));
         }
     }
 
@@ -132,6 +177,23 @@ export class GrpcWebConsoleApi implements ConsoleApi {
             return ok(toListAppDraftSummariesResponse(response));
         } catch (e) {
             return err(toListAppDraftSummariesError(e));
+        }
+    }
+
+    async updateAppDraftListingText(
+        request: UpdateAppDraftListingTextRequest,
+    ): Promise<Result<UpdateAppDraftListingTextResponse, UpdateAppDraftListingTextError>> {
+        try {
+            const response = await this.appDraftClient.updateAppDraftListingText({
+                appDraftId: request.appDraftId,
+                etag: request.etag,
+                name: request.name,
+                shortDescription: request.shortDescription,
+                updateMask: { paths: ["name", "short_description"] },
+            });
+            return ok(toUpdateAppDraftListingTextResponse(response));
+        } catch (e) {
+            return err(toUpdateAppDraftListingTextError(e));
         }
     }
 }

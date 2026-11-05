@@ -5,65 +5,147 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <main class="flex min-h-full flex-col p-6">
-    <div class="mx-auto flex w-full max-w-5xl flex-col gap-8">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-            <h1 class="[font:var(--mat-sys-headline-medium)]">Get your app ready for review</h1>
-            <button
-                matButton="outlined"
-                class="[--mat-sys-primary:var(--mat-sys-tertiary)]"
-                type="button"
-                (click)="openDeleteDialog()">
-                <mat-icon>delete</mat-icon>
-                Delete draft
-            </button>
-        </div>
-    </div>
+    @let currentState = state();
+    @let kind = currentState.kind;
+    @switch (kind) {
+        @case ("pending") {}
+        @case ("loading") {
+            <div class="m-auto">
+                <mat-progress-spinner mode="indeterminate" aria-label="Loading" />
+            </div>
+        }
+        @case ("error") {
+            <acc-full-page-error-view [error]="currentState.error" />
+        }
+        @case ("loaded") {
+            <div class="mx-auto flex w-full max-w-5xl flex-col gap-8">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <h1 class="[font:var(--mat-sys-headline-medium)]">
+                        Get your app ready for review
+                    </h1>
+                    <button
+                        matButton="outlined"
+                        class="[--mat-sys-primary:var(--mat-sys-tertiary)]"
+                        type="button"
+                        (click)="openDeleteDialog()">
+                        <mat-icon>delete</mat-icon>
+                        Delete draft
+                    </button>
+                </div>
+
+                @let stepCount = steps().length;
+                @let completed = completedStepCount();
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex flex-col gap-1">
+                            <p class="[font:var(--mat-sys-title-medium)]">
+                                {{ completed }} of {{ stepCount }} steps complete
+                            </p>
+                            <p class="text-(--mat-sys-on-surface-variant)">
+                                Complete the steps in any order, then submit your app for review.
+                            </p>
+                        </div>
+                        <button
+                            matButton="filled"
+                            type="button"
+                            disabled
+                            disabledInteractive
+                            matTooltip="Complete all steps to submit your app for review.">
+                            <mat-icon>send</mat-icon>
+                            Submit for review
+                        </button>
+                    </div>
+                    <mat-progress-bar
+                        mode="determinate"
+                        [value]="(completed / stepCount) * 100"
+                        aria-hidden="true" />
+                </div>
+
+                <mat-stepper orientation="vertical" [selectedIndex]="initiallySelectedStepIndex()">
+                    @for (step of steps(); track step.id) {
+                        <mat-step [completed]="step.complete">
+                            <ng-template matStepLabel>
+                                <span class="block">{{ step.title }}</span>
+                                <span class="block [font:var(--mat-sys-body-medium)]">
+                                    {{ step.complete ? "Complete" : "Not started" }}
+                                </span>
+                            </ng-template>
+                            @if (step.id === "listing") {
+                                <acc-app-listing-text-editor
+                                    [listing]="currentState.listing"
+                                    [saveState]="currentState.saveListingState"
+                                    [saveError]="currentState.saveListingError"
+                                    [reloadState]="currentState.reloadListingState"
+                                    (save)="saveListing.emit($event)"
+                                    (dismissSaveError)="dismissSaveListingError.emit()"
+                                    (reload)="reloadListing.emit()" />
+                            }
+                            <div class="mt-6 flex gap-2">
+                                @if (!$first) {
+                                    <button matButton type="button" matStepperPrevious>Back</button>
+                                }
+                                @if (!$last) {
+                                    <button matButton="tonal" type="button" matStepperNext>
+                                        Next
+                                    </button>
+                                }
+                            </div>
+                        </mat-step>
+                    }
+                </mat-stepper>
+            </div>
+        }
+        @default never;
+    }
 </main>
 
 <ng-template #deleteDialog>
-    <h2 mat-dialog-title>Delete app draft?</h2>
-    <mat-dialog-content>
-        <div class="flex flex-col gap-4">
-            <p>This app draft and everything in it will be deleted permanently.</p>
-            @if (state().deleteAppDraftError; as error) {
-                <acc-error-alert
-                    heading="Couldn't delete app draft"
-                    [message]="deleteAppDraftErrorMessage(error)"
-                    [failedAttempts]="error.failedAttempts"
-                    [dismissible]="true"
-                    (dismiss)="dismissDeleteError()">
-                    @if (error.kind === "unauthenticated") {
-                        <a matButton="filled" class="mt-1 self-start" routerLink="/login">
-                            Log in
-                        </a>
-                    }
-                </acc-error-alert>
-            }
-        </div>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-        <!--
-        Space the buttons ourselves since Material only spaces adjacent buttons and the delete
-        is wrapped in an acc-loading-button
-        -->
-        @let deleteAppDraftState = state().deleteAppDraftState;
-        <div class="flex gap-2">
-            <acc-loading-button
-                class="[--mat-sys-primary:var(--mat-sys-tertiary)]"
-                [state]="deleteAppDraftState"
-                loadingLabel="Deleting app draft"
-                (press)="deleteAppDraft.emit()">
-                Delete
-            </acc-loading-button>
-            <button
-                matButton="filled"
-                type="button"
-                mat-dialog-close
-                cdkFocusInitial
-                [disabled]="deleteAppDraftState !== 'idle'"
-                disabledInteractive>
-                Cancel
-            </button>
-        </div>
-    </mat-dialog-actions>
+    @let dialogState = state();
+    @if (dialogState.kind === "loaded") {
+        <h2 mat-dialog-title>Delete app draft?</h2>
+        <mat-dialog-content>
+            <div class="flex flex-col gap-4">
+                <p>This app draft and everything in it will be deleted permanently.</p>
+                @if (dialogState.deleteAppDraftError; as error) {
+                    <acc-error-alert
+                        heading="Couldn't delete app draft"
+                        [message]="deleteAppDraftErrorMessage(error)"
+                        [failedAttempts]="error.failedAttempts"
+                        [dismissible]="true"
+                        (dismiss)="dismissDeleteError()">
+                        @if (error.kind === "unauthenticated") {
+                            <a matButton="filled" class="mt-1 self-start" routerLink="/login">
+                                Log in
+                            </a>
+                        }
+                    </acc-error-alert>
+                }
+            </div>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <!--
+            Space the buttons ourselves since Material only spaces adjacent buttons and the delete
+            is wrapped in an acc-loading-button
+            -->
+            @let deleteAppDraftState = dialogState.deleteAppDraftState;
+            <div class="flex gap-2">
+                <acc-loading-button
+                    class="[--mat-sys-primary:var(--mat-sys-tertiary)]"
+                    [state]="deleteAppDraftState"
+                    loadingLabel="Deleting app draft"
+                    (press)="deleteAppDraft.emit()">
+                    Delete
+                </acc-loading-button>
+                <button
+                    matButton="filled"
+                    type="button"
+                    mat-dialog-close
+                    cdkFocusInitial
+                    [disabled]="deleteAppDraftState !== 'idle'"
+                    disabledInteractive>
+                    Cancel
+                </button>
+            </div>
+        </mat-dialog-actions>
+    }
 </ng-template>

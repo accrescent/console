@@ -1,0 +1,13 @@
+// SPDX-FileCopyrightText: © 2026 Logan Magee
+//
+// SPDX-License-Identifier: AGPL-3.0-only
+
+/**
+ * Response to updating an app draft's listing text.
+ */
+export interface UpdateAppDraftListingTextResponse {
+    /**
+     * The etag of the listing text after the update.
+     */
+    readonly etag: string;
+}

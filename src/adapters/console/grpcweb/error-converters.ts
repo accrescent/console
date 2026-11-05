@@ -6,7 +6,9 @@ import { Code, ConnectError } from "@connectrpc/connect";
 
 import type {
     CreateAppDraftError,
+    CreateAppDraftListingTextError,
     DeleteAppDraftError,
+    GetAppDraftDetailsError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
@@ -15,6 +17,7 @@ import type {
     ServiceUnavailableError,
     UnauthenticatedError,
     UnknownError,
+    UpdateAppDraftListingTextError,
 } from "../../../domain/ports/console/errors";
 
 export function toCreateAppDraftError(e: unknown): CreateAppDraftError {
@@ -29,7 +32,24 @@ export function toCreateAppDraftError(e: unknown): CreateAppDraftError {
     }
 }
 
+export function toCreateAppDraftListingTextError(e: unknown): CreateAppDraftListingTextError {
+    const code = ConnectError.from(e).code;
+    switch (code) {
+        case Code.PermissionDenied:
+            return { kind: "permissionDenied" };
+        case Code.AlreadyExists:
+            return { kind: "alreadyExists" };
+        default:
+            return toCommonError(code);
+    }
+}
+
 export function toDeleteAppDraftError(e: unknown): DeleteAppDraftError {
+    const code = ConnectError.from(e).code;
+    return code === Code.PermissionDenied ? { kind: "permissionDenied" } : toCommonError(code);
+}
+
+export function toGetAppDraftDetailsError(e: unknown): GetAppDraftDetailsError {
     const code = ConnectError.from(e).code;
     return code === Code.PermissionDenied ? { kind: "permissionDenied" } : toCommonError(code);
 }
@@ -50,6 +70,18 @@ export function toGetSelfError(e: unknown): GetSelfError {
 export function toListAppDraftSummariesError(e: unknown): ListAppDraftSummariesError {
     const code = ConnectError.from(e).code;
     return code === Code.PermissionDenied ? { kind: "permissionDenied" } : toCommonError(code);
+}
+
+export function toUpdateAppDraftListingTextError(e: unknown): UpdateAppDraftListingTextError {
+    const code = ConnectError.from(e).code;
+    switch (code) {
+        case Code.PermissionDenied:
+            return { kind: "permissionDenied" };
+        case Code.Aborted:
+            return { kind: "etagMismatch" };
+        default:
+            return toCommonError(code);
+    }
 }
 
 function toCommonError(

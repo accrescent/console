@@ -17,9 +17,30 @@ export type CreateAppDraftError =
     | UnknownError;
 
 /**
+ * An error returned by {@link ConsoleApi.createAppDraftListingText}.
+ */
+export type CreateAppDraftListingTextError =
+    | UnauthenticatedError
+    | PermissionDeniedError
+    | AlreadyExistsError
+    | InternalError
+    | ServiceUnavailableError
+    | UnknownError;
+
+/**
  * An error returned by {@link ConsoleApi.deleteAppDraft}.
  */
 export type DeleteAppDraftError =
+    | UnauthenticatedError
+    | PermissionDeniedError
+    | InternalError
+    | ServiceUnavailableError
+    | UnknownError;
+
+/**
+ * An error returned by {@link ConsoleApi.getAppDraftDetails}.
+ */
+export type GetAppDraftDetailsError =
     | UnauthenticatedError
     | PermissionDeniedError
     | InternalError
@@ -65,6 +86,17 @@ export type ListAppDraftSummariesError =
     | UnknownError;
 
 /**
+ * An error returned by {@link ConsoleApi.updateAppDraftListingText}.
+ */
+export type UpdateAppDraftListingTextError =
+    | UnauthenticatedError
+    | PermissionDeniedError
+    | EtagMismatchError
+    | InternalError
+    | ServiceUnavailableError
+    | UnknownError;
+
+/**
  * An error indicating the user isn't authenticated.
  */
 export interface UnauthenticatedError {
@@ -83,6 +115,20 @@ export interface PermissionDeniedError {
  */
 export interface ResourceLimitExceededError {
     readonly kind: "resourceLimitExceeded";
+}
+
+/**
+ * An error indicating the resource being created already exists.
+ */
+export interface AlreadyExistsError {
+    readonly kind: "alreadyExists";
+}
+
+/**
+ * An error indicating the resource has been updated since the user last read it.
+ */
+export interface EtagMismatchError {
+    readonly kind: "etagMismatch";
 }
 
 /**

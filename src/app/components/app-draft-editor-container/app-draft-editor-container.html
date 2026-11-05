@@ -7,5 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 <acc-app-draft-editor-page
     class="block h-full"
     [state]="state()"
+    (saveListing)="saveListing($event)"
+    (dismissSaveListingError)="dismissSaveListingError()"
+    (reloadListing)="reloadListing()"
     (deleteAppDraft)="deleteAppDraft()"
     (dismissDeleteAppDraftError)="dismissDeleteAppDraftError()" />

@@ -15,23 +15,28 @@ import { LoadingButton, type LoadingButtonState } from "./loading-button";
 @Component({
     imports: [LoadingButton, MatIcon],
     template: `
-        <acc-loading-button
-            [appearance]="appearance()"
-            [state]="state()"
-            loadingLabel="Saving"
-            [disabledReason]="disabledReason()"
-            (press)="pressCount = pressCount + 1">
-            <mat-icon>save</mat-icon>
-            <span matButtonIcon class="icon"></span>
-            <span class="label">Save</span>
-        </acc-loading-button>
+        <form (submit)="$event.preventDefault(); submitCount = submitCount + 1">
+            <acc-loading-button
+                [appearance]="appearance()"
+                [type]="type()"
+                [state]="state()"
+                loadingLabel="Saving"
+                [disabledReason]="disabledReason()"
+                (press)="pressCount = pressCount + 1">
+                <mat-icon>save</mat-icon>
+                <span matButtonIcon class="icon"></span>
+                <span class="label">Save</span>
+            </acc-loading-button>
+        </form>
     `,
 })
 class Host {
     readonly appearance = signal<MatButtonAppearance>("text");
+    readonly type = signal<"button" | "submit">("button");
     readonly state = signal<LoadingButtonState>("idle");
     readonly disabledReason = signal<string | undefined>(undefined);
     pressCount = 0;
+    submitCount = 0;
 }
 
 describe("LoadingButton", () => {
@@ -74,6 +79,46 @@ describe("LoadingButton", () => {
         await fixture.whenStable();
 
         expect(button().classList).toContain("mat-mdc-unelevated-button");
+    });
+
+    it("should not submit its form by default", () => {
+        button().click();
+
+        expect(fixture.componentInstance.submitCount).toBe(0);
+    });
+
+    describe("when a submit button", () => {
+        beforeEach(async () => {
+            fixture.componentInstance.type.set("submit");
+            await fixture.whenStable();
+        });
+
+        it("should submit its form when clicked", () => {
+            button().click();
+
+            expect(fixture.componentInstance.submitCount).toBe(1);
+        });
+
+        it.each<LoadingButtonState>(["pending", "loading"])(
+            "should not submit its form when clicked while %s",
+            async (state) => {
+                fixture.componentInstance.state.set(state);
+                await fixture.whenStable();
+
+                button().click();
+
+                expect(fixture.componentInstance.submitCount).toBe(0);
+            },
+        );
+
+        it("should not submit its form when clicked while disabled with a reason", async () => {
+            fixture.componentInstance.disabledReason.set("Nothing to save");
+            await fixture.whenStable();
+
+            button().click();
+
+            expect(fixture.componentInstance.submitCount).toBe(0);
+        });
     });
 
     describe("when idle", () => {

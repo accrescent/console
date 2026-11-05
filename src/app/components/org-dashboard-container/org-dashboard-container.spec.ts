@@ -11,22 +11,28 @@ import { err, ok, type Result } from "../../../core/result";
 import { MIN_PROGRESS_MS, PROGRESS_DELAY_MS } from "../../../domain/delay";
 import type { AppDraftSummary } from "../../../domain/ports/console/app-draft-summary";
 import type { ConsoleApi } from "../../../domain/ports/console/console-api";
+import type { CreateAppDraftListingTextResponse } from "../../../domain/ports/console/create-app-draft-listing-text-response";
 import type { CreateAppDraftRequest } from "../../../domain/ports/console/create-app-draft-request";
 import type { CreateAppDraftResponse } from "../../../domain/ports/console/create-app-draft-response";
 import type {
     CreateAppDraftError,
+    CreateAppDraftListingTextError,
     DeleteAppDraftError,
+    GetAppDraftDetailsError,
     GetMyOrganizationError,
     GetOrganizationError,
     GetSelfError,
     ListAppDraftSummariesError,
+    UpdateAppDraftListingTextError,
 } from "../../../domain/ports/console/errors";
+import type { GetAppDraftDetailsResponse } from "../../../domain/ports/console/get-app-draft-details-response";
 import type { GetMyOrganizationResponse } from "../../../domain/ports/console/get-my-organization-response";
 import type { GetOrganizationResponse } from "../../../domain/ports/console/get-organization-response";
 import type { GetSelfResponse } from "../../../domain/ports/console/get-self-response";
 import type { ListAppDraftSummariesRequest } from "../../../domain/ports/console/list-app-draft-summaries-request";
 import type { ListAppDraftSummariesResponse } from "../../../domain/ports/console/list-app-draft-summaries-response";
 import type { Organization } from "../../../domain/ports/console/organization";
+import type { UpdateAppDraftListingTextResponse } from "../../../domain/ports/console/update-app-draft-listing-text-response";
 import { CONSOLE_API } from "../../tokens";
 import type { LoadingButtonState } from "../loading-button/loading-button";
 import {
@@ -453,7 +459,17 @@ class FakeConsoleApi implements ConsoleApi {
         ok({ appDraftSummaries: APP_DRAFTS });
     listAppDraftSummariesDelayMs = 0;
 
+    createAppDraftListingText(): Promise<
+        Result<CreateAppDraftListingTextResponse, CreateAppDraftListingTextError>
+    > {
+        throw new Error("not used by OrgDashboardContainer");
+    }
+
     deleteAppDraft(): Promise<Result<void, DeleteAppDraftError>> {
+        throw new Error("not used by OrgDashboardContainer");
+    }
+
+    getAppDraftDetails(): Promise<Result<GetAppDraftDetailsResponse, GetAppDraftDetailsError>> {
         throw new Error("not used by OrgDashboardContainer");
     }
 
@@ -484,5 +500,11 @@ class FakeConsoleApi implements ConsoleApi {
         this.listAppDraftSummariesRequests.push(request);
         await new Promise((resolve) => setTimeout(resolve, this.listAppDraftSummariesDelayMs));
         return this.listAppDraftSummariesResult;
+    }
+
+    updateAppDraftListingText(): Promise<
+        Result<UpdateAppDraftListingTextResponse, UpdateAppDraftListingTextError>
+    > {
+        throw new Error("not used by OrgDashboardContainer");
     }
 }

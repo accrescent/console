@@ -137,7 +137,9 @@ export interface OrgDashboardPageError {
     /**
      * The error that occurred.
      */
-    readonly error: FullPageErrorUnavailable<OrganizationResource> | FullPageErrorPermissionDenied;
+    readonly error:
+        | FullPageErrorUnavailable<OrganizationResource>
+        | FullPageErrorPermissionDenied<OrganizationResource>;
 }
 
 /**

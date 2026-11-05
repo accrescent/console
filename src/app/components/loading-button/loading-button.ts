@@ -37,6 +37,11 @@ export class LoadingButton {
     readonly appearance = input<MatButtonAppearance>("text");
 
     /**
+     * The type of the button.
+     */
+    readonly type = input<"button" | "submit">("button");
+
+    /**
      * The state of the action the button starts.
      */
     readonly state = input.required<LoadingButtonState>();
@@ -69,6 +74,16 @@ export class LoadingButton {
      */
     focus(): void {
         this.button().focus();
+    }
+
+    protected onClick(event: Event): void {
+        if (this.disabled()) {
+            // The button is still natively enabled because of disabledInteractive, so explicitly
+            // prevent submit buttons from submitting when disabled
+            event.preventDefault();
+        } else {
+            this.press.emit();
+        }
     }
 }
 
