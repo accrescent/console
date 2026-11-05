@@ -14,7 +14,7 @@ import {
 } from "@storybook/angular-vite";
 
 import type { AppListingText } from "../../../domain/app-listing";
-import { ConsoleScaffoldPage } from "../console-scaffold-page/console-scaffold-page";
+import { ConsoleScaffoldLayout } from "../console-scaffold-layout/console-scaffold-layout";
 import { AppDraftEditorPage, type AppDraftEditorPageLoaded } from "./app-draft-editor-page";
 
 const APP_DRAFT_ID = "ad_5gKq2YbVxPz8RmT3nWc1Ha";
@@ -41,8 +41,8 @@ const meta: Meta<AppDraftEditorPage> = {
     decorators: [
         applicationConfig({ providers: [provideRouter([])] }),
         // Render inside the scaffold as the page is in the app
-        moduleMetadata({ imports: [ConsoleScaffoldPage] }),
-        componentWrapperDecorator(ConsoleScaffoldPage, { logoutState: "idle" }),
+        moduleMetadata({ imports: [ConsoleScaffoldLayout] }),
+        componentWrapperDecorator(ConsoleScaffoldLayout, { logoutState: "idle" }),
     ],
     render: (args) => ({
         props: args,

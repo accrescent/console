@@ -5,10 +5,10 @@
 import { provideRouter } from "@angular/router";
 import { applicationConfig, type Meta, type StoryObj } from "@storybook/angular-vite";
 
-import { ConsoleScaffoldPage } from "./console-scaffold-page";
+import { ConsoleScaffoldLayout } from "./console-scaffold-layout";
 
-const meta: Meta<ConsoleScaffoldPage> = {
-    component: ConsoleScaffoldPage,
+const meta: Meta<ConsoleScaffoldLayout> = {
+    component: ConsoleScaffoldLayout,
     decorators: [applicationConfig({ providers: [provideRouter([])] })],
     args: {
         logoutState: "idle",
@@ -20,7 +20,7 @@ const meta: Meta<ConsoleScaffoldPage> = {
 
 export default meta;
 
-type Story = StoryObj<ConsoleScaffoldPage>;
+type Story = StoryObj<ConsoleScaffoldLayout>;
 
 export const Idle: Story = {};
 

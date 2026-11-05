@@ -12,14 +12,14 @@ import { Router, RouterOutlet } from "@angular/router";
 
 import { withDeferredProgress } from "../../../domain/delay";
 import { AUTHN_API } from "../../tokens";
-import { ConsoleScaffoldPage } from "../console-scaffold-page/console-scaffold-page";
+import { ConsoleScaffoldLayout } from "../console-scaffold-layout/console-scaffold-layout";
 import type { LoadingButtonState } from "../loading-button/loading-button";
 
 /**
  * Effectful container for the console scaffold which renders child routes inside the scaffold.
  */
 @Component({
-    imports: [ConsoleScaffoldPage, RouterOutlet],
+    imports: [ConsoleScaffoldLayout, RouterOutlet],
     selector: "acc-console-scaffold-container",
     templateUrl: "./console-scaffold-container.html",
 })

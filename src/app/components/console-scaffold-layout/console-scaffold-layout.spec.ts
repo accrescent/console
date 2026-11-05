@@ -10,20 +10,20 @@ import { provideRouter } from "@angular/router";
 
 import { HANDSET } from "../../tokens";
 import type { LoadingButtonState } from "../loading-button/loading-button";
-import { ConsoleScaffoldPage } from "./console-scaffold-page";
+import { ConsoleScaffoldLayout } from "./console-scaffold-layout";
 
-describe("ConsoleScaffoldPage", () => {
+describe("ConsoleScaffoldLayout", () => {
     let handset: WritableSignal<boolean>;
     let logoutState: WritableSignal<LoadingButtonState>;
     let logOutCount: number;
 
     /**
-     * Creates a {@link ConsoleScaffoldPage} and waits for it to render.
+     * Creates a {@link ConsoleScaffoldLayout} and waits for it to render.
      */
-    async function render(isHandset: boolean): Promise<ComponentFixture<ConsoleScaffoldPage>> {
+    async function render(isHandset: boolean): Promise<ComponentFixture<ConsoleScaffoldLayout>> {
         handset = signal(isHandset);
         TestBed.configureTestingModule({
-            imports: [ConsoleScaffoldPage],
+            imports: [ConsoleScaffoldLayout],
             providers: [
                 // Accept any URL so that navigation items can be clicked
                 provideRouter([{ path: "**", children: [] }]),
@@ -33,7 +33,7 @@ describe("ConsoleScaffoldPage", () => {
 
         logoutState = signal<LoadingButtonState>("idle");
         logOutCount = 0;
-        const fixture = TestBed.createComponent(ConsoleScaffoldPage, {
+        const fixture = TestBed.createComponent(ConsoleScaffoldLayout, {
             bindings: [
                 inputBinding("logoutState", logoutState),
                 outputBinding("logOut", () => logOutCount++),
@@ -43,20 +43,22 @@ describe("ConsoleScaffoldPage", () => {
         return fixture;
     }
 
-    function logOutButton(fixture: ComponentFixture<ConsoleScaffoldPage>): HTMLButtonElement {
+    function logOutButton(fixture: ComponentFixture<ConsoleScaffoldLayout>): HTMLButtonElement {
         return fixture.nativeElement.querySelector("acc-loading-button button");
     }
 
-    function menuButton(fixture: ComponentFixture<ConsoleScaffoldPage>): HTMLButtonElement | null {
+    function menuButton(
+        fixture: ComponentFixture<ConsoleScaffoldLayout>,
+    ): HTMLButtonElement | null {
         return fixture.nativeElement.querySelector("button[aria-label='Toggle navigation']");
     }
 
-    function sidenav(fixture: ComponentFixture<ConsoleScaffoldPage>): MatSidenav {
+    function sidenav(fixture: ComponentFixture<ConsoleScaffoldLayout>): MatSidenav {
         return fixture.debugElement.query(By.directive(MatSidenav)).injector.get(MatSidenav);
     }
 
     describe("on a large screen", () => {
-        let fixture: ComponentFixture<ConsoleScaffoldPage>;
+        let fixture: ComponentFixture<ConsoleScaffoldLayout>;
 
         beforeEach(async () => {
             fixture = await render(false);
@@ -68,7 +70,7 @@ describe("ConsoleScaffoldPage", () => {
     });
 
     describe("on a handset", () => {
-        let fixture: ComponentFixture<ConsoleScaffoldPage>;
+        let fixture: ComponentFixture<ConsoleScaffoldLayout>;
 
         beforeEach(async () => {
             fixture = await render(true);
@@ -120,7 +122,7 @@ describe("ConsoleScaffoldPage", () => {
     });
 
     describe("log out button", () => {
-        let fixture: ComponentFixture<ConsoleScaffoldPage>;
+        let fixture: ComponentFixture<ConsoleScaffoldLayout>;
 
         beforeEach(async () => {
             fixture = await render(false);

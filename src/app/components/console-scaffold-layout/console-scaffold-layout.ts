@@ -33,10 +33,10 @@ import { LoadingButton, type LoadingButtonState } from "../loading-button/loadin
         RouterLink,
         RouterLinkActive,
     ],
-    selector: "acc-console-scaffold-page",
-    templateUrl: "./console-scaffold-page.html",
+    selector: "acc-console-scaffold-layout",
+    templateUrl: "./console-scaffold-layout.html",
 })
-export class ConsoleScaffoldPage {
+export class ConsoleScaffoldLayout {
     protected readonly accrescentLogo = accrescentLogo;
 
     /**
