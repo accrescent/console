@@ -52,6 +52,7 @@ import {
     FullPageErrorView,
 } from "../full-page-error-view/full-page-error-view";
 import { LoadingButton, type LoadingButtonState } from "../loading-button/loading-button";
+import { Page } from "../page/page";
 
 /**
  * The page for filling in a given app draft.
@@ -76,6 +77,7 @@ import { LoadingButton, type LoadingButtonState } from "../loading-button/loadin
         MatStepperNext,
         MatStepperPrevious,
         MatTooltip,
+        Page,
         RouterLink,
     ],
     selector: "acc-app-draft-editor-page",

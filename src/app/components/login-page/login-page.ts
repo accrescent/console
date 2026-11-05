@@ -7,12 +7,13 @@ import { Component, input, output } from "@angular/core";
 import accrescentLogo from "../../../assets/accrescent-logo.svg";
 import githubInvertocat from "../../../assets/github-invertocat-white.svg";
 import { LoadingButton } from "../loading-button/loading-button";
+import { Page } from "../page/page";
 
 /**
  * The console login page.
  */
 @Component({
-    imports: [LoadingButton],
+    imports: [LoadingButton, Page],
     selector: "acc-login-page",
     templateUrl: "./login-page.html",
 })
