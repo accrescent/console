@@ -52,7 +52,9 @@ export function toGetAppDraftDetailsResponse(
     response: ProtoGetAppDraftDetailsResponse,
 ): GetAppDraftDetailsResponse {
     const { listingText } = response;
-    return { listingText: listingText && toAppDraftListingText(listingText) };
+    return {
+        listingText: listingText === undefined ? undefined : toAppDraftListingText(listingText),
+    };
 }
 
 export function toGetMyOrganizationResponse(

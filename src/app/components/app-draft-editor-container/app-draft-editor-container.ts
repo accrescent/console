@@ -204,7 +204,7 @@ export class AppDraftEditorContainer {
     > {
         const appDraftId = this.appDraftId();
         const details = this.details.value();
-        const listingText = details?.ok ? details.value.listingText : undefined;
+        const listingText = details?.ok === true ? details.value.listingText : undefined;
         return listingText === undefined
             ? this.consoleApi.createAppDraftListingText({ appDraftId, ...listing })
             : this.consoleApi.updateAppDraftListingText({

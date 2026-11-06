@@ -52,6 +52,10 @@ export default defineConfig([
             ],
             "@typescript-eslint/explicit-function-return-type": "error",
             "@typescript-eslint/no-import-type-side-effects": "error",
+            "@typescript-eslint/strict-boolean-expressions": [
+                "error",
+                { allowNullableObject: false, allowNumber: false, allowString: false },
+            ],
             eqeqeq: ["error", "always"],
             "no-duplicate-imports": ["error", { allowSeparateTypeImports: false }],
             "tsdoc/syntax": "error",
