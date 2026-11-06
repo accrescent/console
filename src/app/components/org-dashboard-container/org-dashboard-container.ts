@@ -105,7 +105,7 @@ export class OrgDashboardContainer {
         // Redirect the user to the login page if authentication fails on load
         effect(() => {
             if (this.dashboard.hasValue() && this.dashboard.value().some(isUnauthenticated)) {
-                this.router.navigate(["/login"], { replaceUrl: true });
+                void this.router.navigate(["/login"], { replaceUrl: true });
             }
         });
     }

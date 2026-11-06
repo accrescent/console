@@ -61,7 +61,7 @@ describe("OrgDashboardContent", () => {
     }
 
     function newAppButton(fixture: ComponentFixture<OrgDashboardContent>): HTMLButtonElement {
-        return fixture.nativeElement.querySelector("acc-loading-button button");
+        return fixture.nativeElement.querySelector("acc-loading-button button")!;
     }
 
     function appDraftItems(fixture: ComponentFixture<OrgDashboardContent>): HTMLAnchorElement[] {
@@ -84,23 +84,26 @@ describe("OrgDashboardContent", () => {
         });
 
         it("should title the page", () => {
-            expect(fixture.nativeElement.querySelector("h1").textContent).toContain("Dashboard");
+            expect(fixture.nativeElement.querySelector("h1")!.textContent).toContain("Dashboard");
         });
 
         it("should show published apps out of the limit", () => {
-            const card: HTMLElement = fixture.nativeElement.querySelectorAll("acc-quota-card")[0];
+            const card: HTMLElement =
+                fixture.nativeElement.querySelectorAll<HTMLElement>("acc-quota-card")[0];
             expect(card.textContent).toContain("Published apps");
             expect(text(card)).toContain("3 of 10");
         });
 
         it("should show active app drafts out of the limit", () => {
-            const card: HTMLElement = fixture.nativeElement.querySelectorAll("acc-quota-card")[1];
+            const card: HTMLElement =
+                fixture.nativeElement.querySelectorAll<HTMLElement>("acc-quota-card")[1];
             expect(card.textContent).toContain("App drafts");
             expect(text(card)).toContain("4 of 4");
         });
 
         it("should suggest deleting or publishing a draft when app drafts are full", () => {
-            const card: HTMLElement = fixture.nativeElement.querySelectorAll("acc-quota-card")[1];
+            const card: HTMLElement =
+                fixture.nativeElement.querySelectorAll<HTMLElement>("acc-quota-card")[1];
             expect(card.textContent).toContain(
                 "Delete or publish an app draft to create another one.",
             );
@@ -144,7 +147,7 @@ describe("OrgDashboardContent", () => {
                 appDrafts: { kind: "error", error: { kind } },
             });
 
-            const alert: HTMLElement = fixture.nativeElement.querySelector("acc-error-alert");
+            const alert: HTMLElement = fixture.nativeElement.querySelector("acc-error-alert")!;
             expect(alert.textContent).toContain("Couldn't load app drafts");
             expect(text(alert)).toContain(message);
         });
@@ -180,7 +183,7 @@ describe("OrgDashboardContent", () => {
                 createAppDraftError: { kind, failedAttempts: 1 },
             });
 
-            const alert: HTMLElement = fixture.nativeElement.querySelector("acc-error-alert");
+            const alert: HTMLElement = fixture.nativeElement.querySelector("acc-error-alert")!;
             expect(alert.textContent).toContain("Couldn't create app");
             expect(text(alert)).toContain(message);
         });
@@ -192,7 +195,7 @@ describe("OrgDashboardContent", () => {
             });
 
             const link: HTMLAnchorElement =
-                fixture.nativeElement.querySelector("acc-error-alert a");
+                fixture.nativeElement.querySelector("acc-error-alert a")!;
             expect(link.textContent).toContain("Log in");
             expect(link.getAttribute("href")).toBe("/login");
         });
@@ -209,7 +212,7 @@ describe("OrgDashboardContent", () => {
             beforeEach(async () => {
                 pageState = signal({ ...state, createAppDraftError: error });
                 fixture = await render(pageState);
-                alert = fixture.nativeElement.querySelector("acc-error-alert");
+                alert = fixture.nativeElement.querySelector("acc-error-alert")!;
             });
 
             it("should show how many attempts to create an app draft have failed", async () => {
@@ -239,7 +242,9 @@ describe("OrgDashboardContent", () => {
                     ...state,
                     createAppDraftError: { kind: "unavailable", failedAttempts: 1 },
                 });
-                fixture.nativeElement.querySelector("button[aria-label=Dismiss]").click();
+                fixture.nativeElement
+                    .querySelector<HTMLElement>("button[aria-label=Dismiss]")!
+                    .click();
             });
 
             it("should emit dismissCreateAppDraftError", () => {

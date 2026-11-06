@@ -50,15 +50,15 @@ describe("AppListingTextEditor", () => {
     });
 
     function nameInput(): HTMLInputElement {
-        return fixture.nativeElement.querySelector("input");
+        return fixture.nativeElement.querySelector("input")!;
     }
 
     function shortDescriptionInput(): HTMLInputElement {
-        return fixture.nativeElement.querySelector("mat-form-field:nth-of-type(3) input");
+        return fixture.nativeElement.querySelector("mat-form-field:nth-of-type(3) input")!;
     }
 
     function saveButton(): HTMLButtonElement {
-        return fixture.nativeElement.querySelector("form > div acc-loading-button button");
+        return fixture.nativeElement.querySelector("form > div acc-loading-button button")!;
     }
 
     function reloadButton(): HTMLButtonElement | null {
@@ -253,7 +253,7 @@ describe("AppListingTextEditor", () => {
             await setKind("unauthenticated");
 
             const link: HTMLAnchorElement =
-                fixture.nativeElement.querySelector("acc-error-alert a");
+                fixture.nativeElement.querySelector("acc-error-alert a")!;
             expect(link.textContent).toContain("Log in");
             expect(link.getAttribute("href")).toBe("/login");
         });
@@ -330,7 +330,7 @@ describe("AppListingTextEditor", () => {
             await type(nameInput(), "Weather");
             await setKind("unavailable");
 
-            fixture.nativeElement.querySelector("button[aria-label=Dismiss]").click();
+            fixture.nativeElement.querySelector<HTMLElement>("button[aria-label=Dismiss]")!.click();
 
             expect(dismissCount).toBe(1);
             expect(document.activeElement).toBe(saveButton());

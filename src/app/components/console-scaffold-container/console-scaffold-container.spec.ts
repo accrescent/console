@@ -52,7 +52,7 @@ describe("ConsoleScaffoldContainer", () => {
     });
 
     function logOutButton(): HTMLButtonElement {
-        return harness.fixture.nativeElement.querySelector("acc-loading-button button");
+        return harness.fixture.nativeElement.querySelector("acc-loading-button button")!;
     }
 
     function clickLogOut(): void {

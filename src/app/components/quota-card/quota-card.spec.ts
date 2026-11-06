@@ -44,7 +44,7 @@ describe("QuotaCard", () => {
     it("should show the label", async () => {
         const fixture = await render(3, 10);
 
-        expect(fixture.nativeElement.querySelector("h3").textContent).toContain("Published apps");
+        expect(fixture.nativeElement.querySelector("h3")!.textContent).toContain("Published apps");
     });
 
     it("should show the usage out of the limit", async () => {

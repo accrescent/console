@@ -109,7 +109,7 @@ describe("OrgDashboardContainer", () => {
         fixture.detectChanges();
         return fixture.nativeElement.querySelector(
             "acc-org-dashboard-page acc-loading-button button",
-        );
+        )!;
     }
 
     function loadedValue(
@@ -121,7 +121,7 @@ describe("OrgDashboardContainer", () => {
 
     function clickDismiss(fixture: ComponentFixture<OrgDashboardContainer>): void {
         fixture.nativeElement
-            .querySelector("acc-org-dashboard-page button[aria-label=Dismiss]")
+            .querySelector<HTMLElement>("acc-org-dashboard-page button[aria-label=Dismiss]")!
             .click();
     }
 
@@ -288,7 +288,7 @@ describe("OrgDashboardContainer", () => {
             await settle(fixture);
             fixture.detectChanges();
 
-            fixture.nativeElement.querySelector("acc-error-alert a").click();
+            fixture.nativeElement.querySelector<HTMLElement>("acc-error-alert a")!.click();
             await settle(fixture);
 
             expect(TestBed.inject(Router).url).toBe("/login");

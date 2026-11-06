@@ -30,20 +30,20 @@ describe("LoginContainer", () => {
     });
 
     it("should start the GitHub login flow when login is clicked", () => {
-        fixture.nativeElement.querySelector("button").click();
+        fixture.nativeElement.querySelector("button")!.click();
 
         expect(authnApi.gitHubLoginCount).toBe(1);
     });
 
     it("should show the login page as loading after login is clicked", async () => {
-        fixture.nativeElement.querySelector("button").click();
+        fixture.nativeElement.querySelector("button")!.click();
         await fixture.whenStable();
 
         expect(fixture.nativeElement.querySelector("mat-progress-spinner")).not.toBeNull();
     });
 
     it("should stop loading when restored from the back/forward cache", async () => {
-        fixture.nativeElement.querySelector("button").click();
+        fixture.nativeElement.querySelector("button")!.click();
         await fixture.whenStable();
 
         window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
@@ -53,7 +53,7 @@ describe("LoginContainer", () => {
     });
 
     it("should keep loading on a pageshow not from the back/forward cache", async () => {
-        fixture.nativeElement.querySelector("button").click();
+        fixture.nativeElement.querySelector("button")!.click();
         await fixture.whenStable();
 
         window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: false }));
@@ -73,7 +73,7 @@ class FakeAuthnApi implements AuthnApi {
         this.gitHubLoginCount++;
     }
 
-    async logOut(): Promise<Result<void, LogOutError>> {
-        return ok(undefined);
+    logOut(): Promise<Result<void, LogOutError>> {
+        return Promise.resolve(ok(undefined));
     }
 }

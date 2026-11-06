@@ -81,7 +81,7 @@ describe("AppDraftEditorContent", () => {
     }
 
     async function openDeleteDialog(): Promise<void> {
-        fixture.nativeElement.querySelector("button").click();
+        fixture.nativeElement.querySelector("button")!.click();
         await fixture.whenStable();
     }
 
@@ -133,7 +133,7 @@ describe("AppDraftEditorContent", () => {
         function input(selector: string, value: string): void {
             const element: HTMLInputElement = fixture.nativeElement.querySelector(
                 `acc-app-listing-text-editor ${selector}`,
-            );
+            )!;
             element.value = value;
             element.dispatchEvent(new Event("input"));
         }
@@ -144,7 +144,9 @@ describe("AppDraftEditorContent", () => {
             await fixture.whenStable();
 
             fixture.nativeElement
-                .querySelector("acc-app-listing-text-editor acc-loading-button button")
+                .querySelector<HTMLElement>(
+                    "acc-app-listing-text-editor acc-loading-button button",
+                )!
                 .click();
             await fixture.whenStable();
 
@@ -158,7 +160,9 @@ describe("AppDraftEditorContent", () => {
             });
 
             fixture.nativeElement
-                .querySelector("acc-app-listing-text-editor button[aria-label=Dismiss]")
+                .querySelector<HTMLElement>(
+                    "acc-app-listing-text-editor button[aria-label=Dismiss]",
+                )!
                 .click();
 
             expect(dismissSaveErrorCount).toBe(1);
@@ -171,9 +175,9 @@ describe("AppDraftEditorContent", () => {
             });
 
             fixture.nativeElement
-                .querySelector(
+                .querySelector<HTMLElement>(
                     "acc-app-listing-text-editor acc-error-alert acc-loading-button button",
-                )
+                )!
                 .click();
 
             expect(reloadListingCount).toBe(1);
@@ -182,7 +186,7 @@ describe("AppDraftEditorContent", () => {
 
     describe("stepper", () => {
         function currentStepHeader(): HTMLElement {
-            return fixture.nativeElement.querySelector("[aria-current=step]");
+            return fixture.nativeElement.querySelector("[aria-current=step]")!;
         }
 
         function currentStepButton(label: string): HTMLButtonElement | undefined {

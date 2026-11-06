@@ -99,7 +99,7 @@ describe("ErrorAlert", () => {
     });
 
     it("should emit dismiss when the dismiss button is clicked", () => {
-        fixture.nativeElement.querySelector("button[aria-label=Dismiss]").click();
+        fixture.nativeElement.querySelector<HTMLElement>("button[aria-label=Dismiss]")!.click();
 
         expect(dismissCount).toBe(1);
     });
@@ -115,7 +115,7 @@ describe("ErrorAlert", () => {
         const hostFixture = TestBed.createComponent(ErrorAlertWithAction);
         await hostFixture.whenStable();
 
-        const action = hostFixture.nativeElement.querySelector("acc-error-alert a");
+        const action = hostFixture.nativeElement.querySelector("acc-error-alert a")!;
         expect(action.textContent).toBe("Action");
     });
 });

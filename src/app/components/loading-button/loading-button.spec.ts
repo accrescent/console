@@ -48,7 +48,7 @@ describe("LoadingButton", () => {
     });
 
     function button(): HTMLButtonElement {
-        return fixture.nativeElement.querySelector("button");
+        return fixture.nativeElement.querySelector("button")!;
     }
 
     it("should show the label in the button", () => {
@@ -69,7 +69,7 @@ describe("LoadingButton", () => {
     );
 
     it("should focus the button when focus() is called", () => {
-        fixture.debugElement.query(By.directive(LoadingButton)).componentInstance.focus();
+        fixture.debugElement.query(By.directive(LoadingButton)).injector.get(LoadingButton).focus();
 
         expect(document.activeElement).toBe(button());
     });
@@ -194,7 +194,7 @@ describe("LoadingButton", () => {
         });
 
         it("should not emit press when the label is clicked", () => {
-            fixture.nativeElement.querySelector(".label").click();
+            fixture.nativeElement.querySelector<HTMLElement>(".label")!.click();
 
             expect(fixture.componentInstance.pressCount).toBe(0);
         });
