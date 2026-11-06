@@ -44,7 +44,7 @@ describe("ConsoleScaffoldLayout", () => {
     }
 
     function logOutButton(fixture: ComponentFixture<ConsoleScaffoldLayout>): HTMLButtonElement {
-        return fixture.nativeElement.querySelector("acc-loading-button button");
+        return fixture.nativeElement.querySelector("acc-loading-button button")!;
     }
 
     function menuButton(
@@ -106,7 +106,7 @@ describe("ConsoleScaffoldLayout", () => {
             menuButton(fixture)!.click();
             await fixture.whenStable();
 
-            fixture.nativeElement.querySelector("mat-sidenav a").click();
+            fixture.nativeElement.querySelector<HTMLElement>("mat-sidenav a")!.click();
             await fixture.whenStable();
 
             expect(sidenav(fixture).opened).toBe(false);

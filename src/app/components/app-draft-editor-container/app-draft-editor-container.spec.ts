@@ -119,7 +119,9 @@ describe("AppDraftEditorContainer", () => {
     }
 
     async function openDeleteDialog(): Promise<void> {
-        fixture.nativeElement.querySelector("acc-app-draft-editor-page main button").click();
+        fixture.nativeElement
+            .querySelector<HTMLElement>("acc-app-draft-editor-page main button")!
+            .click();
         await settle();
     }
 
@@ -130,13 +132,13 @@ describe("AppDraftEditorContainer", () => {
     }
 
     function nameInput(): HTMLInputElement {
-        return fixture.nativeElement.querySelector("acc-app-listing-text-editor input");
+        return fixture.nativeElement.querySelector("acc-app-listing-text-editor input")!;
     }
 
     function shortDescriptionInput(): HTMLInputElement {
         return fixture.nativeElement.querySelector(
             "acc-app-listing-text-editor mat-form-field:nth-of-type(3) input",
-        );
+        )!;
     }
 
     function type(element: HTMLInputElement, value: string): void {
@@ -147,14 +149,18 @@ describe("AppDraftEditorContainer", () => {
     function clickSave(): void {
         fixture.detectChanges();
         fixture.nativeElement
-            .querySelector("acc-app-listing-text-editor form > div acc-loading-button button")
+            .querySelector<HTMLElement>(
+                "acc-app-listing-text-editor form > div acc-loading-button button",
+            )!
             .click();
     }
 
     function clickReload(): void {
         fixture.detectChanges();
         fixture.nativeElement
-            .querySelector("acc-app-listing-text-editor acc-error-alert acc-loading-button button")
+            .querySelector<HTMLElement>(
+                "acc-app-listing-text-editor acc-error-alert acc-loading-button button",
+            )!
             .click();
     }
 
@@ -562,7 +568,9 @@ describe("AppDraftEditorContainer", () => {
             it("should hide the error when dismissed", () => {
                 fixture.detectChanges();
                 fixture.nativeElement
-                    .querySelector("acc-app-listing-text-editor button[aria-label=Dismiss]")
+                    .querySelector<HTMLElement>(
+                        "acc-app-listing-text-editor button[aria-label=Dismiss]",
+                    )!
                     .click();
 
                 expect(pageState().saveListingError).toBeUndefined();
@@ -776,11 +784,11 @@ class FakeConsoleApi implements ConsoleApi {
         return this.getAppDraftDetailsResult;
     }
 
-    async createAppDraftListingText(
+    createAppDraftListingText(
         request: CreateAppDraftListingTextRequest,
     ): Promise<Result<CreateAppDraftListingTextResponse, CreateAppDraftListingTextError>> {
         this.createAppDraftListingTextRequests.push(request);
-        return this.createAppDraftListingTextResult;
+        return Promise.resolve(this.createAppDraftListingTextResult);
     }
 
     async updateAppDraftListingText(

@@ -61,21 +61,21 @@ describe("AppDraftList", () => {
             const appDraftItems = items(fixture);
 
             expect(appDraftItems.length).toBe(2);
-            expect(text(appDraftItems[0]!)).toContain("Weather com.example.weather · 1.2.0");
+            expect(text(appDraftItems[0])).toContain("Weather com.example.weather · 1.2.0");
         });
 
         it("should show placeholders for missing app draft details", () => {
-            expect(text(items(fixture)[1]!)).toContain("Untitled app No package yet");
+            expect(text(items(fixture)[1])).toContain("Untitled app No package yet");
         });
 
         it("should show each app draft's icon", () => {
-            const icon = items(fixture)[0]!.querySelector("img");
+            const icon = items(fixture)[0].querySelector("img");
 
             expect(icon?.getAttribute("src")).toBe(ICON_URL);
         });
 
         it("should show a placeholder icon for app drafts without one", () => {
-            const item = items(fixture)[1]!;
+            const item = items(fixture)[1];
 
             expect(item.querySelector("img")).toBeNull();
             expect(text(item)).toContain("android");

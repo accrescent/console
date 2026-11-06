@@ -26,7 +26,7 @@ describe("LoadablePage", () => {
     it("should show nothing when pending", async () => {
         await fixture.whenStable();
 
-        expect(fixture.nativeElement.querySelector("main").childElementCount).toBe(0);
+        expect(fixture.nativeElement.querySelector("main")!.childElementCount).toBe(0);
     });
 
     it("should show a progress indicator when loading", async () => {
@@ -50,6 +50,6 @@ describe("LoadablePage", () => {
         fixture.componentInstance.state.set({ kind: "loaded", value: "content" });
         await fixture.whenStable();
 
-        expect(fixture.nativeElement.querySelector("p").textContent).toBe("content");
+        expect(fixture.nativeElement.querySelector("p")!.textContent).toBe("content");
     });
 });

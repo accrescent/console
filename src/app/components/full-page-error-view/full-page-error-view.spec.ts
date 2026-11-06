@@ -29,7 +29,7 @@ describe("FullPageErrorView", () => {
     }
 
     function link(fixture: ComponentFixture<FullPageErrorView>): string | null {
-        return fixture.nativeElement.querySelector("a").getAttribute("href");
+        return fixture.nativeElement.querySelector("a")!.getAttribute("href");
     }
 
     describe("when unavailable", () => {
@@ -40,7 +40,7 @@ describe("FullPageErrorView", () => {
         });
 
         it("should show an error", () => {
-            const alert: HTMLElement = fixture.nativeElement.querySelector("[role=alert]");
+            const alert: HTMLElement = fixture.nativeElement.querySelector("[role=alert]")!;
             expect(alert.textContent).toContain("Something went wrong");
         });
 
@@ -91,7 +91,7 @@ describe("FullPageErrorView", () => {
         });
 
         it("should show that the user has no access", () => {
-            expect(fixture.nativeElement.querySelector("h1").textContent).toContain("No access");
+            expect(fixture.nativeElement.querySelector("h1")!.textContent).toContain("No access");
         });
 
         it("should identify the organization", () => {

@@ -128,9 +128,10 @@ export class AppListingTextEditor {
         },
         {
             submission: {
-                action: async (field) => {
+                action: (field) => {
                     const { name, shortDescription } = field().value();
                     this.save.emit({ name, shortDescription });
+                    return Promise.resolve();
                 },
             },
         },

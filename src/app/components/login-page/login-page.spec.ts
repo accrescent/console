@@ -29,12 +29,12 @@ describe("LoginPage", () => {
     });
 
     it("should display the login button text", () => {
-        const button: HTMLButtonElement = fixture.nativeElement.querySelector("button");
+        const button: HTMLButtonElement = fixture.nativeElement.querySelector("button")!;
         expect(button.textContent?.trim()).toBe("Log in with GitHub");
     });
 
     it("should emit login when the login button is clicked", () => {
-        fixture.nativeElement.querySelector("button").click();
+        fixture.nativeElement.querySelector("button")!.click();
 
         expect(loginCount).toBe(1);
     });
@@ -50,19 +50,19 @@ describe("LoginPage", () => {
         });
 
         it("should disable the login button but keep it focusable", () => {
-            const button: HTMLButtonElement = fixture.nativeElement.querySelector("button");
+            const button: HTMLButtonElement = fixture.nativeElement.querySelector("button")!;
 
             expect(button.disabled).toBe(false);
             expect(button.getAttribute("aria-disabled")).toBe("true");
         });
 
         it("should give the login button an accessible name describing the login in progress", () => {
-            const button: HTMLButtonElement = fixture.nativeElement.querySelector("button");
+            const button: HTMLButtonElement = fixture.nativeElement.querySelector("button")!;
             expect(button.getAttribute("aria-label")).toBe("Logging in with GitHub");
         });
 
         it("should not emit login when the login button is clicked", () => {
-            fixture.nativeElement.querySelector("button").click();
+            fixture.nativeElement.querySelector("button")!.click();
 
             expect(loginCount).toBe(0);
         });

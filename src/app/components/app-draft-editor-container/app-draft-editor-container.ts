@@ -161,7 +161,7 @@ export class AppDraftEditorContainer {
             }
             const result = this.details.value();
             if (!result.ok && result.error.kind === "unauthenticated") {
-                this.router.navigate(["/login"], { replaceUrl: true });
+                void this.router.navigate(["/login"], { replaceUrl: true });
             }
         });
     }
