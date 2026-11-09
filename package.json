@@ -47,7 +47,7 @@
         "eslint-plugin-storybook": "^10.6.2",
         "eslint-plugin-tsdoc": "^0.5.4",
         "jsdom": "^31.0.0",
-        "oxfmt": "^0.77.0",
+        "oxfmt": "^0.78.0",
         "postcss": "^8.5.30",
         "storybook": "^10.6.2",
         "tailwindcss": "^4.3.3",
