@@ -36,7 +36,7 @@
     "devDependencies": {
         "@analogjs/vite-plugin-angular": "^2.9.0",
         "@angular/build": "^22.2.0",
-        "@angular/cli": "~22.2.0",
+        "@angular/cli": "~22.3.0",
         "@angular/compiler-cli": "^22.2.0",
         "@eslint/js": "^10.0.1",
         "@storybook/addon-themes": "^10.6.2",
